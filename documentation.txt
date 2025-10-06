@@ -1,0 +1,19 @@
+Time-Table-System
+    ///////////////
+    Backend
+        controllers
+
+    /////////////////
+    Frontend
+        Components
+            auth
+                Login.jsx
+                SignUp.jsx
+            Shared
+                Input.jsx
+                Select.jsx
+                Button.jsx    
+        store
+            auth
+                authSlice.js
+            store.js
