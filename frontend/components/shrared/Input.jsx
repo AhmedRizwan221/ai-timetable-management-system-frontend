@@ -14,7 +14,7 @@ function Input({
             </label>}
             <input 
                 type={type}
-                className={`py-3 px-3 rounded-lg bg-white text-black outline-none focus:bg-gray-200 duration-200 border borader-gray-200 w-full
+                className={`py-3 px-3 rounded-lg bg-white text-black outline-none focus:bg-gray-200 duration-200 border border-gray-200 w-full
                 ${className}`}
                 ref={ref}
                 {...props}

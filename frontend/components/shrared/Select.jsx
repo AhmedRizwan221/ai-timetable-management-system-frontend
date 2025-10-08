@@ -26,4 +26,4 @@ function Select({
     )
 }
 
-export default forwardRef(Shared)
+export default forwardRef(Select);
