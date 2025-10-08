@@ -2,6 +2,11 @@ Time-Table-System
     ///////////////
     Backend
         controllers
+        model
+            userSchema
+            deptSchema
+            batchSchema
+            timeTableSchema
 
     /////////////////
     Frontend
@@ -12,7 +17,18 @@ Time-Table-System
             Shared
                 Input.jsx
                 Select.jsx
-                Button.jsx    
+                Button.jsx  
+            dashboard
+                SuperAdminDashboard.jsx
+                ChairmanDashboard.jsx
+                StudentDashboard.jsx
+                TeacherDashboard.jsx
+            layout
+                dashboardLayout.jsx
+                Navbar.jsx
+                Sidebar.jsx
+            AuthLayout.jsx
+            index.jsx      
         store
             auth
                 authSlice.js
