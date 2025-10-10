@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectmongoDB from "./connection.js";
+import authRoute from "./routes/authRoute.js";
 
 
 dotenv.config();
@@ -12,9 +13,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.json({msg: "server is running I think it's fine"});
-})
+app.use('/user', authRoute);
+
+// app.get('/', (req, res) => {
+//     res.json({msg: "server is running I think it's fine"});
+// })
 
 
 // mongoDB connection 

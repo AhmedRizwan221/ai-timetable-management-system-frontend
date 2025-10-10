@@ -2,12 +2,19 @@ Time-Table-System
     ///////////////
     Backend
         controllers
+            user.js
         model
             userSchema
             deptSchema
             batchSchema
             timeTableSchema
+        config
+            connection.js(DB connection)
+        routes
+            authRoute.js
 
+        utils
+            generateToken.js    
     /////////////////
     Frontend
         Components
