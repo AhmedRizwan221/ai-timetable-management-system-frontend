@@ -1,10 +1,8 @@
 import mongoose from "mongoose";
 
 async function connectmongoDB(url) {
-  return mongoose.connect(url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  return mongoose.connect(url)
+  
 }
 
 export default connectmongoDB;
