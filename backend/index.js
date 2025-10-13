@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectmongoDB from "./config/connection.js";
 import authRoute from "./routes/authRoute.js";
+import deptRoute from "./routes/deptRoutes.js";
+
 
 
 dotenv.config();
@@ -13,9 +15,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// routes 
-app.use('/user', authRoute);
+// auth routes 
+app.use('/auth', authRoute);
 
+// department route
+app.use('/department', deptRoute);
 
 // mongoDB connection 
 connectmongoDB(process.env.MONGO_URL)
