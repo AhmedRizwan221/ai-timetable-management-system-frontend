@@ -5,7 +5,7 @@ export const authMiddleware = async (req, res, next) => {
     try {
         const token = req.header("Authorization")?.replace("Bearer ", "");
         if (!token) {
-            return res.status(401).json({ message: "Unauthorize: You are not Admin" })
+            return res.status(401).json({ message: "Unauthorize: Token id not provided" })
         }
 
         const decoded = jwt.verify(token, process.env.SECRET_TOKEN);

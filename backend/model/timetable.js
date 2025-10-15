@@ -10,7 +10,14 @@ const timeTableSchema = new mongoose.Schema({
     teacher: {
         type: mongoose.Types.ObjectId, ref: "Teacher"
     },
-    time: String
+    startTime: {
+        type: String,
+        required: true
+    },
+    endTime: {
+        type: String,
+        required: true
+    }
 });
 
 

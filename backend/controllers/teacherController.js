@@ -11,7 +11,6 @@ export const handleAddTeacher = async (req, res) => {
         if(!user || user.role !== 'teacher') {
             return res.status(400).json({message: "Invalid Teacher"});
         }
-
         const teacher  = await Teacher.create({
             user: userId,
             department: departmentId,

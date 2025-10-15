@@ -6,7 +6,7 @@ import {verifyRole} from "../middleware/verifyRole.js";
 const router = express.Router();
 
 // router.post('/create', handleAddDepartment);
-router.post('/create', authMiddleware, verifyRole(['superadmin']) , handleAddDepartment);
-router.get('/appdepartments', authMiddleware, handleGetAllDept);
+router.post('/create', authMiddleware, verifyRole(['chairman']) , handleAddDepartment);
+router.get('/alldepartments', authMiddleware, handleGetAllDept);
 
 export default router;

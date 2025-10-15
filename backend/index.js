@@ -4,8 +4,8 @@ import cors from "cors";
 import connectmongoDB from "./config/connection.js";
 import authRoute from "./routes/authRoute.js";
 import deptRoute from "./routes/deptRoutes.js";
-
-
+import teacherRoute from "./routes/teacherRoute.js";
+import timetableRoute from "./routes/timeTableRoute.js";
 
 dotenv.config();
 const app = express();
@@ -20,6 +20,12 @@ app.use('/auth', authRoute);
 
 // department route
 app.use('/department', deptRoute);
+
+// teacher ROute
+app.use('/teacher', teacherRoute);
+
+// time table route
+app.use('/timetable', timetableRoute)
 
 // mongoDB connection 
 connectmongoDB(process.env.MONGO_URL)

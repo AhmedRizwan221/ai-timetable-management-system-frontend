@@ -11,7 +11,7 @@ export const handleAddDepartment = async (req, res) => {
         if (!chairman || chairman.role !== 'chairman') {
             return res.status(400).json({ message: "Invalid Chairman" });
         }
-
+        
         const dept = await Deparment.create({
             name,
             chairman: chairman._id
