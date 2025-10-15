@@ -1,9 +1,15 @@
 import mongoose from "mongoose";
 
 const depatSchema = new mongoose.Schema({
-    name: String,
-    chairman:{
-        type: mongoose.Schema.Types.ObjectId, ref: 'User'
+    name: {
+        type: String,
+        required: true
+    },
+    chairman: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        unique: true,
+        sparse: true
     }
 });
 
