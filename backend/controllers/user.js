@@ -6,7 +6,17 @@ import generateToken from "../utils/generateToken.js";
 export const handleRegister = async (req, res) => {
     try {
         const { name, email, password, role } = req.body;
+        
+        if(!name || !email || !password || !role) {
+            return res.json({message: "All fields are required"});
+        }
+
+        const emailAlreadyExists = await User.findOne({email});
+        if(emailAlreadyExists) {
+            return res.status(400).json({message: `${emailAlreadyExists} is already exists`})
+        };
         // console.log(name, email, role);
+
         const hashedPassword = await bcrypt.hash(password, 10);
 
         if (role === "superadmin") {
@@ -25,7 +35,7 @@ export const handleRegister = async (req, res) => {
         res.json({ _id: user._id, email: user.email, role: user.role });
     } catch (error) {
         console.log("Register error", error.message);
-        res.status(500).json({ message: "Server error " });
+        res.status(500).json({ message: "Server error"});
     }
 
 }
@@ -34,12 +44,11 @@ export const handleRegister = async (req, res) => {
 export const handleLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
-
         const user = await User.findOne({ email });
-
         if (!user) {
             return res.status(401).json({ message: 'User not found' });
         }
+        // console.log(user);
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
@@ -54,7 +63,8 @@ export const handleLogin = async (req, res) => {
             _id: user._id,
             email: user.email,
             role: user.role,
-            token: token
+            token: token,
+            isAuthenticated: true,
         })
 
     } catch (error) {

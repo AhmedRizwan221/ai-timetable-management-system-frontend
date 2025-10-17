@@ -9,6 +9,7 @@ import ChairmanDashboard from "../components/dashboard/ChairmanDashboard";
 import TeacherDashboard from "../components/dashboard/TeacherDashboard";
 import StudentDashboard from "../components/dashboard/StudentDashboard";
 import DashboardLayout from "../components/layout/DashboardLayout";
+import Home from "../components/dashboard/Home";
 
 export {
     Button,
@@ -22,5 +23,5 @@ export {
     TeacherDashboard,
     StudentDashboard,
     DashboardLayout,
-    
+    Home,
 }

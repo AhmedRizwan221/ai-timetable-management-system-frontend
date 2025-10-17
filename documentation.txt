@@ -3,16 +3,25 @@ Time-Table-System
     Backend
         controllers
             user.js
+            departmentController.js
+            teaherController.js
+            timeTableController.js
+        middleware 
+            authMiddleware.js
+            verifyRole.js    
         model
             userSchema
             deptSchema
             batchSchema
             timeTableSchema
+            teacherSchema
         config
             connection.js(DB connection)
         routes
             authRoute.js
-
+            deptRoute.js
+            teacherRoute.js
+            timeTableRote.js // add shift for morning and evening 
         utils
             generateToken.js    
     /////////////////
