@@ -18,10 +18,12 @@ export default function Login() {
         setError("");
 
         try {
+            const token = localStorage.getItem('token');
             const response = await axios.post('http://localhost:4000/auth/login', data,
                 {
                     headers: {
                         "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
                     },
                 });
 
