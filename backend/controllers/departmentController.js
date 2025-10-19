@@ -32,7 +32,7 @@ export const handleAddDepartment = async (req, res) => {
         const existingDeptWithChairman = await Deparment.findOne({ chairman: chairmanId });
         if (existingDeptWithChairman) {
             return res.status(400).json({
-                message: `${chairman.name} is already assigned to ${existingDeptWithChairman.name} department`
+                message: `${chairman.name} chiarman is already assigned to ${existingDeptWithChairman.name} department`
             })
         }
 

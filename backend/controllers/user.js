@@ -79,6 +79,23 @@ export const handleLogin = async (req, res) => {
 
 }
 
+export const handleGetAllChairmen = async (req, res) => {
+    try {
+      // Fetch all users with role = chairman
+      const chairmen = await User.find({ role: "chairman" }).select("name email role");
+  
+      if (!chairmen || chairmen.length === 0) {
+        return res.status(404).json({ message: "No chairmen found" });
+      }
+  
+      res.status(200).json(chairmen);
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching chairmen", error: error.message });
+    }
+  };
+  
+
+
 // logout 
 export const handleLogout = async (req, res) => {
     try {

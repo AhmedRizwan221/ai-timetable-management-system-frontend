@@ -11,6 +11,6 @@ const depatSchema = new mongoose.Schema({
         unique: true,
         sparse: true
     }
-});
+}, {timestamps: true});
 
 export default mongoose.model('Department', depatSchema);

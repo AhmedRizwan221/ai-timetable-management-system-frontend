@@ -25,7 +25,9 @@ app.use('/department', deptRoute);
 app.use('/teacher', teacherRoute);
 
 // time table route
-app.use('/timetable', timetableRoute)
+app.use('/timetable', timetableRoute);
+
+app.use('/user', authRoute);
 
 // mongoDB connection 
 connectmongoDB(process.env.MONGO_URL)

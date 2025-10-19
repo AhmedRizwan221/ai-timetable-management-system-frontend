@@ -1,7 +1,27 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios  from "axios";
+
+export const fetchDepartments = createAsyncThunk(
+    "department/fetchAllDept",
+    async(_, {rejectWithValue}) => {
+        try {
+            const token = localStorage.getItem("token");
+            const response = await axios.get('http://localhost:4000/department/alldepartments',{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    })
+
 
 const initialState = {
     departments: [],
+    status: 'idle',
+    error: null
 }
 
 const departmentSlice = createSlice({
@@ -24,8 +44,23 @@ const departmentSlice = createSlice({
         },
         setDepartments: (state, action) => {
             state.departments = action.payload;
-        }
-    }
+        },
+        
+    },
+    extraReducers: (builder) => {
+        builder
+          .addCase(fetchDepartments.pending, (state) => {
+            state.status = "loading";
+          })
+          .addCase(fetchDepartments.fulfilled, (state, action) => {
+            state.status = "succeeded";
+            state.departments = action.payload;
+          })
+          .addCase(fetchDepartments.rejected, (state, action) => {
+            state.status = "failed";
+            state.error = action.payload;
+          });
+      },
 });
 
 export const { createDepartment, deleteDepartment, updateDepartment, setDepartments } = departmentSlice.actions;
