@@ -16,33 +16,37 @@ export default function SignUp() {
     const SignUp = async (data) => {
         setError("");
         try {
+            const currentUser = JSON.parse(localStorage.getItem("user"));
+            const token = localStorage.getItem("token");
+
+
             const response = await axios.post("http://localhost:4000/auth/register", data,
                 {
                     headers: {
                         "Content-Type": "application/json",
+                        ...(currentUser && token ? { Authorization: `Bearer ${token}` } : {}),
                     },
                 }
             );
-            const userData = response.data;
-            localStorage.setItem("token", userData.token);
-            dispatch(login(userData));
 
 
-            if (userData) {
-                if (userData.role === "superadmin") {
-                    navigate('/dashboard/superadmin');
-                } else if (userData.role === 'chairman') {
-                    navigate('/dashboard/chairman');
-                } else if (userData.role === 'teacher') {
-                    navigate('/dashboard/teacher');
-                } else if (userData.role === 'student') {
-                    navigate('/dashboard/student');
-                }else {
-                    navigate('/');
-                }
+            if (currentUser?.role === "superadmin") {
+                alert("✅ Chairman created successfully!");
+                navigate("/dashboard/superadmin");
+            } else if (currentUser?.role === "chairman") {
+                alert("✅ Teacher created successfully!");
+                navigate("/dashboard/chairman");
+            } else {
+                // ✅ Normal signup (user signing up themselves)
+                const userData = response.data;
+                localStorage.setItem("token", userData.token);
+                localStorage.setItem("user", JSON.stringify(userData));
+                dispatch(login(userData));
+                navigate("/dashboard/superadmin");
             }
         } catch (error) {
-            setError(error.message);
+            console.error(error);
+            setError(error.response?.data?.message || "Something went wrong");
         }
     }
 
@@ -93,8 +97,6 @@ export default function SignUp() {
                                 <option value="">Select role</option>
                                 <option value="superadmin">Superadmin</option>
                                 <option value="chairman">Chairman</option>
-                                <option value="teacher">Teacher</option>
-                                <option value="student">Student</option>
                             </select>
                             <Input
                                 label="password"

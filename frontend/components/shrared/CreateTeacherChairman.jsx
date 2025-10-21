@@ -1,0 +1,107 @@
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { Input, Button } from "../index";
+import axios from "axios";
+import { login } from "../../store/auth/authSlice";
+
+export default function CreateTeacherChairman() {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { register, handleSubmit, reset } = useForm();
+    const [error, setError] = useState("");
+
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    const token = localStorage.getItem('token');
+
+    const handleUser = async ( data ) => {
+        setError("");
+
+        try {
+            const response = await axios.post('http://localhost:4000/auth/register', data, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                }
+            })
+
+            if (user?.role === 'superadmin') {
+                alert("Chairman Created Succefully");
+                navigate('/dashboard/superadmin');
+            } else if (user?.role === 'chairman') {
+                alert("Chairman Creaetd Succegully");
+                navigate("/dashboard/chairman");
+            } else {
+                const userData = response.data;
+                localStorage.setItem("token", userData.token);
+                localStorage.setItem("user", JSON.stringify(userData));
+                dispatch(login(userData));
+                navigate("/dashboard/superadmin");
+            }
+
+            reset();
+
+        } catch (error) {
+            setError(error.response?.data?.message || "Something went wrong");
+        }
+    }
+
+    return (
+        <div className="flex justify-center items-center min-h-screen">
+            <div className={`m-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}>
+                <div className="mb-2 justify-center">
+                    {user?.role === 'superadmin' && " Create Chairman for Department"}
+                    {user?.role === 'chairman' && "Create Teacher for Department"}
+                </div>
+                {error && (
+                    <p className="text-red-600 text-sm mb-2 text-center">{error}</p>
+                )}
+
+                <form onSubmit={handleSubmit(handleUser)}>
+                    <div className="space-y-5">
+                        <Input
+                            label={user?.role === 'superadmin' ? "Chairman Name" : "Teacher Name"}
+                            type="text"
+                            placeholder="Enter Name"
+                            {...register('name', {
+                                required: true
+                            })}
+                        />
+                        <Input
+                            label="Email"
+                            placeholder="Enter Email"
+                            type="email"
+                            {...register('email', {
+                                required: true,
+                                validate: {
+                                    matchPattern: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || "Email address must be a valid address"
+                                }
+                            })}
+                        />
+                        <Input
+                            label="Password"
+                            placeholder="Enter Password"
+                            type="password"
+                            {...register('password', { required: true })}
+                        />
+                        <Input
+                            label="Role"
+                            type="text"
+                            value={user?.role === "superadmin" ? "chairman" : "teacher"}
+                            readOnly
+                            {...register("role")}
+                        />
+
+                        <Button type="submit">
+                            {user?.role === "superadmin"
+                                ? "Create Chairman"
+                                : "Create Teacher"}
+                        </Button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    )
+}

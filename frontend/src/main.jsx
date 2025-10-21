@@ -2,10 +2,11 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.jsx';
-import {store} from "../store/store";
+import { store } from "../store/store";
 import { Provider } from 'react-redux';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import {Login, AuthLayout, SignUp, StudentDashboard, TeacherDashboard, ChairmanDashboard, SuperAdminDashboard, DashboardLayout, Home } from '../components/index';
+import { Login, AuthLayout, SignUp, ChairmanDashboard, SuperAdminDashboard, DashboardLayout, Home, DeptDashboard, CreateTeacherChairman } from '../components/index';
+
 
 const router = createBrowserRouter([
   {
@@ -55,22 +56,26 @@ const router = createBrowserRouter([
         )
       },
       {
-        path: '/dashboard/teacher',
+        path: '/dashboard/deptDashboard',
         element: (
-          <AuthLayout authentication={true}>
-            <DashboardLayout>
-              <TeacherDashboard />
-            </DashboardLayout>
+          <DashboardLayout>
+            <DeptDashboard />
+          </DashboardLayout>
+        )
+      },
+      {
+        path: '/dashboard/superadmin/create-chairman',
+        element: (
+          <AuthLayout authentication={false}>
+            <CreateTeacherChairman />
           </AuthLayout>
         )
       },
       {
-        path: '/dashboard/student',
+        path: '/dashboard/chairman/create-teacher',
         element: (
-          <AuthLayout authentication={true}>
-            <DashboardLayout>
-              <StudentDashboard />
-            </DashboardLayout>
+          <AuthLayout authentication={false}>
+            <CreateTeacherChairman />
           </AuthLayout>
         )
       }

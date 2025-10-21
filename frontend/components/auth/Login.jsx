@@ -29,7 +29,7 @@ export default function Login() {
 
             const userData = response.data;
             localStorage.setItem('token', userData.token);
-
+            localStorage.setItem("user",  JSON.stringify(userData));
             dispatch(authLogin(userData));
 
             if (userData.role === 'superadmin') {

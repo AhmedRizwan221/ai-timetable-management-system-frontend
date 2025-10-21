@@ -14,10 +14,8 @@ function SuperAdminDashboard() {
 
   const { departments = [], error, status } = useSelector((state) => state.department);
 
-  // Fetch all departments on mount
-  useEffect(() => {
-    dispatch(fetchDepartments());
-  }, [dispatch]);
+  
+ 
 
   // Fetch all chairmen on mount
   useEffect(() => {
@@ -35,6 +33,10 @@ function SuperAdminDashboard() {
 
     fetchChairmen();
   }, []);
+  // Fetch all departments on mount
+  useEffect(() => {
+    dispatch(fetchDepartments());
+  }, [dispatch]);
 
   // ✅ Create department
   const handleCreateDept = async (data) => {
@@ -68,10 +70,9 @@ function SuperAdminDashboard() {
 
   return (
     <div className="px-4 py-6">
-      {/* ✅ Department list */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-4">
         {status === "loading" && <p>Loading departments...</p>}
-        {status === "failed" && <p>Error: {error}</p>}
+        {status === "failed" && <p>Error: {error.message}</p>}
         {status === "succeeded" && departments.length > 0 ? (
           departments.map((dept) =>
             dept?._id ? (
@@ -83,7 +84,6 @@ function SuperAdminDashboard() {
         )}
       </div>
 
-      {/* ✅ Create Department Form */}
       <form
         onSubmit={handleSubmit(handleCreateDept)}
         className="border border-gray-300 rounded-xl p-4 max-w-lg mx-auto"

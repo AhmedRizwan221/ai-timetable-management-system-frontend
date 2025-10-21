@@ -6,10 +6,10 @@ import SignUp from "./auth/SignUp"
 import AuthLayout from "./AuthLayout";
 import SuperAdminDashboard from "../components/dashboard/SuperAdminDashboard";
 import ChairmanDashboard from "../components/dashboard/ChairmanDashboard";
-import TeacherDashboard from "../components/dashboard/TeacherDashboard";
-import StudentDashboard from "../components/dashboard/StudentDashboard";
 import DashboardLayout from "../components/layout/DashboardLayout";
 import Home from "../components/dashboard/Home";
+import DeptDashboard from "./dashboard/deptDashboard";
+import CreateTeacherChairman from "../components/shrared/CreateTeacherChairman";
 
 export {
     Button,
@@ -20,8 +20,8 @@ export {
     AuthLayout,
     SuperAdminDashboard,
     ChairmanDashboard,
-    TeacherDashboard,
-    StudentDashboard,
     DashboardLayout,
     Home,
+    DeptDashboard,
+    CreateTeacherChairman,
 }

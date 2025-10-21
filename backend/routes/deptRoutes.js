@@ -8,6 +8,6 @@ const router = express.Router();
 // router.post('/create', handleAddDepartment);
 router.post('/create', authMiddleware, verifyRole(['superadmin']) , handleAddDepartment);
 router.put('/update/:id', authMiddleware, verifyRole(['superadmin']), handleUpdateDept);
-router.get('/alldepartments', authMiddleware, handleGetAllDept);
+router.get('/alldepartments', authMiddleware, verifyRole(['superadmin']), handleGetAllDept);
 
 export default router;
