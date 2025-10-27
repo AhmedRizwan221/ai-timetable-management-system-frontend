@@ -52,7 +52,7 @@ export default function Login() {
                     {/* <span className="flex justify-center items-center  w-full max-w-[100px]">
                     <h1 className="">Logo will be here</h1>
                 </span> */}
-                    <h2 className="text-center text-2xl leading-tight text-black font-bold">Sign up to create account</h2>
+                    <h2 className="text-center text-xl lg:text-2xl leading-tight text-black font-bold">Sign up to create account</h2>
                     <p className="mt-2 text-center text-base text-black/60">
                         Do not have account?&nbsp;
                         <Link

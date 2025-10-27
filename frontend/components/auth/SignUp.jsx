@@ -57,7 +57,7 @@ export default function SignUp() {
                     {/* <span className="flex justify-center items-center  w-full max-w-[100px]">
                         <h1 className="">Logo will be here</h1>
                     </span> */}
-                    <h2 className="text-center text-2xl leading-tight text-black font-bold">Sign up to create account</h2>
+                    <h2 className="text-center text-xl lg:text-2xl leading-tight text-black font-bold">Sign up to create account</h2>
                     <p className="mt-2 text-center text-base text-black/60">
                         Alreadt have an account?&nbsp;
                         <Link
@@ -69,7 +69,7 @@ export default function SignUp() {
                     </p>
                     {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
                     <form onSubmit={handleSubmit(SignUp)}>
-                        <div className="space-y-5">
+                        <div>
                             <Input
                                 label="name"
                                 placeholder="Enter your Name"

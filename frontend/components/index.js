@@ -10,6 +10,8 @@ import DashboardLayout from "../components/layout/DashboardLayout";
 import Home from "../components/dashboard/Home";
 import DeptDashboard from "./dashboard/deptDashboard";
 import CreateTeacherChairman from "../components/shrared/CreateTeacherChairman";
+import Navbar from "./layout/Navbar";
+import DepartmentCard from "../components/layout/DepartmentCard";
 
 export {
     Button,
@@ -24,4 +26,6 @@ export {
     Home,
     DeptDashboard,
     CreateTeacherChairman,
+    Navbar,
+    DepartmentCard
 }

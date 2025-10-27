@@ -49,18 +49,17 @@ export default function CreateTeacherChairman() {
     }
 
     return (
-        <div className="flex justify-center items-center min-h-screen">
+        <div className="flex justify-center items-center min-h-screen px-5" >
             <div className={`m-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}>
-                <div className="mb-2 justify-center">
-                    {user?.role === 'superadmin' && " Create Chairman for Department"}
+                <h1 className="font-bold text-center text-base sm:text-xl lg:text-2xl mb-4">{user?.role === 'superadmin' && " Create Chairman for Department"}
                     {user?.role === 'chairman' && "Create Teacher for Department"}
-                </div>
+                </h1>
                 {error && (
                     <p className="text-red-600 text-sm mb-2 text-center">{error}</p>
                 )}
 
                 <form onSubmit={handleSubmit(handleUser)}>
-                    <div className="space-y-5">
+                    <div>
                         <Input
                             label={user?.role === 'superadmin' ? "Chairman Name" : "Teacher Name"}
                             type="text"
@@ -94,7 +93,7 @@ export default function CreateTeacherChairman() {
                             {...register("role")}
                         />
 
-                        <Button type="submit">
+                        <Button type="submit" className="flex m-auto">
                             {user?.role === "superadmin"
                                 ? "Create Chairman"
                                 : "Create Teacher"}

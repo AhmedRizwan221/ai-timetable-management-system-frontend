@@ -15,8 +15,6 @@ function Protected({children, authentication = true}) {
             return '/dashboard/chairman';
         }else if(role === 'teacher') {
             return '/dashboard/teacher';
-        }else if(role === 'student') {
-            return '/dashboard/student';
         }
     }
 

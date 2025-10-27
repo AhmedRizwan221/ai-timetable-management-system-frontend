@@ -8,7 +8,7 @@ function Input({
 }, ref) {
     const id = useId();
     return (
-        <div className="w-full">
+        <div className="w-full py-3">
             {label && <label className="inline-block mb-1 pl-1 text-black" htmlFor={id}>
                 {label}
             </label>}

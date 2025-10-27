@@ -1,12 +1,31 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios  from "axios";
+import axios from "axios";
 
+const token = localStorage.getItem('token');
+// 
+export const departmentCreate = createAsyncThunk(
+    "department/create",
+    async (deptData, {rejectWithValue}) => {
+        try {
+            const response = await axios.post('http://localhost:4000/department/create', deptData, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
+// fetch departments 
 export const fetchDepartments = createAsyncThunk(
     "department/fetchAllDept",
-    async(_, {rejectWithValue}) => {
+    async (_, { rejectWithValue }) => {
         try {
-            const token = localStorage.getItem("token");
-            const response = await axios.get('http://localhost:4000/department/alldepartments',{
+            // const token = localStorage.getItem("token");
+            const response = await axios.get('http://localhost:4000/department/alldepartments', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -45,22 +64,22 @@ const departmentSlice = createSlice({
         setDepartments: (state, action) => {
             state.departments = action.payload;
         },
-        
+
     },
     extraReducers: (builder) => {
         builder
-          .addCase(fetchDepartments.pending, (state) => {
-            state.status = "loading";
-          })
-          .addCase(fetchDepartments.fulfilled, (state, action) => {
-            state.status = "succeeded";
-            state.departments = action.payload;
-          })
-          .addCase(fetchDepartments.rejected, (state, action) => {
-            state.status = "failed";
-            state.error = action.payload;
-          });
-      },
+            .addCase(fetchDepartments.pending, (state) => {
+                state.status = "loading";
+            })
+            .addCase(fetchDepartments.fulfilled, (state, action) => {
+                state.status = "succeeded";
+                state.departments = action.payload;
+            })
+            .addCase(fetchDepartments.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.payload;
+            });
+    },
 });
 
 export const { createDepartment, deleteDepartment, updateDepartment, setDepartments } = departmentSlice.actions;

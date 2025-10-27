@@ -1,7 +1,77 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { Input, Select, Button } from "../index";
+import { useForm } from "react-hook-form"
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDepartments } from "../../store/dept/departmentSlice.js";
 
-export default function Home(){
-    return(
-        <h1>Home page</h1>
+
+export default function Home() {
+    const dispatch = useDispatch();
+    const { register, handleSubmit, reset } = useForm();
+    const { departments, error, loading } = useSelector((state) => state.department)
+
+    //fetch depts from redux 
+    useEffect(() => {
+        dispatch(fetchDepartments());
+    }, [dispatch]);
+
+    const handleUser = async () => {
+
+    }
+    if (loading) return <p className="text-gray-500">Loading departments...</p>;
+    if (error) return <p className="text-red-600">Error: {error}</p>;
+
+    return (
+        <div className="flex justify-center items-center min-h-screen bg-gray-50">
+            <div className="w-full max-w-md bg-white shadow-md rounded-2xl p-8">
+                <div className="text-center mb-6">
+                    <h1 className="font-bold text-2xl text-gray-800">Time Table System</h1>
+                    <p className="text-gray-500 text-sm mt-1">Select your department to continue</p>
+                </div>
+
+                <form
+                    onSubmit={handleSubmit(handleUser)}
+                    className="flex flex-col gap-4"
+                >
+                    <label className="text-gray-700 font-medium">Select Department</label>
+
+                    <select
+                        className="border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none transition duration-200"
+                    >
+                        <option>Select Department</option>
+                        {departments.map((dept) => (
+                            <option key={dept._id} value={dept._id}>
+                                {dept.name}
+                            </option>
+                        ))}
+                    </select>
+                    {/* <label className="text-gray-700 font-medium">Select Batch</label>
+
+                    <select
+                        className="border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none transition duration-200"
+                    >
+                        <option>Morning</option>
+                        <option value="">Evening</option>
+                    </select>
+                    <label className="text-gray-700 font-medium">Select Year</label>
+
+                    <select
+                        className="border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none transition duration-200"
+                    >
+                        <option>1st Year</option>
+                        <option value="">2nd Year</option>
+                        <option>3rd Year</option>
+                        <option value="">4th Year</option>
+                    </select> */}
+                    <button
+                        type="submit"
+                        className="mt-4 bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition duration-200"
+                    >
+                        Continue
+                    </button>
+                </form>
+            </div>
+        </div>
+
     )
 }
