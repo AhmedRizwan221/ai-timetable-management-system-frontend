@@ -36,7 +36,7 @@ export default function CreateDeptAssignChiarman() {
     const handleCreateDept = async (data) => {
         setErr("");
         try {
-           await dispatch(departmentCreate({
+            await dispatch(departmentCreate({
                 name: data.department,
                 chairmanId: data.chairmanId,
             })).unwrap();
@@ -50,37 +50,44 @@ export default function CreateDeptAssignChiarman() {
         }
     };
     return (
-        <form
-            onSubmit={handleSubmit(handleCreateDept)}
-            className="m-auto w-full"
-        >
-            <div className="flex flex-col gap-4 mb-4 ">
-                <Input
-                    className="w-1/2"
-                    label="Create Department"
-                    placeholder="Enter department name"
-                    type="text"
-                    {...register("department", { required: true })}
-                />
-
-                <select
-                    className="border border-gray-400 p-2 rounded-lg"
-                    {...register("chairmanId", { required: true })}
+        <div className="flex justify-center items-center px-5 min-h-screen">
+            <div className="m-auto w-full max-w-lg rounded-xl bg-gray-100 border border-black/10 p-10">
+            {err && (
+                    <p className="text-red-600 text-sm mb-2 text-center">{err}</p>
+                )}
+                <form
+                    onSubmit={handleSubmit(handleCreateDept)}
+                    className=""
                 >
-                    <option value="">Select Chairman</option>
-                    {chairmen.map((chair) => (
-                        <option key={chair._id} value={chair._id}>
-                            {chair.name} ({chair.email})
-                        </option>
-                    ))}
-                </select>
+                    <div className="flex flex-col gap-4 mb-4">
+                        <Input
+                            className="w-1/2"
+                            label="Create Department"
+                            placeholder="Enter department name"
+                            type="text"
+                            {...register("department", { required: true })}
+                        />
+
+                        <select
+                            className="border border-gray-400 p-2 rounded-lg"
+                            {...register("chairmanId", { required: true })}
+                        >
+                            <option value="">Select Chairman</option>
+                            {chairmen.map((chair) => (
+                                <option key={chair._id} value={chair._id}>
+                                    {chair.name} ({chair.email})
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <Button type="submit" className="w-full">
+                        Create Department
+                    </Button>
+
+                    {err && <p className="text-red-500 mt-2 items-center">{err.message}</p>}
+                </form>
             </div>
-
-            <Button type="submit" className="w-full">
-                Create Department
-            </Button>
-
-            {err && <p className="text-red-500 mt-2 items-center">{err}</p>}
-        </form>
+        </div>
     )
 }

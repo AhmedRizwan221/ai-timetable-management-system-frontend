@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { Input, Select, Button } from "../index";
 import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDepartments } from "../../store/dept/departmentSlice.js";
+import {Navbar} from "../index";
 
 
 export default function Home() {
@@ -22,21 +22,23 @@ export default function Home() {
     if (error) return <p className="text-red-600">Error: {error}</p>;
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-50">
-            <div className="w-full max-w-md bg-white shadow-md rounded-2xl p-8">
-                <div className="text-center mb-6">
-                    <h1 className="font-bold text-2xl text-gray-800">Time Table System</h1>
-                    <p className="text-gray-500 text-sm mt-1">Select your department to continue</p>
+        <>
+        <Navbar />
+        <div className="">
+            <div className="">
+                <div className="">
+                    <h1 className="">Time Table System</h1>
+                    <p className="">Select your department to continue</p>
                 </div>
 
                 <form
                     onSubmit={handleSubmit(handleUser)}
-                    className="flex flex-col gap-4"
+                    className=""
                 >
-                    <label className="text-gray-700 font-medium">Select Department</label>
+                    <label className="">Select Department</label>
 
                     <select
-                        className="border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none transition duration-200"
+                        className=""
                     >
                         <option>Select Department</option>
                         {departments.map((dept) => (
@@ -65,13 +67,14 @@ export default function Home() {
                     </select> */}
                     <button
                         type="submit"
-                        className="mt-4 bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition duration-200"
+                        className="bg-blue-200"
                     >
                         Continue
                     </button>
                 </form>
             </div>
         </div>
+        </>
 
     )
 }

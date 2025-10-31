@@ -8,6 +8,7 @@ export default function DeptDashboard() {
   const { departments, loading, error } = useSelector(
     (state) => state.department
   );
+  console.log("Departments:", departments);
 
   useEffect(() => {
     dispatch(fetchDepartments());

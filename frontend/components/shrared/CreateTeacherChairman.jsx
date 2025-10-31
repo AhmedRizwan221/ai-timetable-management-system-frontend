@@ -55,7 +55,7 @@ export default function CreateTeacherChairman() {
                     {user?.role === 'chairman' && "Create Teacher for Department"}
                 </h1>
                 {error && (
-                    <p className="text-red-600 text-sm mb-2 text-center">{error}</p>
+                    <p className="text-red-600 text-sm mb-2 text-center">{error.message}</p>
                 )}
 
                 <form onSubmit={handleSubmit(handleUser)}>

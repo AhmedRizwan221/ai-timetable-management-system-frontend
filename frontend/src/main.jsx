@@ -59,40 +59,50 @@ const router = createBrowserRouter([
       {
         path: '/dashboard/deptDashboard',
         element: (
-          <DashboardLayout>
-            <DeptDashboard />
-          </DashboardLayout>
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <DeptDashboard />
+            </DashboardLayout>
+          </AuthLayout>
         )
       },
       {
         path: '/department/:id',
         element: (
-          <DashboardLayout>
-            <DepartmentCard />
-          </DashboardLayout>
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <DepartmentCard />
+            </DashboardLayout>
+          </AuthLayout>
         )
       },
       {
         path: '/dashboard/superadmin/create-chairman',
         element: (
-          <AuthLayout authentication={false}>
-            <CreateTeacherChairman />
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <CreateTeacherChairman />
+            </DashboardLayout>
           </AuthLayout>
         )
       },
       {
         path: '/dashboard/superadmin/create-department',
         element: (
-          <AuthLayout authentication={false}>
-            <CreateDeptAssignChiarman />
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <CreateDeptAssignChiarman />
+            </DashboardLayout>
           </AuthLayout>
         )
       },
       {
         path: '/dashboard/chairman/create-teacher',
         element: (
-          <AuthLayout authentication={false}>
-            <CreateTeacherChairman />
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <CreateTeacherChairman />
+            </DashboardLayout>
           </AuthLayout>
         )
       }

@@ -27,5 +27,5 @@ export {
     DeptDashboard,
     CreateTeacherChairman,
     Navbar,
-    DepartmentCard
+    DepartmentCard,
 }

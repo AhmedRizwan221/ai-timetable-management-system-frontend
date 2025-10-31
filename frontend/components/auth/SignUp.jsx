@@ -67,7 +67,7 @@ export default function SignUp() {
                             Login
                         </Link>
                     </p>
-                    {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
+                    {error && <p className="text-red-600 mt-8 text-center">{error.message}</p>}
                     <form onSubmit={handleSubmit(SignUp)}>
                         <div>
                             <Input
