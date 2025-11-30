@@ -1,5 +1,5 @@
 import User from "../model/user.js";
-import Teacher from "../model/user.js";
+import Teacher from "../model/teacher.js";
 import Department from "../model/department.js";
 
 //  use time format for time here 

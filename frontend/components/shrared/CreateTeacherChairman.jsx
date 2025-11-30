@@ -31,7 +31,7 @@ export default function CreateTeacherChairman() {
                 alert("Chairman Created Succefully");
                 navigate('/dashboard/superadmin');
             } else if (user?.role === 'chairman') {
-                alert("Chairman Creaetd Succegully");
+                alert("Teacher Creaetd Succegully");
                 navigate("/dashboard/chairman");
             } else {
                 const userData = response.data;
