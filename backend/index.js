@@ -32,4 +32,12 @@ app.use('/timetable', timetableRoute);
 app.use('/user', authRoute);
 
 // mongoDB connection 
-connectmongoDB();
+connectmongoDB()
+.then(() => {
+    app.listen(process.env.PORT, () => {
+        console.log(`Database is connected on the PORT ${process.env.PORT}`);
+    })
+})
+.catch((error) => {
+    console.log("MongoDB connection Failed !!", error);
+})
