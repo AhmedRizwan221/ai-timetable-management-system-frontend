@@ -1,3 +1,4 @@
+import department from "../model/department.js";
 import Deparment from "../model/department.js";
 import User from "../model/user.js";
 
@@ -113,5 +114,27 @@ export const handleUpdateDept = async (req, res) => {
         res.json(dept);
     } catch (error) {
         return res.status(500).json({ message: error.message });
+    }
+}
+
+// get single dept
+export const handleGetSingleDept = async(req, res) => {
+    try {
+        const {id} = req.params;
+
+        const department = await Deparment.findById(id).populate(
+            "chairman",
+            "name email"
+          );
+          
+          
+        if(!department) {
+            return res.status(404).json({message: "Department not found!"});
+        }
+
+        res.status(200).json(department);
+
+    } catch (error) {
+        return res.status(500).json({message: error.message})
     }
 }

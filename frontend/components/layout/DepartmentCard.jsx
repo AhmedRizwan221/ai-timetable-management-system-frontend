@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export default function DepartmentCard({department}) {
     if(!department) {
-        return <p>Department data not found</p>
+        return <p>Department data not found here</p>
     }else {
 
         return (
