@@ -19,6 +19,8 @@ export default function Login() {
 
         try {
             const token = localStorage.getItem('token');
+            // console.log(token, "this is a token");
+
             const response = await axios.post('http://localhost:4000/auth/login', data,
                 {
                     headers: {

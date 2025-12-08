@@ -1,4 +1,4 @@
-import React, { useId, forwardRef } from "react";
+import { useId, forwardRef } from "react";
 
 function Select({
     label,
@@ -9,7 +9,7 @@ function Select({
     const id = useId();
     return (
         <div className="w-full">
-            {label && <label className="py-3 px-2" htmlFor={id}></label>}
+            {label && <label className="py-3 px-2" htmlFor={id}>{label}</label>}
             <select
                 {...props}
                 id={id}
@@ -17,8 +17,8 @@ function Select({
                 ref={ref}
             >
                 {options?.map((option) => (
-                    <option key={option} value={option}>
-                        {option}
+                    <option key={option._id} value={option._id}>
+                        {option.name}
                     </option>
                 ))}
             </select>

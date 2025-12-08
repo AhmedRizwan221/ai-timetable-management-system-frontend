@@ -5,7 +5,7 @@ import User from "../model/user.js";
 // create department only superadmin
 export const handleAddDepartment = async (req, res) => {
     try {
-        const { name, chairmanId } = req.body;
+        const { name, chairmanId, batch } = req.body;
 
         // check existing Department name
         const existingDeptName = await Deparment.findOne({ name });
@@ -14,7 +14,6 @@ export const handleAddDepartment = async (req, res) => {
                 message: `${existingDeptName.name} is already exists`
             })
         }
-
         // Check if chairman exists and has correct role
         const chairman = await User.findById(chairmanId);
         if (!chairman) {
@@ -41,7 +40,8 @@ export const handleAddDepartment = async (req, res) => {
         // create dept
         const dept = await Deparment.create({
             name,
-            chairman: chairman._id
+            chairman: chairman._id,
+            batch
         })
         res.status(201).json({
             message: "Succesfully dept created",

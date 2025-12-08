@@ -19,7 +19,6 @@ export default function SignUp() {
             const currentUser = JSON.parse(localStorage.getItem("user"));
             const token = localStorage.getItem("token");
 
-
             const response = await axios.post("http://localhost:4000/auth/register", data,
                 {
                     headers: {
@@ -31,13 +30,12 @@ export default function SignUp() {
 
 
             if (currentUser?.role === "superadmin") {
-                alert("✅ Chairman created successfully!");
+                alert(" Chairman created successfully!");
                 navigate("/dashboard/superadmin");
             } else if (currentUser?.role === "chairman") {
-                alert("✅ Teacher created successfully!");
+                alert(" Teacher created successfully!");
                 navigate("/dashboard/chairman");
             } else {
-                // ✅ Normal signup (user signing up themselves)
                 const userData = response.data;
                 localStorage.setItem("token", userData.token);
                 localStorage.setItem("user", JSON.stringify(userData));

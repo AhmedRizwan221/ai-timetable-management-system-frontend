@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDepartments } from "../../store/dept/departmentSlice.js";
-import {Navbar} from "../index";
+import {Navbar, Select} from "../index";
 
 
 export default function Home() {
@@ -15,27 +15,43 @@ export default function Home() {
         dispatch(fetchDepartments());
     }, [dispatch]);
 
-    const handleUser = async () => {
 
+    const handleUser = async (data) => {
+        console.log(data);
     }
     if (loading) return <p className="text-gray-500">Loading departments...</p>;
-    if (error) return <p className="text-red-600">Error: {error}</p>;
+    if (error) return <p className="text-red-600">Error: {error.message}</p>;
 
     return (
         <>
         <Navbar />
-        <div className="">
-            <div className="">
-                <div className="">
-                    <h1 className="">Time Table System</h1>
-                    <p className="">Select your department to continue</p>
+        <div className="bg-white-700">
+            <div className="flex justify-center  items-center flex-col">
+                <div className="pt-8 text-center">
+                    <h1 className="text-xl font-bold py-2">Time Table Management System</h1>
+                    <p className="text-l font-medium pb-2">Select your Department and Batch to continue</p>
                 </div>
 
                 <form
                     onSubmit={handleSubmit(handleUser)}
                     className=""
                 >
-                    <label className="">Select Department</label>
+                    
+                    <Select 
+                        label={"Select Department"}
+                        options={departments}
+                        value="Select Department"
+                    />
+
+                     <Select 
+                        label="Select Batch"
+                        options={departments}
+                        value="Select Department"
+                    />
+
+
+
+                    {/* <label className="">Select Department</label>
 
                     <select
                         className=""
@@ -46,7 +62,7 @@ export default function Home() {
                                 {dept.name}
                             </option>
                         ))}
-                    </select>
+                    </select> */}
                     {/* <label className="text-gray-700 font-medium">Select Batch</label>
 
                     <select
@@ -65,12 +81,12 @@ export default function Home() {
                         <option>3rd Year</option>
                         <option value="">4th Year</option>
                     </select> */}
-                    <button
+                    {/* <button
                         type="submit"
                         className="bg-blue-200"
                     >
                         Continue
-                    </button>
+                    </button> */}
                 </form>
             </div>
         </div>

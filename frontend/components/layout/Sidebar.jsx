@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Home, Users, LogOut, UserCog } from "lucide-react";
+import { Home, Users, LogOut, UserCog,  } from "lucide-react";
+import HumburgerMenu from "../shrared/HumburgerMenu";
 
 export default function Sidebar() {
   const storedUser = localStorage.getItem("user");
@@ -8,9 +9,20 @@ export default function Sidebar() {
   // console.log(user);
   return (
     <aside className="flex md:block md:w-64 bg-slate-800 text-white p-2 md:p-5">
-      <h2 className="text-xl font-semibold mb-10 text-center">{user?.role === 'superadmin' ? "Admin Panel" : "Chairman Panel"}</h2>
+      <HumburgerMenu
+        dashboardName="Admin Dashboard"
+        options={[
+          { name: "Departments", path: "/dashboard/deptDashboard", className: "flex items-center gap-2 hover:text-yellow-400", icon:Home },
+          { name: "Create Chairman", path: "/dashboard/superadmin/create-chairman", icon:Users},
+          { name: "Create Dept & Assign Chairman", path: "/dashboard/superadmin/create-department", icon:UserCog }
+        ]}
+      />
 
-      <nav className="flex-1 space-y-4">
+
+
+      {/* <h2 className="text-xl font-semibold mb-10 text-center">{user?.role === 'superadmin' ? "Admin Panel" : "Chairman Panel"}</h2> */}
+
+      {/* <nav className="flex-1 space-y-4">
         <ul className="flex md:flex-col gap-4">
           <Link to={user?.role === 'superadmin' ? "/dashboard/superadmin" : "/dashboard/ChairmanDashboard"}
             className="flex items-center gap-2 hover:text-yellow-400 ">
@@ -41,7 +53,7 @@ export default function Sidebar() {
             )}
           </li>
         </ul>
-      </nav>
+      </nav> */}
 
       <button className="flex items-center gap-2 hover:text-red-400 mt-auto"
         onClick={() => {

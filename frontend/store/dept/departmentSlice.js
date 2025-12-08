@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const token = localStorage.getItem('token');
-// 
+
 export const departmentCreate = createAsyncThunk(
     "department/create",
     async (deptData, {rejectWithValue}) => {
