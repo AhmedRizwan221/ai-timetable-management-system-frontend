@@ -22,13 +22,20 @@ const userSchema = new mongoose.Schema(
         },
         role: {
             type: String,
-            enum: ['superadmin', 'chairman', 'teacher']
+            enum: ['superadmin', 'Dean', 'chairman', 'teacher']
+        },
+        refreshToken: {
+            type: String
         }
 
     }, { timestamps: true }
 )
 
-/*
+userSchema.index(
+    { role: 1 },
+    { unique: true, partialFilterExpression: { role: "superadmin" } }
+)
+
 
 // here gonna add some jwt and bcrypt code
 userSchema.pre("save", async function (next) {
@@ -45,14 +52,14 @@ userSchema.methods.isCorrectPassword = async function (password) {
 
 // generate access and refresh tokens
 userSchema.methods.generateAccessToken = async function () {
-   return jwt.sign(
+    return jwt.sign(
         {
             _id: this._id,
             name: this.name,
             role: this.role,
             email: this.email
         },
-        process.env.ACCESS_TOKEN-SECRET,
+        process.env.ACCESS_TOKEN - SECRET,
         {
             expiresIn: process.env.ACCESS_TOKEN_EXPIRY
         }
@@ -70,8 +77,6 @@ userSchema.methods.generateRefreshToken = async function () {
         }
     )
 }
-
-*/
 
 
 export default mongoose.model('User', userSchema);

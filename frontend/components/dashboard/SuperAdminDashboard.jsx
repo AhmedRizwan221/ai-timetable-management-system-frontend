@@ -17,7 +17,7 @@ function SuperAdminDashboard() {
 
   return (
     <div className="px-4 py-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-4">
+      <div className="flex flex-wrap gap-6">
         {status === "loading" && <p>Loading departments...</p>}
         {status === "failed" && <p>Error: {error.message}</p>}
         {status === "succeeded" && departments.length > 0 ? (

@@ -1,18 +1,55 @@
-import React from "react";
+// import React from "react";
+// import { Link } from "react-router-dom";
+
+// export default function DepartmentCard({department}) {
+//     if(!department) {
+//         return <p>Department data not found here</p>
+//     }else {
+//         const name = department.chairman?.name || "Chairman is not assigned";
+//         console.log(name)
+//         return (
+//             <Link to={`/department/${department._id}`}>
+//                 <div className=" bg-white rounded-xl shadow-md p-5 hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
+//                     <h1 className="text-xl font-semibold text-gray-800">{department.name}</h1>
+//                     {`This is a ${department.name} and the chairman is ${name} `}
+//                     <p>{name}</p>
+//                 </div>
+//             </Link>
+//         )
+//     }
+// }
+
 import { Link } from "react-router-dom";
 
-export default function DepartmentCard({department}) {
-    if(!department) {
-        return <p>Department data not found here</p>
-    }else {
+export default function DepartmentCard({ department }) {
+  if (!department) {
+    return <p>Department data not found</p>;
+  }
 
-        return (
-            <Link to={`/department/${department._id}`}>
-                <div className=" bg-white rounded-xl shadow-md p-5 hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
-                    <h1 className="text-xl font-semibold text-gray-800">{department.name}</h1>
-                    <p>{department.chairman?.name || "Chairman is not assigned"}</p>
-                </div>
-            </Link>
-        )
-    }
+  const chairmanName = department.chairman?.name || "Not assigned";
+  const description = department.description || `This is the ${department.name} department.`;
+
+  return (
+    <Link to={`/department/${department._id}`}>
+      <div className="bg-white rounded-xl shadow-md p-6 w-72 hover:shadow-xl hover:scale-105 transition-transform duration-300 cursor-pointer">
+        {/* Header */}
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">{department.name}</h2>
+
+        {/* Description */}
+        <p className="text-gray-600 mb-4">{description}</p>
+
+        {/* Chairman info */}
+        <div className="flex items-center text-gray-800 font-medium">
+          <svg
+            className="w-5 h-5 text-blue-500 mr-2"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+          </svg>
+          <span>Chairman: {chairmanName}</span>
+        </div>
+      </div>
+    </Link>
+  );
 }
