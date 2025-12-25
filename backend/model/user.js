@@ -38,12 +38,13 @@ userSchema.index(
 
 
 // here gonna add some jwt and bcrypt code
-userSchema.pre("save", async function (next) {
-    if (!this.password.isModifies("password")) return next();
+userSchema.pre("save", async function () {
+    if (!this.isModified("password")) return;
 
-    return await bcrypt.hash(this.password, 10)
-    next();
+    this.password =  await bcrypt.hash(this.password, 10)
 })
+
+
 
 // compare password
 userSchema.methods.isCorrectPassword = async function (password) {
@@ -59,7 +60,7 @@ userSchema.methods.generateAccessToken = async function () {
             role: this.role,
             email: this.email
         },
-        process.env.ACCESS_TOKEN - SECRET,
+        process.env.ACCESS_TOKEN_SECRET,
         {
             expiresIn: process.env.ACCESS_TOKEN_EXPIRY
         }

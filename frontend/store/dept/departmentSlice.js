@@ -25,6 +25,7 @@ export const fetchDepartments = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             // const token = localStorage.getItem("token");
+            console.log(token);
             const response = await axios.get('http://localhost:4000/department/alldepartments', {
                 headers: {
                     Authorization: `Bearer ${token}`

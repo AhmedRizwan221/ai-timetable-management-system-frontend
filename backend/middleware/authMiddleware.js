@@ -1,24 +1,25 @@
 import jwt from "jsonwebtoken";
 import User from "../model/user.js"
+import ApiError from "../utils/ApiError.js";
+import AsyncHandler from "../utils/AsyncHandler.js";
 
-export const authMiddleware = async (req, res, next) => {
-    try {
-        const token = req.header("Authorization")?.replace("Bearer ", "");
+export const authMiddleware = AsyncHandler( async (req, _, next) => {
+        const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
+
         if (!token) {
-            return res.status(401).json({ message: "Unauthorize: Token id not provided" })
+            throw new ApiError(401, "Unauthorized request");
         }
 
-        const decoded = jwt.verify(token, process.env.SECRET_TOKEN);
+        console.log(token);
 
-        const user = await User.findById(decoded.id).select("-password");
+        const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+
+        const user = await User.findById(decodedToken?._id).select("-password");
 
         if (!user) {
-            return res.status(404).json({ message: "User not found" })
+           throw new ApiError(404, "User not found");
         }
 
         req.user = user;
         next();
-    } catch (error) {
-        res.status(403).json({ message: "Invalid or expire token" });
-    }
-}
+})
