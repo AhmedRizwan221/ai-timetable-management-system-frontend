@@ -5,14 +5,15 @@ export default function DepartmentDetails() {
     const { id } = useParams();
     const [department, setDepartment] = useState(null);
     const [loading, setLoading] = useState(true);
-    const token = localStorage.getItem('token');
+    // const token = localStorage.getItem('token');
     useEffect(() => {
      
         fetch(`http://localhost:4000/department/${id}`, {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            }
+           withCredentials: true
+            // headers: {
+            //     "Content-Type": "application/json",
+            //     Authorization: `Bearer ${token}`,
+            // }
         })
             .then((res) => res.json())
             .then((data) => {

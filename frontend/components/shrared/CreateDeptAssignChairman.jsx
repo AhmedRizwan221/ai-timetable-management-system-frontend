@@ -13,14 +13,16 @@ export default function CreateDeptAssignChiarman() {
     const [chairmen, setChairmen] = useState([]);
     const navigate = useNavigate();
 
-    const user = JSON.parse(localStorage.getItem('user'));
+    // const user = JSON.parse(localStorage.getItem('user'));
     // Fetch all chairmen on mount
     useEffect(() => {
         const fetchChairmen = async () => {
             try {
-                const token = localStorage.getItem("token");
+                // const token = localStorage.getItem("token");
                 const res = await axios.get("http://localhost:4000/user/getchairman", {
-                    headers: { Authorization: `Bearer ${token}` },
+                    withCredentials: true
+                    // headers: { Authorization: `Bearer ${token}` },
+
                 });
 
                 setChairmen(res.data || []);

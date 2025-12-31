@@ -68,6 +68,7 @@ export const handleRegister = AsyncHandler(async (req, res) => {
 export const handleLogin = AsyncHandler(async (req, res) => {
 
     const { email, password } = req.body;
+    // console.log(email, password);
 
     if (!email || !password) {
         throw new ApiError(400, "All fields are required");
@@ -87,18 +88,19 @@ export const handleLogin = AsyncHandler(async (req, res) => {
         throw new ApiError(401, "Password is incorrect")
     }
 
-    const {accessToken, refreshToken} = await generateAccessAndRefreshToken(user._id);
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id);
     // console.log(accessToken, refreshToken)
 
 
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
 
+    // console.log(loggedInUser);
     const options = {
         httpOnly: true,
         secure: true
     }
 
-    res
+    return res
         .status(200)
         .cookie("accessToken", accessToken, options)
         .cookie("refreshToken", refreshToken, options)

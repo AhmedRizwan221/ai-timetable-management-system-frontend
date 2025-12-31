@@ -1,9 +1,11 @@
 import  { useState } from "react";
 import { Menu, DoorOpen, UserRoundPlus } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Navbar() {
-  const user = JSON.parse(localStorage.getItem("user"));
+  // const user = JSON.parse(localStorage.getItem("user"));
+   const user = useSelector((state) => state.auth.user);
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (

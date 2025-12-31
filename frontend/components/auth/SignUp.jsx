@@ -16,30 +16,25 @@ export default function SignUp() {
     const SignUp = async (data) => {
         setError("");
         try {
-            const currentUser = JSON.parse(localStorage.getItem("user"));
-            const token = localStorage.getItem("token");
 
             const response = await axios.post("http://localhost:4000/auth/register", data,
                 {
-                    headers: {
-                        "Content-Type": "application/json",
-                        ...(currentUser && token ? { Authorization: `Bearer ${token}` } : {}),
-                    },
+                    withCredentials: true
                 }
             );
+             const res = response.data;
+            const user =
+                res?.data?.user ||
+                res?.message?.user;
 
-
-            if (currentUser?.role === "superadmin") {
+            if (user.role === "superadmin") {
                 alert(" Chairman created successfully!");
                 navigate("/dashboard/superadmin");
-            } else if (currentUser?.role === "chairman") {
+            } else if (user.role === "chairman") {
                 alert(" Teacher created successfully!");
                 navigate("/dashboard/chairman");
             } else {
-                const userData = response.data;
-                localStorage.setItem("token", userData.token);
-                localStorage.setItem("user", JSON.stringify(userData));
-                dispatch(login(userData));
+                dispatch(login(user));
                 navigate("/dashboard/superadmin");
             }
         } catch (error) {

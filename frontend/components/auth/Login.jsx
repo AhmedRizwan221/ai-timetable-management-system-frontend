@@ -2,41 +2,40 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
-import { login as authLogin} from "../../store/auth/authSlice.js";
+import { login as authLogin } from "../../store/auth/authSlice.js";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import {Input, Button} from "../index.js";
+import { Input, Button } from "../index.js";
 
 export default function Login() {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [error, setError] = useState("");
-    const {register, handleSubmit} = useForm();
+    const { register, handleSubmit } = useForm();
 
     const handlelogin = async (data) => {
         setError("");
-
         try {
-            const token = localStorage.getItem('token');
-            // console.log(token, "this is a token");
 
             const response = await axios.post('http://localhost:4000/auth/login', data,
                 {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`
-                    },
+                    withCredentials: true
                 });
+            // console.log("res:", response);
+            // console.log("res.data:", response.data);
+            // console.log("res.data.data:", response.data?.data);
+            const res = response.data;
+            console.log(res);
+            const user = res?.message?.user;
 
-            const userData = response.data;
-            localStorage.setItem('token', userData.token);
-            localStorage.setItem("user",  JSON.stringify(userData));
-            dispatch(authLogin(userData));
+            // const { user } = response.data.data;
+            console.log(user);
+            dispatch(authLogin(user));
 
-            if (userData.role === 'superadmin') {
+            if (user.role === 'superadmin') {
                 navigate('/dashboard/superadmin');
-            } else if (userData.role === 'chairman') {
+            } else if (user.role === 'chairman') {
                 navigate('/dashboard/chairman');
             } else {
                 navigate('/');
@@ -81,6 +80,7 @@ export default function Login() {
                             label="password"
                             type="password"
                             placeholder="Enter your password"
+                            autoComplete="current-password"
                             {...register('password', {
                                 required: true
                             })}

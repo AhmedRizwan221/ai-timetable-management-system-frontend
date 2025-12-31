@@ -13,18 +13,19 @@ export default function CreateTeacherChairman() {
     const [error, setError] = useState("");
 
 
-    const user = JSON.parse(localStorage.getItem('user'));
-    const token = localStorage.getItem('token');
+    // const user = JSON.parse(localStorage.getItem('user'));
+    // const token = localStorage.getItem('token');
 
     const handleUser = async ( data ) => {
         setError("");
 
         try {
             const response = await axios.post('http://localhost:4000/auth/register', data, {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                }
+                withCredentials: true
+                // headers: {
+                //     "Content-Type": "application/json",
+                //     Authorization: `Bearer ${token}`,
+                // }
             })
 
             if (user?.role === 'superadmin') {
@@ -35,8 +36,8 @@ export default function CreateTeacherChairman() {
                 navigate("/dashboard/chairman");
             } else {
                 const userData = response.data;
-                localStorage.setItem("token", userData.token);
-                localStorage.setItem("user", JSON.stringify(userData));
+                // localStorage.setItem("token", userData.token);
+                // localStorage.setItem("user", JSON.stringify(userData));
                 dispatch(login(userData));
                 navigate("/dashboard/superadmin");
             }

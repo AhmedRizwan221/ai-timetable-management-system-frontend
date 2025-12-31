@@ -1,18 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const token = localStorage.getItem('token');
 
 export const departmentCreate = createAsyncThunk(
     "department/create",
     async (deptData, {rejectWithValue}) => {
         try {
             const response = await axios.post('http://localhost:4000/department/create', deptData, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+                withCredentials: true
             })
-            return response.data;
+            return response.data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -24,14 +21,11 @@ export const fetchDepartments = createAsyncThunk(
     "department/fetchAllDept",
     async (_, { rejectWithValue }) => {
         try {
-            // const token = localStorage.getItem("token");
             console.log(token);
             const response = await axios.get('http://localhost:4000/department/alldepartments', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+               withCredentials: true
             })
-            return response.data;
+            return response.data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }

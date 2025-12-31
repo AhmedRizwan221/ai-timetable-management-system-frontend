@@ -4,7 +4,7 @@ import Select from "./shrared/Select";
 import Login from "./auth/Login";
 import SignUp from "./auth/SignUp"
 import AuthLayout from "./AuthLayout";
-import SuperAdminDashboard from "../components/dashboard/SuperAdminDashboard";
+import SuperAdminDashboard from "../components/dashboard/SuperAdminDashboard.jsx";
 import ChairmanDashboard from "../components/dashboard/ChairmanDashboard";
 import DashboardLayout from "../components/layout/DashboardLayout";
 import Home from "../components/dashboard/Home";

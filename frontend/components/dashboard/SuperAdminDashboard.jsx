@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import DepartmentCard from "../layout/DepartmentCard";
 import { fetchDepartments } from "../../store/dept/departmentSlice";
 import { useDispatch, useSelector } from "react-redux";
-import Navbar from "../layout/Navbar";
 
 function SuperAdminDashboard() {
   const dispatch = useDispatch();

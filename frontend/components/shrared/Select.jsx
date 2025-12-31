@@ -11,6 +11,7 @@ function Select({
         <div className="w-full">
             {label && <label className="py-3 px-2" htmlFor={id}>{label}</label>}
             <select
+                onChange={(e) => setRole(e.target.value)}
                 {...props}
                 id={id}
                 className={`py-3 px-3 rounded-lg bg-white text-black outline-none focus:bg-gray-500 duration-200 border borader-gray-200 w-full ${className}`}
