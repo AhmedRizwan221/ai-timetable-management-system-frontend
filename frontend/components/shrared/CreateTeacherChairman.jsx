@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Input, Button } from "../index";
 import axios from "axios";
@@ -12,21 +12,18 @@ export default function CreateTeacherChairman() {
     const { register, handleSubmit, reset } = useForm();
     const [error, setError] = useState("");
 
+    const user = useSelector((state) => state.auth.user);
+    // console.log(user);
 
-    // const user = JSON.parse(localStorage.getItem('user'));
-    // const token = localStorage.getItem('token');
-
-    const handleUser = async ( data ) => {
+    const handleUser = async (data) => {
         setError("");
 
         try {
             const response = await axios.post('http://localhost:4000/auth/register', data, {
                 withCredentials: true
-                // headers: {
-                //     "Content-Type": "application/json",
-                //     Authorization: `Bearer ${token}`,
-                // }
             })
+            const user = response.data.data;
+            console.log(user);
 
             if (user?.role === 'superadmin') {
                 alert("Chairman Created Succefully");
@@ -35,11 +32,8 @@ export default function CreateTeacherChairman() {
                 alert("Teacher Creaetd Succegully");
                 navigate("/dashboard/chairman");
             } else {
-                const userData = response.data;
-                // localStorage.setItem("token", userData.token);
-                // localStorage.setItem("user", JSON.stringify(userData));
-                dispatch(login(userData));
-                navigate("/dashboard/superadmin");
+                dispatch(login(user));
+                navigate("/");
             }
 
             reset();

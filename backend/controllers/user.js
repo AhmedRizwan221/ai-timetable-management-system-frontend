@@ -35,7 +35,7 @@ export const handleRegister = AsyncHandler(async (req, res) => {
     }
 
     const existingUser = await User.findOne({
-        $or: [{ email }, { role }]
+       email
     })
 
     if (existingUser) {
@@ -118,7 +118,9 @@ export const handleLogin = AsyncHandler(async (req, res) => {
 
 export const handleGetAllChairmen = AsyncHandler(async (req, res) => {
     // Fetch all users with role = chairman
-    const chairmen = await User.find({ role: "chairman" }).select("name -email role");
+    const chairmen = await User.find({ role: "chairman" }).select("name email role");
+
+    // console.log(chairmen);
 
     if (!chairmen || chairmen.length === 0) {
         throw new ApiError(404, "No chiarman found")

@@ -22,10 +22,10 @@ export default function SignUp() {
                     withCredentials: true
                 }
             );
-             const res = response.data;
-            const user =
-                res?.data?.user ||
-                res?.message?.user;
+             const user = response.data.data.user;
+            // const user =
+            //     res?.data?.user ||
+            //     res?.message?.user;
 
             if (user.role === "superadmin") {
                 alert(" Chairman created successfully!");
@@ -35,7 +35,7 @@ export default function SignUp() {
                 navigate("/dashboard/chairman");
             } else {
                 dispatch(login(user));
-                navigate("/dashboard/superadmin");
+                navigate("/");
             }
         } catch (error) {
             console.error(error);

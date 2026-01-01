@@ -22,15 +22,10 @@ export default function Login() {
                 {
                     withCredentials: true
                 });
-            // console.log("res:", response);
-            // console.log("res.data:", response.data);
-            // console.log("res.data.data:", response.data?.data);
-            const res = response.data;
-            console.log(res);
-            const user = res?.message?.user;
 
-            // const { user } = response.data.data;
-            console.log(user);
+            const user = response.data.data.user;
+            // console.log(user);
+
             dispatch(authLogin(user));
 
             if (user.role === 'superadmin') {
@@ -46,6 +41,7 @@ export default function Login() {
             setError(error.response?.data?.message || "Login failed. Please try again.");
         }
     }
+
     return (
         <div className="flex justify-center items-center min-h-screen">
             <div className={`m-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}>

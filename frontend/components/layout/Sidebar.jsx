@@ -135,9 +135,7 @@ export default function Sidebar() {
 
  
   const user = useSelector((state) => state.auth.user);
-  console.log(user);
-
-
+  // console.log(user);
 
   return (
     <aside className="flex md:block md:w-64 bg-slate-800 text-white p-2 md:p-5">
