@@ -9,7 +9,7 @@ export const departmentCreate = createAsyncThunk(
             const response = await axios.post('http://localhost:4000/department/create', deptData, {
                 withCredentials: true
             })
-            return response.data.data;
+            return response.data;
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -21,11 +21,10 @@ export const fetchDepartments = createAsyncThunk(
     "department/fetchAllDept",
     async (_, { rejectWithValue }) => {
         try {
-            console.log(token);
             const response = await axios.get('http://localhost:4000/department/alldepartments', {
                withCredentials: true
             })
-            return response.data.data;
+            return response.data;
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }

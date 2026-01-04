@@ -5,10 +5,10 @@ import DepartmentCard from "../layout/DepartmentCard";
 
 export default function DeptDashboard() {
   const dispatch = useDispatch();
-  const { departments, loading, error } = useSelector(
+  const { departments, loading, error}  = useSelector(
     (state) => state.department
   );
-  // // departments are fetching 
+  // departments are fetching 
   // console.log("Departments:", departments);
 
   useEffect(() => {

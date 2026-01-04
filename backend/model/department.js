@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const depatSchema = new mongoose.Schema({
     name: {
@@ -9,9 +9,13 @@ const depatSchema = new mongoose.Schema({
     chairman: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        unique: true,
         sparse: true
+    },
+    faculty: {
+        type: Schema.Types.ObjectId,
+        ref: "Faculty",
+        // required: true
     }
 }, {timestamps: true});
 
-export default mongoose.model('Department', depatSchema);
+export const Department = mongoose.model("Department", depatSchema);
