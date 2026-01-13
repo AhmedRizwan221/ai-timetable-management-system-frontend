@@ -8,7 +8,7 @@ const router = express.Router();
 // router.post('/create', handleAddDepartment);
 router.post('/create', authMiddleware, verifyRole(['superadmin']) , handleAddDepartment);
 router.put('/update/:id', authMiddleware, verifyRole(['superadmin']), handleUpdateDept);
-router.get('/alldepartments', authMiddleware, verifyRole(['superadmin']), handleGetAllDept);
-router.get('/:id',authMiddleware,verifyRole(['superadmin']), handleGetSingleDept);
+router.get('/alldepartments', handleGetAllDept);
+router.get('/:id', handleGetSingleDept);
 
 export default router;
