@@ -22,14 +22,18 @@ export default function SignUp() {
                     withCredentials: true
                 }
             );
-             const user = response.data.data.user;
+            const user = response.data.data.user;
             // const user =
             //     res?.data?.user ||
             //     res?.message?.user;
 
             if (user.role === "superadmin") {
-                alert(" Chairman created successfully!");
+                alert(" Dean created successfully!");
                 navigate("/dashboard/superadmin");
+            }
+            else if (user.role === 'dean') {
+                alert("Chairman created successfully");
+                navigate("/dashboard/dean");
             } else if (user.role === "chairman") {
                 alert(" Teacher created successfully!");
                 navigate("/dashboard/chairman");

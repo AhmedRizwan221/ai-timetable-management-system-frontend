@@ -18,7 +18,7 @@ export default function Login() {
         setError("");
         try {
 
-            const response = await axios.post('http://localhost:4000/auth/login', data,
+            const response = await axios.post('http://localhost:8000/api/v1/users/login', data,
                 {
                     withCredentials: true
                 });
@@ -30,7 +30,10 @@ export default function Login() {
 
             if (user.role === 'superadmin') {
                 navigate('/dashboard/superadmin');
-            } else if (user.role === 'chairman') {
+            } else if (user.role === 'dean') {
+                navigate("/dashboard/dean");
+            }
+            else if (user.role === 'chairman') {
                 navigate('/dashboard/chairman');
             } else {
                 navigate('/');

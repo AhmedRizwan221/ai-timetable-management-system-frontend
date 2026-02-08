@@ -13,6 +13,7 @@ import CreateTeacherChairman from "../components/shrared/CreateTeacherChairman";
 import Navbar from "./layout/Navbar";
 import DepartmentCard from "../components/layout/DepartmentCard";
 import HumburgerMenu from "./shrared/HumburgerMenu";
+import DeanDashboard from "./dashboard/DeanDashboard.jsx";
 
 export {
     Button,
@@ -29,5 +30,6 @@ export {
     CreateTeacherChairman,
     Navbar,
     DepartmentCard,
-    HumburgerMenu
+    HumburgerMenu,
+    DeanDashboard
 }

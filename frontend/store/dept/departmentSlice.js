@@ -3,13 +3,13 @@ import axios from "axios";
 
 
 export const departmentCreate = createAsyncThunk(
-    "department/create",
-    async (deptData, {rejectWithValue}) => {
+    "departments/create",
+    async (deptData, { rejectWithValue }) => {
         try {
-            const response = await axios.post('http://localhost:4000/department/create', deptData, {
+            const response = await axios.post('http://localhost:8000/api/v1/departments/create', deptData, {
                 withCredentials: true
             })
-            return response.data;
+            return response.data.data.departments;
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -19,12 +19,12 @@ export const departmentCreate = createAsyncThunk(
 // fetch departments 
 export const fetchDepartments = createAsyncThunk(
     "department/fetchAllDept",
-    async (_, { rejectWithValue }) => {
+    async (facultyId, { rejectWithValue }) => {
         try {
-            const response = await axios.get('http://localhost:4000/department/alldepartments', {
-               withCredentials: true
+            const response = await axios.get(`http://localhost:8000/api/v1/departments/allDepartments/${facultyId}/departments`, {
+                withCredentials: true
             })
-            return response.data;
+            return response.data.data.departments;
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }

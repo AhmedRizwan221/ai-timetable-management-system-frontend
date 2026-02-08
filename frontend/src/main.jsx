@@ -5,7 +5,7 @@ import App from './App.jsx';
 import { store } from "../store/store";
 import { Provider } from 'react-redux';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { Login, AuthLayout, SignUp, ChairmanDashboard, SuperAdminDashboard, DashboardLayout, Home, DeptDashboard, CreateTeacherChairman } from '../components/index';
+import { Login, AuthLayout, SignUp, ChairmanDashboard, SuperAdminDashboard, DashboardLayout, Home, DeptDashboard, CreateTeacherChairman, DeanDashboard } from '../components/index';
 import CreateDeptAssignChiarman from '../components/shrared/CreateDeptAssignChairman';
 import Department from "../pages/Department"
 
@@ -42,6 +42,16 @@ const router = createBrowserRouter([
           <AuthLayout authentication={true}>
             <DashboardLayout>
               <SuperAdminDashboard />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+      {
+        path: '/dashboard/dean',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <DeanDashboard />
             </DashboardLayout>
           </AuthLayout>
         )
