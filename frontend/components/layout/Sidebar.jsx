@@ -139,7 +139,7 @@ export default function Sidebar() {
 
   return (
     <aside className="flex md:block md:w-64 bg-slate-800 text-white p-2 md:p-5">
-      <h2 className="text-xl font-semibold mb-10 text-center">{user?.role === 'superadmin' ? "Admin Panel" : "Chairman Panel"}</h2>
+      <h2 className="text-xl font-semibold mb-10 text-center">{user?.role === 'admin' ? "Admin Panel" : "Chairman Panel"}</h2>
       <nav className="flex-1 space-y-4">
         <button
           className="md:hidden text-2xl"

@@ -1,36 +1,33 @@
 import React, { useEffect } from "react";
-import { fetchDepartments } from "../../store/dept/departmentSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
 import FacultyCard from "../layout/facultyCard";
+import { useNavigate } from "react-router-dom";
+import {fetchFaculties} from "../../store/faculty/facultySlice.js";
 
 function SuperAdminDashboard() {
   const dispatch = useDispatch();
-  const facultyId = useParams();
+  const navigate = useNavigate();
 
-  // Fetch all departments on mount from redux
   useEffect(() => {
-    if (facultyId) {
-      dispatch(fetchDepartments(facultyId));
-    }
-  }, [dispatch]);
+    dispatch(fetchFaculties());
+  }, [dispatch])
 
-  const { departments = [], error, status } = useSelector((state) => state.department);
+  const { faculties = [], error, status } = useSelector((state) => state.faculty);
 
-// here use faculty card and render all faculties inside the admin
+  // console.log(faculties); 
   return (
     <div className="px-4 py-6">
       <div className="flex flex-wrap gap-6">
-        {status === "loading" && <p>Loading departments...</p>}
+        {status === "loading" && <p>Loading faculties...</p>}
         {status === "failed" && <p>Error: {error.message}</p>}
-        {status === "succeeded" && departments.length > 0 ? (
-          departments.map((dept) =>
-            dept?._id ? (
-              <FacultyCard key={faculty._id} faculty={faculty} />
+        {status === "succeeded" && faculties.length > 0 ? (
+          faculties.map((fact) =>
+            fact?._id ? (
+              <FacultyCard key={fact._id} faculty={fact} />
             ) : null
           )
         ) : (
-          <p>No departments found.</p>
+          <p>No Faculty found.</p>
         )}
       </div>
     </div>

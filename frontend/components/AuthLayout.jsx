@@ -9,7 +9,7 @@ function Protected({children, authentication = true}) {
     const user = useSelector(state => state.auth.user);
 
     const getDashboardPath = (role) => {
-        if(role === 'superadmin') {
+        if(role === 'admin') {
             return '/dashboard/superadmin';
         }else if(role === 'chairman') {
             return '/dashboard/chairman';

@@ -28,7 +28,8 @@ export const fetchDepartments = createAsyncThunk(
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
-    })
+    }
+)
 
 
 const initialState = {
@@ -45,7 +46,7 @@ const departmentSlice = createSlice({
             state.departments.push(action.payload.department);
         },
         deleteDepartment: (state, action) => {
-            state.departments = state.departments.filter((dept) => dept.id !== action.payload.departmentId);
+            state.departments = state.departments.filter((dept) => dept._id !== action.payload.departmentId);
         },
         updateDepartment: (state, action) => {
             const updateDept = action.payload.department;

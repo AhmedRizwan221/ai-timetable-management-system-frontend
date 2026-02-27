@@ -5,9 +5,10 @@ import App from './App.jsx';
 import { store } from "../store/store";
 import { Provider } from 'react-redux';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { Login, AuthLayout, SignUp, ChairmanDashboard, SuperAdminDashboard, DashboardLayout, Home, DeptDashboard, CreateTeacherChairman, DeanDashboard } from '../components/index';
+import { Login, AuthLayout, SignUp, ChairmanDashboard, SuperAdminDashboard, DashboardLayout, Home, DeptDashboard, CreateTeacherChairman, DeanDashboard, FacultyDashboard } from '../components/index';
 import CreateDeptAssignChiarman from '../components/shrared/CreateDeptAssignChairman';
 import Department from "../pages/Department"
+import Faculty from "../pages/Faculty.jsx";
 
 const router = createBrowserRouter([
   {
@@ -67,6 +68,26 @@ const router = createBrowserRouter([
         )
       },
       {
+        path: `/dashboard/facultyDashboard`,
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <FacultyDashboard />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+      {
+        path: '/faculties/:facultyId',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <Faculty />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+      {
         path: '/dashboard/deptDashboard',
         element: (
           <AuthLayout authentication={true}>
@@ -77,7 +98,7 @@ const router = createBrowserRouter([
         )
       },
       {
-        path: '/department/:id',
+        path: '/departments/:id',
         element: (
           <AuthLayout authentication={true}>
             <DashboardLayout>

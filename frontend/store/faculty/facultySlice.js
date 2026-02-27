@@ -16,8 +16,21 @@ export const facultyCreate = createAsyncThunk(
     }
 )
 
+// fetch all faculties 
 export const fetchFaculties = createAsyncThunk(
-    "faculties"
+    
+    "faculties/all-faculties",
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await axios.get('http://localhost:8000/api/v1/faculties/all-faculties', {
+                withCredentials: true
+            })
+            // console.log(response);
+            return response.data.data.faculties
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
 )
 
 const initialState = {
@@ -30,14 +43,39 @@ const facultySlice = createSlice({
     name: "facultySlice",
     initialState,
     reducers: {
-        createFaculty: (action, payload) => {
+        createFaculty: (state, action) => {
             state.faculties.push(action.payload.faculty)
         },
-        deleteFaculty: (action, payload) => {
-            state.faculties = state.faculties.filter((fact) => fact.id !== action.payload.facultyId)
+        deleteFaculty: (state, action) => {
+            state.faculties = state.faculties.filter((fact) => fact._id !== action.payload.facultyId)
         },
-        updateFaculty: (action, payload) => {
-            
-        }
+        updateFaculty: (state, action) => {
+            const index = state.faculties.findIndex(
+                (fact) => fact._id === action.payload._id
+            );
+
+            if (index !== -1) {
+                state.faculties[index] = action.payload;
+            }
+        },
+    },
+
+     extraReducers: (builder) => {
+        builder
+            .addCase(fetchFaculties.pending, (state) => {
+                state.status = "loading";
+            })
+            .addCase(fetchFaculties.fulfilled, (state, action) => {
+                state.status = "succeeded";
+                state.faculties = action.payload;  // store data here
+            })
+            .addCase(fetchFaculties.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.payload;
+            });
     }
 })
+
+export const {createFaculty, deleteFaculty, updateFaculty} = facultySlice.actions;
+
+export default facultySlice.reducer
