@@ -5,12 +5,12 @@ export default function DepartmentCard({ department }) {
     return <p>Department data not found</p>;
   }
 
-  const chairmanName = department.chairman?.name || "Not assigned";
+  const chairmanName = department.chairman?.fullName || "Not assigned";
 
   return (
-    <Link to={`/department/${department._id}`}>
+    <Link to={`/departments/${department._id}`}>
       <div className="bg-white rounded-xl shadow-md p-6 w-72 hover:shadow-xl hover:scale-105 transition-transform duration-300 cursor-pointer">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">{department.name}</h2>      
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">{department.deptName}</h2>      
         <div className="flex items-center text-gray-800 font-medium">
           <svg
             className="w-5 h-5 text-blue-500 mr-2"

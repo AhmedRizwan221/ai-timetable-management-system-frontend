@@ -7,8 +7,7 @@ import { Provider } from 'react-redux';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { Login, AuthLayout, SignUp, ChairmanDashboard, SuperAdminDashboard, DashboardLayout, Home, DeptDashboard, CreateTeacherChairman, DeanDashboard, FacultyDashboard } from '../components/index';
 import CreateDeptAssignChiarman from '../components/shrared/CreateDeptAssignChairman';
-import Department from "../pages/Department"
-import Faculty from "../pages/Faculty.jsx";
+import Department from "../pages/Department";
 
 const router = createBrowserRouter([
   {
@@ -68,7 +67,7 @@ const router = createBrowserRouter([
         )
       },
       {
-        path: `/dashboard/facultyDashboard`,
+        path: '/faculties/:facultyId/departments',
         element: (
           <AuthLayout authentication={true}>
             <DashboardLayout>
@@ -77,16 +76,16 @@ const router = createBrowserRouter([
           </AuthLayout>
         )
       },
-      {
-        path: '/faculties/:facultyId',
-        element: (
-          <AuthLayout authentication={true}>
-            <DashboardLayout>
-              <Faculty />
-            </DashboardLayout>
-          </AuthLayout>
-        )
-      },
+      // {
+      //   path: `/dashboard/facultyDashboard`,
+      //   element: (
+      //     <AuthLayout authentication={true}>
+      //       <DashboardLayout>
+      //         <FacultyDashboard />
+      //       </DashboardLayout>
+      //     </AuthLayout>
+      //   )
+      // },
       {
         path: '/dashboard/deptDashboard',
         element: (
@@ -145,7 +144,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>
       <RouterProvider router={router} >
-        <App />
+        {/* <App /> */}
       </RouterProvider>
     </Provider>
   </StrictMode>,

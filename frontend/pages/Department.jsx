@@ -1,33 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function DepartmentDetails() {
-    const { id } = useParams();
-    const [department, setDepartment] = useState(null);
-    const [loading, setLoading] = useState(true);
-    useEffect(() => {
-        fetch(`http://localhost:4000/department/${id}`, {
-            withCredentials: true
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                // console.log("Single Department:", data); 
-                setDepartment(data);
-                setLoading(false);
-            })
-            .catch((err) => console.error("Fetch Error:", err));
-    }, [id]);
 
-    if (loading) return <p className="p-6">Loading...</p>;
-    if (!department) return <p className="p-6">Department not found</p>;
+
+    const { departments = [], error, status } = useSelector((state) => state.department);
+    console.log(departments);
 
     return (
         <div className="p-6">
-            <h1 className="text-3xl font-bold">{department.name}</h1>
-            <p className="text-lg mt-2">
-                Chairman: {department.chairman?.name || "Not assigned"}
-            </p>
-            <p>Email: {department.chairman?.email}</p>
+            {departments && departments.map((dept) => (
+                <div key={dept._id} className="mb-6 border p-4 rounded">
+                    <h1 className="text-3xl font-bold">{dept.deptName}</h1>
+
+                    <p className="text-lg mt-2">
+                        Chairman: {dept.chairman?.fullName || "Not assigned"}
+                    </p>
+
+                    <p>Email: {dept.chairman?.email || "No email available"}</p>
+                </div>
+            ))}
         </div>
     );
 }

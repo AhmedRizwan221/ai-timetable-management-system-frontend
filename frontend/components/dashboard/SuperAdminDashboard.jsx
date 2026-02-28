@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import FacultyCard from "../layout/facultyCard";
 import { useNavigate } from "react-router-dom";
-import {fetchFaculties} from "../../store/faculty/facultySlice.js";
+import { fetchFaculties } from "../../store/faculty/facultySlice.js";
 
 function SuperAdminDashboard() {
   const dispatch = useDispatch();

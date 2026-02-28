@@ -24,6 +24,7 @@ export const fetchDepartments = createAsyncThunk(
             const response = await axios.get(`http://localhost:8000/api/v1/departments/allDepartments/${facultyId}/departments`, {
                 withCredentials: true
             })
+            // console.log(response.data.data.departments);
             return response.data.data.departments;
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
