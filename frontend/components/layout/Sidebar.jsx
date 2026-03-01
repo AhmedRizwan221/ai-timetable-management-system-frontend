@@ -126,20 +126,35 @@
 
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Home, Users, LogOut, UserCog, Menu } from "lucide-react";
+import { Home, Users, LogOut, UserCog, Menu, Building2, GraduationCap } from "lucide-react";
 import { useSelector } from "react-redux";
 
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
 
- 
+
   const user = useSelector((state) => state.auth.user);
+
   // console.log(user);
+  let panelTitle = "";
+  if (user?.role === 'admin') {
+    panelTitle = "Admin Panel"
+  } else if (user?.role === "dean") {
+    panelTitle = "Dean Panel"
+  } else if (user?.role === "chairman") {
+    panelTitle = "Chairman Panel"
+  }
+
+  const dashboardRoutes = {
+    admin: "/dashboard/superadmin",
+    chairman: "/dashboard/ChairmanDashboard",
+    dean: "/dashboard/DeanDashboard",
+  };
 
   return (
     <aside className="flex md:block md:w-64 bg-slate-800 text-white p-2 md:p-5">
-      <h2 className="text-xl font-semibold mb-10 text-center">{user?.role === 'admin' ? "Admin Panel" : "Chairman Panel"}</h2>
+      <h2 className="text-xl font-semibold mb-10 text-center">{panelTitle}</h2>
       <nav className="flex-1 space-y-4">
         <button
           className="md:hidden text-2xl"
@@ -149,27 +164,45 @@ export default function Sidebar() {
         </button>
 
         <ul className=" flex md:flex-col gap-4">
-          <Link to={user?.role === 'superadmin' ? "/dashboard/superadmin" : "/dashboard/ChairmanDashboard"}
+          <Link to={dashboardRoutes[user?.role] || "/"}
             className="flex items-center gap-2 hover:text-yellow-400 ">
             <Home size={18} /> Dashboard
           </Link>
 
-          {user?.role === 'superadmin' && (
-            <Link to="/dashboard/deptDashboard" className="flex items-center gap-2 hover:text-yellow-400">
-              <Users size={18} /> Departments
+          {user?.role === 'admin' && (
+            <Link to="/dashboard/facultyDashboard" className="flex items-center gap-2 hover:text-yellow-400">
+              <GraduationCap size={18} /> Faculties
             </Link>
           )}
 
-          {user?.role === 'superadmin' && (
-            <Link to="/dashboard/superadmin/create-chairman" className="flex items-center gap-2 hover:text-yellow-400">
+          {user?.role === 'admin' && (
+            <Link to="/dashboard/superadmin/create-dean" className="flex items-center gap-2 hover:text-yellow-400">
+              <Users size={18} /> Create Dean
+            </Link>
+          )}
+          {user?.role === 'admin' && (
+            <Link to="/dashboard/superadmin/create-faculty" className="flex items-center gap-2 hover:text-yellow-400">
+              <UserCog size={24} />Create Faculty
+            </Link>
+          )}
+          {user?.role === 'admin' && (
+            <Link to="/dashboard/superadmin/manage-deans" className="flex items-center gap-2 hover:text-yellow-400">
+              <UserCog size={24} />Manage Deans
+            </Link>
+          )}
+          {/* //////////dean faculty stuff is here //////////////////////////////////////// */}
+          {/* for faculty and assign dean we need one more component */}
+          {user?.role === 'dean' && (
+            <Link to="/dashboard/dean/create-chairman" className="flex items-center gap-2 hover:text-yellow-400">
               <Users size={18} /> Create Chairman
             </Link>
           )}
-          {user?.role === 'superadmin' && (
-            <Link to="/dashboard/superadmin/create-department" className="flex items-center gap-2 hover:text-yellow-400">
-              <UserCog size={24} />Create Dept & Assign Chairman
+          {user?.role === 'dean' && (
+            <Link to="/dashboard/dean/create-department" className="flex items-center gap-2 hover:text-yellow-400">
+              <Building2 size={24} />Create Department
             </Link>
           )}
+
           <li>
             {user?.role === 'chairman' && (
               <Link to="/dashboard/chairman/create-teacher" className="flex items-center gap-2 hover:text-yellow-400">

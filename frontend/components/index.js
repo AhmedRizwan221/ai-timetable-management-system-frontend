@@ -15,6 +15,8 @@ import DepartmentCard from "../components/layout/DepartmentCard";
 import HumburgerMenu from "./shrared/HumburgerMenu";
 import DeanDashboard from "./dashboard/DeanDashboard.jsx";
 import FacultyDashboard from "./dashboard/facultyDasbhoard.jsx";
+import FacultyDepartments from "./dashboard/FacultyDepartments.jsx";
+import ManageDeans from "./dashboard/ManageDeans.jsx";
 
 export {
     Button,
@@ -33,5 +35,7 @@ export {
     DepartmentCard,
     HumburgerMenu,
     DeanDashboard,
-    FacultyDashboard
+    FacultyDashboard,
+    FacultyDepartments,
+    ManageDeans
 }

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from "react-redux";
-import { fetchDepartments } from "../../store/dept/departmentSlice.js";
+import { fetchAllDepartments } from "../../store/dept/departmentSlice.js";
 import {Navbar, Select} from "../index";
 
 
@@ -12,7 +12,7 @@ export default function Home() {
 
     //fetch depts from redux 
     useEffect(() => {
-        dispatch(fetchDepartments());
+        dispatch(fetchAllDepartments());
     }, [dispatch]);
 
 

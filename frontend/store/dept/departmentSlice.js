@@ -16,11 +16,14 @@ export const departmentCreate = createAsyncThunk(
     }
 )
 
-// fetch departments 
+// fetch departments in faculty
 export const fetchDepartments = createAsyncThunk(
-    "department/fetchAllDept",
+    "department/fetchAllDeptFaculty",
     async (facultyId, { rejectWithValue }) => {
         try {
+            if (!facultyId) {
+                return rejectWithValue("Faculty ID is required");
+            }
             const response = await axios.get(`http://localhost:8000/api/v1/departments/allDepartments/${facultyId}/departments`, {
                 withCredentials: true
             })
@@ -32,6 +35,21 @@ export const fetchDepartments = createAsyncThunk(
     }
 )
 
+// fetch all departments 
+export const fetchAllDepartments = createAsyncThunk(
+    "department/fetchAllDept",
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await axios.get(`http://localhost:8000/api/v1/departments/allDepartments`, {
+                withCredentials: true
+            })
+            // console.log(response.data.data.departments);
+            return response.data.data.departments;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
 
 const initialState = {
     departments: [],
@@ -66,6 +84,10 @@ const departmentSlice = createSlice({
         builder
             .addCase(fetchDepartments.pending, (state) => {
                 state.status = "loading";
+            })
+            .addCase(fetchAllDepartments.fulfilled, (state, action) => {
+                state.status = "succeeded";
+                state.departments = action.payload
             })
             .addCase(fetchDepartments.fulfilled, (state, action) => {
                 state.status = "succeeded";

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { departmentCreate } from "../../store/dept/departmentSlice";
+import { createFaculty } from "../../store/faculty/facultySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { Input, Button } from "../index";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { getDeans } from "../../store/user/user.js";
 
 export default function CreateDeptAssignChiarman() {
     const dispatch = useDispatch();
@@ -12,35 +12,25 @@ export default function CreateDeptAssignChiarman() {
     const [err, setErr] = useState("");
     const [chairmen, setChairmen] = useState([]);
     const navigate = useNavigate();
-
     useEffect(() => {
-        const fetchChairmen = async () => {
-            try {
-                const res = await axios.get("http://localhost:4000/user/getchairman", {
-                    withCredentials: true
-                });
-                // console.log(res.data)
+        dispatch(getDeans());
+    }, [dispatch])
 
-                setChairmen(res.data.data || []);
-            } catch (err) {
-                console.error("Error fetching chairmen:", err);
-            }
-        };
+    // redux level fetching 
+    const {deans = [], error, status} = useSelector((state) => state.user);
+    // console.log(deans);
 
-        fetchChairmen();
-    }, []);
-
-    // send data to redux to create a dept
-    const handleCreateDept = async (data) => {
+    // send data to redux to create a faculty
+    const handleCreateFact = async (data) => {
         setErr("");
         try {
-            await dispatch(departmentCreate({
-                name: data.department,
-                chairmanId: data.chairmanId,
+            await dispatch(createFaculty({
+                name: data.facultyName,
+                deanId: data.deanId,
             })).unwrap();
             reset();
-            alert("Department created successfully!");
-            if (user?.role === 'superadmin') {
+            alert("Faculty created successfully!");
+            if (user?.role === 'admin') {
                 navigate('/dashboard/superadmin');
             }
         } catch (error) {
@@ -54,7 +44,44 @@ export default function CreateDeptAssignChiarman() {
                     <p className="text-red-600 text-sm mb-2 text-center">{err}</p>
                 )}
                 <form
-                    onSubmit={handleSubmit(handleCreateDept)}
+                    onSubmit={handleSubmit(handleCreateFact)}
+                    className=""
+                >
+                    <div className="flex flex-col gap-4 mb-4">
+                        <Input
+                            className="w-1/2"
+                            label="Create Faculty"
+                            placeholder="Enter faculty name"
+                            type="text"
+                            {...register("facultyname", { required: true })}
+                        />
+
+                        <select
+                            className="border border-gray-400 p-2 rounded-lg"
+                            {...register("deanId", { required: true })}
+                        >
+                            <option value="">Select Dean</option>
+                            {deans.map((dean) => (
+                                <option key={dean._id} value={dean._id}>
+                                    {dean.name} ({dean.email})
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <Button type="submit" className="w-full">
+                        Create Faculty
+                    </Button>
+
+                    {err && <p className="text-red-500 mt-2 items-center">{err.message}</p>}
+                </form>
+            </div>
+        </div>
+    )
+}
+// use that form for creation of department 
+{/* <form
+                    onSubmit={handleSubmit(handleCreateFact)}
                     className=""
                 >
                     <div className="flex flex-col gap-4 mb-4">
@@ -84,8 +111,4 @@ export default function CreateDeptAssignChiarman() {
                     </Button>
 
                     {err && <p className="text-red-500 mt-2 items-center">{err.message}</p>}
-                </form>
-            </div>
-        </div>
-    )
-}
+                </form> */}

@@ -17,20 +17,24 @@ export default function CreateTeacherChairman() {
 
     const handleUser = async (data) => {
         setError("");
-
+        // console.log(data);
         try {
-            const response = await axios.post('http://localhost:4000/auth/register', data, {
+            const response = await axios.post('http://localhost:8000/api/v1/users/register', data, {
                 withCredentials: true
             })
+            console.log(response);
             const user = response.data.data;
             console.log(user);
 
-            if (user?.role === 'superadmin') {
-                alert("Chairman Created Succefully");
+            if (user?.role === 'admin') {
+                alert("Dean Created Succefully");
                 navigate('/dashboard/superadmin');
+            } else if (user?.role === 'dean') {
+                alert("Chairman Creaetd Succegully");
+                navigate("/dashboard/dean");
             } else if (user?.role === 'chairman') {
-                alert("Teacher Creaetd Succegully");
-                navigate("/dashboard/chairman");
+                alert("Teacher created successfully")
+                navigate("/dashboard/chairman")
             } else {
                 dispatch(login(user));
                 navigate("/");
@@ -43,23 +47,30 @@ export default function CreateTeacherChairman() {
         }
     }
 
+    let nameLabels = {
+        admin: "Dean Name",
+        dean: "Chairman Name",
+        chairman: "Teacher Name"
+    }
+
     return (
         <div className="flex justify-center items-center min-h-screen px-5" >
             <div className={`m-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}>
-                <h1 className="font-bold text-center text-base sm:text-xl lg:text-2xl mb-4">{user?.role === 'superadmin' && " Create Chairman for Department"}
+                <h1 className="font-bold text-center text-base sm:text-xl lg:text-2xl mb-4">{user?.role === 'admin' && " Create Dean for Faculty"}
+                    {user?.role === 'dean' && "Create Chairman for Department"}
                     {user?.role === 'chairman' && "Create Teacher for Department"}
                 </h1>
                 {error && (
-                    <p className="text-red-600 text-sm mb-2 text-center">{error.message}</p>
+                    <p className="text-red-600 text-sm mb-2 text-center">{error}</p>
                 )}
 
                 <form onSubmit={handleSubmit(handleUser)}>
                     <div>
                         <Input
-                            label={user?.role === 'superadmin' ? "Chairman Name" : "Teacher Name"}
+                            label="FullName"
                             type="text"
                             placeholder="Enter Name"
-                            {...register('name', {
+                            {...register('fullName', {
                                 required: true
                             })}
                         />
@@ -83,15 +94,17 @@ export default function CreateTeacherChairman() {
                         <Input
                             label="Role"
                             type="text"
-                            value={user?.role === "superadmin" ? "chairman" : "teacher"}
+                            value={user?.role === "admin" ? "dean" : user?.role === 'dean' ? "chairman" : "teacher"}
                             readOnly
                             {...register("role")}
                         />
 
                         <Button type="submit" className="flex m-auto">
-                            {user?.role === "superadmin"
-                                ? "Create Chairman"
-                                : "Create Teacher"}
+                            {user?.role === "admin"
+                                ? "Create Dean"
+                                : user?.role === 'dean'
+                                    ? "Create Chairman"
+                                    : "Create Teacher"}
                         </Button>
                     </div>
                 </form>
