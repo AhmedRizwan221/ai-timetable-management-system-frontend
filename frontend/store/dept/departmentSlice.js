@@ -51,8 +51,29 @@ export const fetchAllDepartments = createAsyncThunk(
     }
 )
 
+// get single department 
+export const getDepartment = createAsyncThunk(
+    "department/singleDepartment",
+    async (deptId, { rejectWithValue }) => {
+        try {
+            // console.log(deptId);
+            const response = await axios.get(`http://localhost:8000/api/v1/departments/${deptId}`, {
+                withCredentials: true
+            });
+            // console.log(response.data.data);
+            return response.data.data
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
+
 const initialState = {
     departments: [],
+    department: null,
+    teachers: [],
+    courses: [],
     status: 'idle',
     error: null
 }
@@ -61,9 +82,6 @@ const departmentSlice = createSlice({
     name: "departmentSlice",
     initialState,
     reducers: {
-        createDepartment: (state, action) => {
-            state.departments.push(action.payload.department);
-        },
         deleteDepartment: (state, action) => {
             state.departments = state.departments.filter((dept) => dept._id !== action.payload.departmentId);
         },
@@ -96,7 +114,31 @@ const departmentSlice = createSlice({
             .addCase(fetchDepartments.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.payload;
-            });
+            })
+            .addCase(departmentCreate.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(departmentCreate.fulfilled, (state, action) => {
+                state.status = 'Succeeded';
+                    state.departments = action.payload
+            })
+            .addCase(departmentCreate.rejected, (state, action) => {
+                state.status = 'rejected';
+                state.error = action.payload;
+            })
+            .addCase(getDepartment.pending, (state) => {
+                state.status = 'Loading'
+            })
+            .addCase(getDepartment.fulfilled, (state, action) => {
+                state.status = 'Succeeded';
+                state.department = action.payload;
+                state.teachers = action.payload.teacherCount;
+                state.courses = action.payload.coursesCount
+            })
+            .addCase(getDepartment.rejected, (state, action) => {
+                state.status = 'rejected';
+                state.error = action.payload
+            })
     },
 });
 

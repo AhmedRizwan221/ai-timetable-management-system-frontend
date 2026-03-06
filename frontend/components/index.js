@@ -8,7 +8,7 @@ import SuperAdminDashboard from "../components/dashboard/SuperAdminDashboard.jsx
 import ChairmanDashboard from "../components/dashboard/ChairmanDashboard";
 import DashboardLayout from "../components/layout/DashboardLayout";
 import Home from "../components/dashboard/Home";
-import DeptDashboard from "./dashboard/deptDashboard";
+import DeptDashboard from "./dashboard/DeptDashboard.jsx";
 import CreateTeacherChairman from "../components/shrared/CreateTeacherChairman";
 import Navbar from "./layout/Navbar";
 import DepartmentCard from "../components/layout/DepartmentCard";
@@ -17,6 +17,11 @@ import DeanDashboard from "./dashboard/DeanDashboard.jsx";
 import FacultyDashboard from "./dashboard/facultyDasbhoard.jsx";
 import FacultyDepartments from "./dashboard/FacultyDepartments.jsx";
 import ManageDeans from "./dashboard/ManageDeans.jsx";
+import CreateDeanAndAssignFaculty from "./shrared/CreateDeanAndAssignFaculty.jsx";
+import CreateDeptAssignChiarman from "./shrared/CreateDeptAssignChiarman.jsx";
+import EditDean from "../pages/EditDean.jsx";
+import EditChairman from "../pages/EditChairman.jsx";
+import EditTeacher from "../pages/EditTeacher.jsx";
 
 export {
     Button,
@@ -37,5 +42,10 @@ export {
     DeanDashboard,
     FacultyDashboard,
     FacultyDepartments,
-    ManageDeans
+    ManageDeans,
+    CreateDeanAndAssignFaculty,
+    CreateDeptAssignChiarman,
+    EditChairman,
+    EditTeacher,
+    EditDean
 }

@@ -11,7 +11,10 @@ function Protected({children, authentication = true}) {
     const getDashboardPath = (role) => {
         if(role === 'admin') {
             return '/dashboard/superadmin';
-        }else if(role === 'chairman') {
+        }else if(role === 'dean') {
+            return '/dashboard/dean';
+        }
+        else if(role === 'chairman') {
             return '/dashboard/chairman';
         }else if(role === 'teacher') {
             return '/dashboard/teacher';

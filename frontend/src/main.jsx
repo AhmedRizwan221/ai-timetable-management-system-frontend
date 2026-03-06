@@ -5,8 +5,10 @@ import App from './App.jsx';
 import { store } from "../store/store";
 import { Provider } from 'react-redux';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { Login, AuthLayout, SignUp, ChairmanDashboard, SuperAdminDashboard, DashboardLayout, Home, DeptDashboard, CreateTeacherChairman, DeanDashboard, FacultyDashboard, FacultyDepartments, ManageDeans } from '../components/index';
-import CreateDeptAssignChiarman from '../components/shrared/CreateDeptAssignChairman';
+import {
+  Login, AuthLayout, SignUp, ChairmanDashboard, SuperAdminDashboard, DashboardLayout, Home, DeptDashboard, CreateTeacherChairman, DeanDashboard, FacultyDashboard, FacultyDepartments, ManageDeans,
+  CreateDeptAssignChiarman, CreateDeanAndAssignFaculty, EditDean, EditChairman, EditTeacher
+} from '../components/index';
 import Department from "../pages/Department";
 
 const router = createBrowserRouter([
@@ -36,6 +38,7 @@ const router = createBrowserRouter([
           </AuthLayout>
         )
       },
+      // admin routes here 
       {
         path: '/dashboard/superadmin',
         element: (
@@ -47,21 +50,11 @@ const router = createBrowserRouter([
         )
       },
       {
-        path: '/dashboard/dean',
+        path: `/dashboard/facultyDashboard`,
         element: (
           <AuthLayout authentication={true}>
             <DashboardLayout>
-              <DeanDashboard />
-            </DashboardLayout>
-          </AuthLayout>
-        )
-      },
-      {
-        path: '/dashboard/chairman',
-        element: (
-          <AuthLayout authentication={true}>
-            <DashboardLayout>
-              <ChairmanDashboard />
+              <FacultyDashboard />
             </DashboardLayout>
           </AuthLayout>
         )
@@ -77,15 +70,113 @@ const router = createBrowserRouter([
         )
       },
       {
-        path: `/dashboard/facultyDashboard`,
+        path: '/dashboard/superadmin/create-dean',
         element: (
           <AuthLayout authentication={true}>
             <DashboardLayout>
-              <FacultyDashboard />
+              <CreateTeacherChairman />
             </DashboardLayout>
           </AuthLayout>
         )
       },
+      {
+        path: '/dashboard/superadmin/manage-deans',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <ManageDeans />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+      {
+        path: '/dashboard/superadmin/create-faculty',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <CreateDeanAndAssignFaculty />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+      {
+        path: '/dashboard/superadmin/edit-dean/:id',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <EditDean />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+        {
+        path: '/dashboard/superadmin/delete-dean/:id',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <EditDean />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+
+      // dean routes here 
+      {
+        path: '/dashboard/dean',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <DeanDashboard />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+      {
+        // here we need a separate component for faculty and dean
+        path: '/dashboard/dean/create-department',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <CreateDeptAssignChiarman />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+      {
+        path: '/dashboard/dean/departments',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <DeptDashboard />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+      {
+        path: '/dashboard/dean/create-chairman',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <CreateTeacherChairman />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+
+
+
+      {
+        path: '/dashboard/chairman',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <ChairmanDashboard />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+
+
       {
         path: '/dashboard/deptDashboard',
         element: (
@@ -106,57 +197,10 @@ const router = createBrowserRouter([
           </AuthLayout>
         )
       },
-      {
-        path: '/dashboard/superadmin/create-dean',
-        element: (
-          <AuthLayout authentication={true}>
-            <DashboardLayout>
-              <CreateTeacherChairman />
-            </DashboardLayout>
-          </AuthLayout>
-        )
-      },
-       {
-        path: '/dashboard/superadmin/manage-deans',
-        element: (
-          <AuthLayout authentication={true}>
-            <DashboardLayout>
-              <ManageDeans />
-            </DashboardLayout>
-          </AuthLayout>
-        )
-      },
-      {
-        path: '/dashboard/superadmin/create-faculty',
-        element: (
-          <AuthLayout authentication={true}>
-            <DashboardLayout>
-              <CreateDeptAssignChiarman />
-            </DashboardLayout>
-          </AuthLayout>
-        )
-      },
-      {
-        // here we need a separate component for faculty and dean
-        path: '/dashboard/dean/create-department',
-        element: (
-          <AuthLayout authentication={true}>
-            <DashboardLayout>
-              <CreateDeptAssignChiarman />
-            </DashboardLayout>
-          </AuthLayout>
-        )
-      },
-      {
-        path: '/dashboard/dean/create-chairman',
-        element: (
-          <AuthLayout authentication={true}>
-            <DashboardLayout>
-              <CreateTeacherChairman />
-            </DashboardLayout>
-          </AuthLayout>
-        )
-      },
+
+
+
+
       {
         path: '/dashboard/chairman/create-teacher',
         element: (

@@ -22,9 +22,9 @@ export default function CreateTeacherChairman() {
             const response = await axios.post('http://localhost:8000/api/v1/users/register', data, {
                 withCredentials: true
             })
-            console.log(response);
-            const user = response.data.data;
-            console.log(user);
+            // console.log(response);
+            const createdUser = response.data.data;
+            // console.log(createdUser);
 
             if (user?.role === 'admin') {
                 alert("Dean Created Succefully");

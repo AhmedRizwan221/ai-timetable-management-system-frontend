@@ -149,7 +149,7 @@ export default function Sidebar() {
   const dashboardRoutes = {
     admin: "/dashboard/superadmin",
     chairman: "/dashboard/ChairmanDashboard",
-    dean: "/dashboard/DeanDashboard",
+    dean: "/dashboard/dean",
   };
 
   return (
@@ -164,45 +164,63 @@ export default function Sidebar() {
         </button>
 
         <ul className=" flex md:flex-col gap-4">
-          <Link to={dashboardRoutes[user?.role] || "/"}
-            className="flex items-center gap-2 hover:text-yellow-400 ">
-            <Home size={18} /> Dashboard
-          </Link>
-
-          {user?.role === 'admin' && (
-            <Link to="/dashboard/facultyDashboard" className="flex items-center gap-2 hover:text-yellow-400">
-              <GraduationCap size={18} /> Faculties
+          <li>
+            <Link to={dashboardRoutes[user?.role] || "/"}
+              className="flex items-center gap-2 hover:text-yellow-400 ">
+              <Home size={18} /> Dashboard
             </Link>
-          )}
-
-          {user?.role === 'admin' && (
-            <Link to="/dashboard/superadmin/create-dean" className="flex items-center gap-2 hover:text-yellow-400">
-              <Users size={18} /> Create Dean
-            </Link>
-          )}
-          {user?.role === 'admin' && (
-            <Link to="/dashboard/superadmin/create-faculty" className="flex items-center gap-2 hover:text-yellow-400">
-              <UserCog size={24} />Create Faculty
-            </Link>
-          )}
-          {user?.role === 'admin' && (
-            <Link to="/dashboard/superadmin/manage-deans" className="flex items-center gap-2 hover:text-yellow-400">
-              <UserCog size={24} />Manage Deans
-            </Link>
-          )}
+          </li>
+          <li>
+            {user?.role === 'admin' && (
+              <Link to="/dashboard/facultyDashboard" className="flex items-center gap-2 hover:text-yellow-400">
+                <GraduationCap size={18} /> Faculties
+              </Link>
+            )}
+          </li>
+          <li>
+            {user?.role === 'admin' && (
+              <Link to="/dashboard/superadmin/create-dean" className="flex items-center gap-2 hover:text-yellow-400">
+                <Users size={18} /> Create Dean
+              </Link>
+            )}
+          </li>
+          <li>
+            {user?.role === 'admin' && (
+              <Link to="/dashboard/superadmin/create-faculty" className="flex items-center gap-2 hover:text-yellow-400">
+                <UserCog size={24} />Create Faculty
+              </Link>
+            )}
+          </li>
+          <li>
+            {user?.role === 'admin' && (
+              <Link to="/dashboard/superadmin/manage-deans" className="flex items-center gap-2 hover:text-yellow-400">
+                <UserCog size={24} />Manage Deans
+              </Link>
+            )}
+          </li>
           {/* //////////dean faculty stuff is here //////////////////////////////////////// */}
           {/* for faculty and assign dean we need one more component */}
-          {user?.role === 'dean' && (
-            <Link to="/dashboard/dean/create-chairman" className="flex items-center gap-2 hover:text-yellow-400">
-              <Users size={18} /> Create Chairman
-            </Link>
-          )}
-          {user?.role === 'dean' && (
-            <Link to="/dashboard/dean/create-department" className="flex items-center gap-2 hover:text-yellow-400">
-              <Building2 size={24} />Create Department
-            </Link>
-          )}
-
+          <li>
+            {user?.role === 'dean' && (
+              <Link to="/dashboard/dean/create-chairman" className="flex items-center gap-2 hover:text-yellow-400">
+                <Users size={18} /> Create Chairman
+              </Link>
+            )}
+          </li>
+          <li>
+            {user?.role === 'dean' && (
+              <Link to="/dashboard/dean/departments" className="flex items-center gap-2 hover:text-yellow-400">
+                <Building2 size={24} />Departments
+              </Link>
+            )}
+          </li>
+          <li>
+            {user?.role === 'dean' && (
+              <Link to="/dashboard/dean/create-department" className="flex items-center gap-2 hover:text-yellow-400">
+                <Building2 size={24} />Create Department
+              </Link>
+            )}
+          </li>
           <li>
             {user?.role === 'chairman' && (
               <Link to="/dashboard/chairman/create-teacher" className="flex items-center gap-2 hover:text-yellow-400">

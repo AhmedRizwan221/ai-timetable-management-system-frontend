@@ -5,11 +5,13 @@ import axios from "axios";
 export const facultyCreate = createAsyncThunk(
     "faculties/create",
     async (facultyData, { rejectWithValue }) => {
+        // console.log(facultyData);
         try {
             const response = await axios.post('http://localhost:8000/api/v1/faculties/create', facultyData, {
                 withCredentials: true
-            })
-            return response.data.data.faculties;
+            });
+            // console.log(response.data.data);
+            return response.data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -18,7 +20,6 @@ export const facultyCreate = createAsyncThunk(
 
 // fetch all faculties 
 export const fetchFaculties = createAsyncThunk(
-    
     "faculties/all-faculties",
     async (_, { rejectWithValue }) => {
         try {
@@ -43,9 +44,9 @@ const facultySlice = createSlice({
     name: "facultySlice",
     initialState,
     reducers: {
-        createFaculty: (state, action) => {
-            state.faculties.push(action.payload.faculty)
-        },
+        // createFaculty: (state, action) => {
+        //     state.faculties.push(action.payload.faculty)
+        // },
         deleteFaculty: (state, action) => {
             state.faculties = state.faculties.filter((fact) => fact._id !== action.payload.facultyId)
         },
@@ -60,7 +61,7 @@ const facultySlice = createSlice({
         },
     },
 
-     extraReducers: (builder) => {
+    extraReducers: (builder) => {
         builder
             .addCase(fetchFaculties.pending, (state) => {
                 state.status = "loading";
@@ -72,10 +73,21 @@ const facultySlice = createSlice({
             .addCase(fetchFaculties.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.payload;
+            })
+            .addCase(facultyCreate.pending, (state) => {
+                state.status = "loading";
+            })
+            .addCase(facultyCreate.fulfilled, (state, action) => {
+                state.status = "succeeded";
+                state.faculties.push(action.payload);
+            })
+            .addCase(facultyCreate.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.payload;
             });
     }
 })
 
-export const {createFaculty, deleteFaculty, updateFaculty} = facultySlice.actions;
+export const {  deleteFaculty, updateFaculty } = facultySlice.actions;
 
 export default facultySlice.reducer
