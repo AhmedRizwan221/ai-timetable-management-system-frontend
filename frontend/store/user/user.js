@@ -11,7 +11,7 @@ export const createFaculty = createAsyncThunk(
             });
             console.log(response);
 
-            // return response.data.data;
+            return response.data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -44,7 +44,7 @@ export const getChairmans = createAsyncThunk(
                 { withCredentials: true }
             );
             // console.log(response);
-            console.log(response.data.data);
+            // console.log(response.data.data);
             return response.data.data
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
@@ -60,7 +60,7 @@ export const updateUserData = createAsyncThunk(
             const response = await axios.patch(`http://localhost:8000/api/v1/users/update/${role}/${id}`, data,
                 { withCredentials: true }
             );
-            console.log(response.data.data);
+            // console.log(response.data.data);
             return response.data.data
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
@@ -77,7 +77,7 @@ export const deleteUser = createAsyncThunk(
             const response = await axios.delete(`http://localhost:8000/api/v1/users/delete-user/${id}`, {
                 withCredentials: true
             });
-            console.log(response);
+            // console.log(response);
             return id;
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);

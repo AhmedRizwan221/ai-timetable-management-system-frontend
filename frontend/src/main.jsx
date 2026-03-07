@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import {
   Login, AuthLayout, SignUp, ChairmanDashboard, SuperAdminDashboard, DashboardLayout, Home, DeptDashboard, CreateTeacherChairman, DeanDashboard, FacultyDashboard, FacultyDepartments, ManageDeans,
-  CreateDeptAssignChiarman, CreateDeanAndAssignFaculty, EditDean, EditChairman, EditTeacher
+  CreateDeptAssignChiarman, CreateDeanAndAssignFaculty, EditDean, EditChairman, EditTeacher, CreateTimeTable
 } from '../components/index';
 import Department from "../pages/Department";
 
@@ -197,16 +197,22 @@ const router = createBrowserRouter([
           </AuthLayout>
         )
       },
-
-
-
-
       {
         path: '/dashboard/chairman/create-teacher',
         element: (
           <AuthLayout authentication={true}>
             <DashboardLayout>
               <CreateTeacherChairman />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+        {
+        path: '/dashboard/chairman/create-timetable',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <CreateTimeTable />
             </DashboardLayout>
           </AuthLayout>
         )

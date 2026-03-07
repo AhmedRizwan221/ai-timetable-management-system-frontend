@@ -18,22 +18,26 @@ export default function Login() {
         setError("");
         try {
 
-            const response = await axios.post('http://localhost:8000/api/v1/users/login', data,
+             await axios.post('http://localhost:8000/api/v1/users/login', data,
                 {
                     withCredentials: true
                 });
 
-            const user = response.data.data.user;
-            // console.log(user);
+            const currentUser = await axios.get(
+                "http://localhost:8000/api/v1/users/current-user",
+                { withCredentials: true }
+            );
 
-            dispatch(authLogin(user));
+            dispatch(authLogin(currentUser.data.data));
 
-            if (user.role === 'superadmin') {
+            const role = currentUser.data.data.role;
+
+            if (role === 'superadmin') {
                 navigate('/dashboard/superadmin');
-            } else if (user.role === 'dean') {
+            } else if (role === 'dean') {
                 navigate("/dashboard/dean");
             }
-            else if (user.role === 'chairman') {
+            else if (role === 'chairman') {
                 navigate('/dashboard/chairman');
             } else {
                 navigate('/');

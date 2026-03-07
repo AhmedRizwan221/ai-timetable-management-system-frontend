@@ -22,6 +22,7 @@ import CreateDeptAssignChiarman from "./shrared/CreateDeptAssignChiarman.jsx";
 import EditDean from "../pages/EditDean.jsx";
 import EditChairman from "../pages/EditChairman.jsx";
 import EditTeacher from "../pages/EditTeacher.jsx";
+import CreateTimeTable from "./layout/CreateTimeTable.jsx";
 
 export {
     Button,
@@ -47,5 +48,6 @@ export {
     CreateDeptAssignChiarman,
     EditChairman,
     EditTeacher,
-    EditDean
+    EditDean,
+    CreateTimeTable
 }

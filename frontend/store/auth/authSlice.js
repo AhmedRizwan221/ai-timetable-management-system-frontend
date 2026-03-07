@@ -1,6 +1,23 @@
 import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// login user 
+export const userLogin = createAsyncThunk(
+    "user/login",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await axios.post('http://localhost:8000/api/v1/users/login', data, {
+                withCredentials: true
+            });
+
+            console.log(response.data.data);
+            return response.data.data
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
 
 export const getUser = createAsyncThunk(
     "user/fetch",
@@ -9,11 +26,13 @@ export const getUser = createAsyncThunk(
             const response = await axios.get('http://localhost:8000/api/v1/users/current-user',
                 { withCredentials: true }
             );
-            console.log("Thunk console: ",response.data.data);
+            console.log("Thunk console: ", response.data.data);
             // return {
             //     ...response.data.data,
             //     faculty: response.data.data.faculty
             // }
+            console.log("Respons", response);
+
             return response.data.data
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
@@ -24,7 +43,9 @@ export const getUser = createAsyncThunk(
 const initialState = {
     user: null,
     status: "idle",
-    error: null
+    error: null,
+    department: null,
+    faculty: null
 }
 
 const authSlice = createSlice({
@@ -42,22 +63,35 @@ const authSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-       builder
+        builder
+            .addCase(userLogin.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(userLogin.fulfilled, (state, action) => {
+                state.status = 'Succeeded';
+                state.user = action.payload.user
+            })
+            .addCase(userLogin.rejected, (state, action) => {
+                state.status = 'rejected';
+                state.error = action.payload
+            })
             .addCase(getUser.pending, (state) => {
                 state.status = "loading";
             })
             .addCase(getUser.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                // console.log("Action Payload :", action.payload);
-                console.log("Clean State before update:", current(state));
-                state.user = {...action.payload};
-                console.log("Clean State after update:", current(state));
+                const user = action.payload.data;
+                console.log(user);
+
+                state.user = user;
+                state.department = user.department;
+                state.faculty = user.faculty;
             })
             .addCase(getUser.rejected, (state, action) => {
                 state.status = "failed";
-                state.user= null;
+                state.user = null;
                 state.error = action.payload;
-            }) 
+            })
     }
 })
 

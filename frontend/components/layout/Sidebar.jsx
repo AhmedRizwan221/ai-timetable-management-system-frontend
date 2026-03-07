@@ -148,7 +148,7 @@ export default function Sidebar() {
 
   const dashboardRoutes = {
     admin: "/dashboard/superadmin",
-    chairman: "/dashboard/ChairmanDashboard",
+    chairman: "/dashboard/chairman",
     dean: "/dashboard/dean",
   };
 
@@ -170,64 +170,73 @@ export default function Sidebar() {
               <Home size={18} /> Dashboard
             </Link>
           </li>
-          <li>
-            {user?.role === 'admin' && (
+          {user?.role === 'admin' && (
+            <li>
               <Link to="/dashboard/facultyDashboard" className="flex items-center gap-2 hover:text-yellow-400">
                 <GraduationCap size={18} /> Faculties
               </Link>
-            )}
-          </li>
-          <li>
-            {user?.role === 'admin' && (
+            </li>
+          )}
+          {user?.role === 'admin' && (
+            <li>
               <Link to="/dashboard/superadmin/create-dean" className="flex items-center gap-2 hover:text-yellow-400">
                 <Users size={18} /> Create Dean
               </Link>
-            )}
-          </li>
-          <li>
-            {user?.role === 'admin' && (
+            </li>
+          )}
+          {user?.role === 'admin' && (
+            <li>
               <Link to="/dashboard/superadmin/create-faculty" className="flex items-center gap-2 hover:text-yellow-400">
                 <UserCog size={24} />Create Faculty
               </Link>
-            )}
-          </li>
-          <li>
-            {user?.role === 'admin' && (
+            </li>
+          )}
+          {user?.role === 'admin' && (
+            <li>
               <Link to="/dashboard/superadmin/manage-deans" className="flex items-center gap-2 hover:text-yellow-400">
                 <UserCog size={24} />Manage Deans
               </Link>
-            )}
-          </li>
+            </li>
+          )}
           {/* //////////dean faculty stuff is here //////////////////////////////////////// */}
           {/* for faculty and assign dean we need one more component */}
-          <li>
-            {user?.role === 'dean' && (
+          {user?.role === 'dean' && (
+            <li>
               <Link to="/dashboard/dean/create-chairman" className="flex items-center gap-2 hover:text-yellow-400">
                 <Users size={18} /> Create Chairman
               </Link>
-            )}
-          </li>
-          <li>
-            {user?.role === 'dean' && (
+            </li>
+          )}
+          {user?.role === 'dean' && (
+            <li>
               <Link to="/dashboard/dean/departments" className="flex items-center gap-2 hover:text-yellow-400">
                 <Building2 size={24} />Departments
               </Link>
-            )}
-          </li>
-          <li>
-            {user?.role === 'dean' && (
+            </li>
+          )}
+          {user?.role === 'dean' && (
+            <li>
               <Link to="/dashboard/dean/create-department" className="flex items-center gap-2 hover:text-yellow-400">
                 <Building2 size={24} />Create Department
               </Link>
-            )}
-          </li>
-          <li>
-            {user?.role === 'chairman' && (
+            </li>
+          )}
+
+          {/* chairman sidebar  */}
+          {user?.role === 'chairman' && (
+            <li>
               <Link to="/dashboard/chairman/create-teacher" className="flex items-center gap-2 hover:text-yellow-400">
                 <Users size={18} /> Create Teacher
               </Link>
-            )}
-          </li>
+            </li>
+          )}
+           {user?.role === 'chairman' && (
+            <li>
+              <Link to="/dashboard/chairman/create-timetable" className="flex items-center gap-2 hover:text-yellow-400">
+                <Users size={18} /> Create TimeTable
+              </Link>
+            </li>
+          )}
         </ul>
         <button className="flex items-center gap-2 hover:text-red-400 mt-auto"
           onClick={() => {
