@@ -26,7 +26,7 @@ export const getBatches = createAsyncThunk(
 
             // console.log(response.data.data);
 
-            return response.data.data
+            return response.data.data.batches
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }

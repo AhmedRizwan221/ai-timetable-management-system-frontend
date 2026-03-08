@@ -10,7 +10,7 @@ export const userLogin = createAsyncThunk(
                 withCredentials: true
             });
 
-            console.log(response.data.data);
+            // console.log(response.data.data);
             return response.data.data
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
@@ -26,12 +26,12 @@ export const getUser = createAsyncThunk(
             const response = await axios.get('http://localhost:8000/api/v1/users/current-user',
                 { withCredentials: true }
             );
-            console.log("Thunk console: ", response.data.data);
+            // console.log("Thunk console: ", response.data.data);
             // return {
             //     ...response.data.data,
             //     faculty: response.data.data.faculty
             // }
-            console.log("Respons", response);
+            // console.log("Respons", response);
 
             return response.data.data
         } catch (error) {
@@ -55,7 +55,6 @@ const authSlice = createSlice({
         login: (state, action) => {
             state.user = action.payload;
             state.status = true;
-            // console.log(state.user);
         },
         logout: (state) => {
             state.user = null;
@@ -81,11 +80,9 @@ const authSlice = createSlice({
             .addCase(getUser.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 const user = action.payload.data;
-                console.log(user);
-
                 state.user = user;
-                state.department = user.department;
-                state.faculty = user.faculty;
+                state.department = user?.department;
+                state.faculty = user?.faculty;
             })
             .addCase(getUser.rejected, (state, action) => {
                 state.status = "failed";
