@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import {
   Login, AuthLayout, SignUp, ChairmanDashboard, SuperAdminDashboard, DashboardLayout, Home, DeptDashboard, CreateTeacherChairman, DeanDashboard, FacultyDashboard, FacultyDepartments, ManageDeans,
-  CreateDeptAssignChiarman, CreateDeanAndAssignFaculty, EditDean, EditChairman, EditTeacher, CreateTimeTable
+  CreateDeptAssignChiarman, CreateDeanAndAssignFaculty, EditDean, EditChairman, EditTeacher, CreateTimeTable, CreateCourse
 } from '../components/index';
 import Department from "../pages/Department";
 
@@ -109,7 +109,7 @@ const router = createBrowserRouter([
           </AuthLayout>
         )
       },
-        {
+      {
         path: '/dashboard/superadmin/delete-dean/:id',
         element: (
           <AuthLayout authentication={true}>
@@ -162,9 +162,7 @@ const router = createBrowserRouter([
           </AuthLayout>
         )
       },
-
-
-
+      //chairman route  
       {
         path: '/dashboard/chairman',
         element: (
@@ -207,7 +205,7 @@ const router = createBrowserRouter([
           </AuthLayout>
         )
       },
-        {
+      {
         path: '/dashboard/chairman/create-timetable',
         element: (
           <AuthLayout authentication={true}>
@@ -216,7 +214,27 @@ const router = createBrowserRouter([
             </DashboardLayout>
           </AuthLayout>
         )
-      }
+      },
+      {
+        path: '/dashboard/chairman/create-course',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <CreateCourse />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+      {
+        path: '/dashboard/chairman/edit-teacher',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <EditTeacher />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
     ]
   }
 ])

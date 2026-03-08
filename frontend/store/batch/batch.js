@@ -48,6 +48,18 @@ const batchSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(createBatch.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(createBatch.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.batches.push(action.payload)
+            })
+            .addCase(createBatch.rejected, (state, action) => {
+                state.status = 'rejected';
+                state.error = action.payload
+            })
+
             .addCase(getBatches.pending, (state) => {
                 state.status = 'pending'
             })

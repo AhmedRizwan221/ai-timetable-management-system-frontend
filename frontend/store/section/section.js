@@ -48,6 +48,17 @@ const sectionSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(createSection.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(createSection.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.sections.push(action.payload)
+            })
+            .addCase(createSection.rejected, (state, action) => {
+                state.status = 'rejected';
+                state.error = action.payload
+            })
             .addCase(getSections.pending, (state) => {
                 state.status = 'pending'
             })

@@ -237,6 +237,20 @@ export default function Sidebar() {
               </Link>
             </li>
           )}
+            {user?.role === 'chairman' && (
+            <li>
+              <Link to="/dashboard/chairman/create-course" className="flex items-center gap-2 hover:text-yellow-400">
+                <Users size={18} /> Create Course
+              </Link>
+            </li>
+          )}
+            {user?.role === 'chairman' && (
+            <li>
+              <Link to="/dashboard/chairman/manage-chairmans" className="flex items-center gap-2 hover:text-yellow-400">
+                <Users size={18} /> Manage Chairmans
+              </Link>
+            </li>
+          )}
         </ul>
         <button className="flex items-center gap-2 hover:text-red-400 mt-auto"
           onClick={() => {

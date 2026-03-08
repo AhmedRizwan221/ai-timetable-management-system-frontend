@@ -48,6 +48,17 @@ const semesterSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(createSemester.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(createSemester.fulfilled, (state, action) => {
+                state.status = 'succeeded',
+                state.semesters.push(action.payload)
+            })
+            .addCase(createSemester.rejected, (state, action) => {
+                state.status = 'rejected',
+                state.error = action.payload
+            })
             .addCase(getSemesters.pending, (state) => {
                 state.status = 'pending'
             })

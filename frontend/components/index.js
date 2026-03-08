@@ -23,6 +23,7 @@ import EditDean from "../pages/EditDean.jsx";
 import EditChairman from "../pages/EditChairman.jsx";
 import EditTeacher from "../pages/EditTeacher.jsx";
 import CreateTimeTable from "./layout/CreateTimeTable.jsx";
+import CreateCourse from "./layout/CreateCourse.jsx";
 
 export {
     Button,
@@ -49,5 +50,6 @@ export {
     EditChairman,
     EditTeacher,
     EditDean,
-    CreateTimeTable
+    CreateTimeTable,
+    CreateCourse
 }

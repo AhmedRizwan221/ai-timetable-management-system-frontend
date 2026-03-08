@@ -7,6 +7,8 @@ import timetableReducer from "./timetable/timeTable";
 import semesterReducer from "./semester/semester";
 import batchReducer from "./batch/batch";
 import sectionReducer from "./section/section";
+import timetableSLotReducer from "./timetableSlot/timetableSlot";
+import courseReducer from "./course/course";
 
 
 export const store = configureStore({
@@ -18,6 +20,8 @@ export const store = configureStore({
         timetable: timetableReducer,
         semester: semesterReducer,
         batch: batchReducer,
-        section: sectionReducer
+        section: sectionReducer,
+        timetabelSlot: timetableSLotReducer,
+        course: courseReducer
     }
 })

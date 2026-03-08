@@ -9,13 +9,16 @@ import { getBatches } from "../../store/batch/batch";
 import { getSections } from "../../store/section/section";
 import { createTimeTable } from "../../store/timetable/timeTable";
 import { Navigate } from "react-router-dom";
+import { createTimeTableSlot } from "../../store/timetableSlot/timetableSlot";
+import { Input } from "../index";
+import { getTeachers } from "../../store/user/user";
 
 export default function CreateTimeTable() {
     const dispatch = useDispatch();
     const { register, handleSubmit, reset } = useForm();
 
     const { timeTables = [], error: timetableError } = useSelector((state) => state.timetable);
-    // console.log("Time tables : ", timeTables);
+    console.log("Time tables : ", timeTables);
 
     const { user, error: userError, status } = useSelector((state) => state.auth);
     // console.log(user);
@@ -29,6 +32,12 @@ export default function CreateTimeTable() {
     const { sections = [], error: sectionError } = useSelector((state) => state.section);
     // console.log("Sections of dept", sections);
 
+    const {teachers = [], totalTeachers, error: teacherError } = useSelector((state) => state.user);
+    console.log("Teachers" , teachers, "Total Teachers ",totalTeachers);
+
+
+    
+    // now fetched all courses using deptId and render here 
     useEffect(() => {
         if (status === 'idle') {
             dispatch(getUser());
@@ -38,6 +47,7 @@ export default function CreateTimeTable() {
             dispatch(getSemesters(user?.department?._id));
             dispatch(getBatches(user?.department?._id));
             dispatch(getSections(user?.department?._id));
+            dispatch(getTeachers());
         }
     }, [dispatch, user, status]);
 
@@ -63,6 +73,20 @@ export default function CreateTimeTable() {
         }
     }
 
+    const handleCreateTimeTableSlot = async (data) => {
+        await dispatch(createTimeTableSlot({
+            timetableId: data.timetableId,
+            day: data.day,
+            startTime,
+            endTime,
+            teacherId: data.teacherId,
+            courseId,
+            type,
+        }
+        )
+
+        )
+    }
 
     return (
         <div>
@@ -138,6 +162,68 @@ export default function CreateTimeTable() {
             </div>
 
 
+            <div>
+                <h1>Create time table Slot for {user?.department.deptName}</h1>
+
+                <form
+                    onSubmit={handleSubmit(handleCreateTimeTableSlot)}>
+                    <div>
+                        <label >Select Time Tables </label>
+                        <select
+                            className="border border-gray-400 p-2 rounded-lg"
+                            {...register("timetableId", { required: true })}
+                        >
+                            <option>Select Time Tables</option>
+                            {timeTables.map((temp) => (
+                                <option key={temp._id} value={temp._id}>
+                                    {temp.batch.batchName} , {"Sem No" + " " + temp.semester.semesterNumber + " " + "Year No" + temp.semester.studyYear}
+                                </option>
+                            ))}
+                        </select>
+                        <div className="mt-4 p-4">
+                            <label htmlFor="">Select Teacher</label>
+                            <select
+                                className="border border-gray-400 p-2 rounded-lg"
+                                {...register("teacherId", { required: true })}
+                            >
+                                {teachers.map((teach) => (
+                                    <option key={teach._id} value={teach._id}>
+                                        {teach.fullName} {}
+                                    </option>
+                                ))}
+                            </select>
+                           
+                            <div className="flex justify-between">
+                                <select
+                                    className="border border-black p-1 mt-2 outline-none rounded-lg w-full"
+                                >
+                                    <option value="">Monday</option>
+                                    <option value="">Tuesday</option>
+                                    <option value="">Wednessday</option>
+                                    <option value="">Thursday</option>
+                                    <option value="">Friday</option>
+                                </select>
+                                <Input
+                                    label="Start Time"
+                                    type="time"
+                                    placeholder="Add Batch"
+                                    className="border border-black p-1 mt-2 outline-none rounded-lg w-full"
+                                />
+                                 <Input
+                                    label="End Time"
+                                    type="time"
+                                    placeholder="Add Batch"
+                                    className="border border-black p-1 mt-2 outline-none rounded-lg w-full"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
         </div>
+
+
+
     )
 }

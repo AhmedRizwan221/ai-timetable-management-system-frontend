@@ -2,21 +2,21 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // create faculty
-export const createFaculty = createAsyncThunk(
-    "user/createFaculty",
-    async (facultyData, { rejectWithValue }) => {
-        try {
-            const response = await axios.post('http://localhost:8000/api/v1/faculties/create', facultyData, {
-                withCredentials: true
-            });
-            console.log(response);
+// export const createFaculty = createAsyncThunk(
+//     "user/createFaculty",
+//     async (facultyData, { rejectWithValue }) => {
+//         try {
+//             const response = await axios.post('http://localhost:8000/api/v1/faculties/create', facultyData, {
+//                 withCredentials: true
+//             });
+//             console.log(response);
 
-            return response.data.data;
-        } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
-        }
-    }
-)
+//             return response.data.data;
+//         } catch (error) {
+//             return rejectWithValue(error.response?.data || error.message);
+//         }
+//     }
+// )
 
 // fetch deans 
 export const getDeans = createAsyncThunk(
@@ -85,12 +85,31 @@ export const deleteUser = createAsyncThunk(
     }
 )
 
+// get teachers 
+export const getTeachers = createAsyncThunk(
+    "user/teachers",
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await axios.get('http://localhost:8000/api/v1/users/teachers', {
+                withCredentials: true
+            });
+
+            console.log(response.data.data);
+
+            return response.data.data
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
 const initialState = {
     deans: [],
     chairmans: [],
     teachers: [],
     totalDeans: null,
     totalChairmans: null,
+    totalTeachers: null,
     status: "idle",
     error: null
 }
@@ -174,6 +193,18 @@ const userSlice = createSlice({
             .addCase(deleteUser.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.payload;
+            })
+            .addCase(getTeachers.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(getTeachers.fulfilled, (state, action) => {
+                state.status = 'succeeded',
+                state.teachers = action.payload.teachers,
+                state.totalTeachers = action.payload.totalTeachers
+            })
+            .addCase(getTeachers.rejected, (state, action) => {
+                state.status = 'rejected',
+                state.error = action.payload
             })
 
     }

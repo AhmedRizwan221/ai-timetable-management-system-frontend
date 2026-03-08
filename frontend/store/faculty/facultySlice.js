@@ -63,6 +63,17 @@ const facultySlice = createSlice({
 
     extraReducers: (builder) => {
         builder
+            .addCase(facultyCreate.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(facultyCreate.fulfilled, (state, action) => {
+                state.status = 'succeeded',
+                state.faculties.push(action.payload)
+            })
+            .addCase(facultyCreate.rejected, (state, action) => {
+                state.status = 'rejected',
+                state.error = action.payload
+            })
             .addCase(fetchFaculties.pending, (state) => {
                 state.status = "loading";
             })
@@ -74,17 +85,6 @@ const facultySlice = createSlice({
                 state.status = "failed";
                 state.error = action.payload;
             })
-            .addCase(facultyCreate.pending, (state) => {
-                state.status = "loading";
-            })
-            .addCase(facultyCreate.fulfilled, (state, action) => {
-                state.status = "succeeded";
-                state.faculties.push(action.payload);
-            })
-            .addCase(facultyCreate.rejected, (state, action) => {
-                state.status = "failed";
-                state.error = action.payload;
-            });
     }
 })
 

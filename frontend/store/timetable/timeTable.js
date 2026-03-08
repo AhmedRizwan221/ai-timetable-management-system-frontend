@@ -53,6 +53,17 @@ const timetableSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(createTimeTable.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(createTimeTable.fulfilled, (state, action) => {
+                state.status = 'Succeeded',
+                state.timeTables.push(action.payload)
+            })
+            .addCase(createTimeTable.rejected, (state, action) => {
+                state.status =  'rejected',
+                state.error = action.payload
+            })
             .addCase(getDeptallTimeTables.pending, (state) => {
                 state.status = 'Pending'
             })

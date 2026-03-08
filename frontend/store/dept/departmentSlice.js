@@ -120,7 +120,7 @@ const departmentSlice = createSlice({
             })
             .addCase(departmentCreate.fulfilled, (state, action) => {
                 state.status = 'Succeeded';
-                    state.departments = action.payload
+                    state.departments.push(action.payload)
             })
             .addCase(departmentCreate.rejected, (state, action) => {
                 state.status = 'rejected';
