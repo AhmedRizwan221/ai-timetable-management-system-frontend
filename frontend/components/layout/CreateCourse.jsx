@@ -27,7 +27,8 @@ export default function CreateCourse() {
                 courseName: data.courseName,
                 theoryCredits: data.theoryCredits,
                 practicalCredits: data.practicalCredits || null,
-                semesterId: data.semesterId
+                semesterId: data.semesterId,
+                departmentId: user?.department?._id 
             })).unwrap();
             reset();
             alert("Course created successfully");

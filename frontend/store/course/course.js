@@ -6,7 +6,7 @@ export const createCourse = createAsyncThunk(
     "course/create",
     async (data, { rejectWithValue }) => {
         try {
-            const response = await axios.post(`http://localhost:8000/api/v1/courses/create`, data, {
+            const response = await axios.post('http://localhost:8000/api/v1/courses/create', data, {
                 withCredentials: true
             });
 
@@ -38,16 +38,16 @@ export const getAllCourses = createAsyncThunk(
 
 // get all courses in dept 
 export const getAllCoursesInDept = createAsyncThunk(
-    "course/getall",
+    "course/getallCourse",
     async (deptId, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/courses/allCourses/${deptId}`, {
+            const response = await axios.get(`http://localhost:8000/api/v1/courses/all-courses/${deptId}`, {
                 withCredentials: true
             });
 
             console.log(response.data.data);
 
-            return response.data.data
+            return response.data.data.courses
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
