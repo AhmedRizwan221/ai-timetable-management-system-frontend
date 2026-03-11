@@ -13,7 +13,7 @@ export const createTimeTableSlot = createAsyncThunk(
                 withCredentials: true
             });
 
-            console.log(response.data.data);
+            // console.log(response.data.data);
             return response.data.data
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);

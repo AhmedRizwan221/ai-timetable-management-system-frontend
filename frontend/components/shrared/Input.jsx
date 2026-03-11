@@ -4,23 +4,25 @@ function Input({
     label,
     type = "text",
     className = "",
+    icon: Icon,
     ...props
 }, ref) {
     const id = useId();
     return (
-        <div className="w-full py-3">
-            {label && <label className="inline-block mb-1 pl-1 text-black" htmlFor={id}>
-                {label}
+        <>
+            {label && <label className="flex items-center gap-1.5" htmlFor={id}>
+                {Icon && <Icon className="h-3.5 w-3.5 text-muted-foreground" />} {label}
             </label>}
-            <input 
+            <input
                 type={type}
-                className={`py-3 px-3 rounded-lg bg-white text-black outline-none focus:bg-gray-200 duration-200 border border-gray-200 w-full
+                className={`
                 ${className}`}
                 ref={ref}
                 {...props}
                 id={id}
             />
-        </div>
+
+        </>
     )
 
 }

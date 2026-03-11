@@ -27,7 +27,7 @@ export const getDeptallTimeTables = createAsyncThunk(
             const response = await axios.get(`http://localhost:8000/api/v1/timetables/${deptId}`, {
                 withCredentials: true
             });
-            console.log(response.data.data.timetables);
+            // console.log(response.data.data.timetables);
             return response.data.data.timetables;
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);

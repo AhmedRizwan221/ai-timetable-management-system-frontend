@@ -27,7 +27,7 @@ export const getAllCourses = createAsyncThunk(
                 withCredentials: true
             });
 
-            console.log(response.data.data);
+            // console.log(response.data.data);
 
             return response.data.data
         } catch (error) {
@@ -45,7 +45,7 @@ export const getAllCoursesInDept = createAsyncThunk(
                 withCredentials: true
             });
 
-            console.log(response.data.data);
+            // console.log(response.data.data);
 
             return response.data.data.courses
         } catch (error) {

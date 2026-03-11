@@ -10,7 +10,6 @@ import { getSections } from "../../store/section/section";
 import { createTimeTable } from "../../store/timetable/timeTable";
 import { Navigate } from "react-router-dom";
 import { createTimeTableSlot } from "../../store/timetableSlot/timetableSlot";
-import { Input } from "../index";
 import { getTeachers } from "../../store/user/user";
 import { getAllCoursesInDept } from "../../store/course/course";
 import { CalendarDays, Users, BookOpen, Layers, Plus, CalendarClock, Clock } from "lucide-react";
@@ -26,6 +25,7 @@ export default function CreateTimeTable() {
 
     const { user, error: userError, status } = useSelector((state) => state.auth);
     // console.log(user);
+    // console.log(user?.department?._id);
 
     const { semesters = [], error: semesterError } = useSelector((state) => state.semester);
     // console.log("Semester of dept: ", semesters);
@@ -40,10 +40,10 @@ export default function CreateTimeTable() {
     // console.log("Teachers" , teachers, "Total Teachers ",totalTeachers);
 
     const { courses = [], error: courseError } = useSelector((state) => state.course);
-    console.log("Courses", courses)
+    // console.log("Courses", courses)
 
-    const { timeTableSlot = [], error: TimeTableSLotError } = useSelector((state) => state).timetabelSlot
-    console.log("Batch All time tables", timeTableSlot);
+    const { timeTableSlot = [], error: TimeTableSLotError } = useSelector((state) => state.timetabelSlot)
+    // console.log("Batch All time tables", timeTableSlot);
 
     // now fetched all courses using deptId and render here 
     useEffect(() => {
@@ -234,7 +234,7 @@ export default function CreateTimeTable() {
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                                     {...registerTimetableSlot("timetableId", { required: true })}
                                 >
-                                    <option>  <Layers className="h-3.5 w-3.5 text-muted-foreground" /> Time Tables</option>
+                                    <option> Time Tables</option>
                                     {timeTables.map((temp) => (
                                         <option key={temp._id} value={temp._id}>
                                             {temp.batch.batchName} , {"Sem No" + " " + temp.semester.semesterNumber + " " + "Year No" + temp.semester.studyYear}
