@@ -6,7 +6,7 @@ import { login as authLogin } from "../../store/auth/authSlice.js";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Input, Button } from "../index.js";
-import {Mail, Lock } from "lucide-react"
+import { Mail, Lock } from "lucide-react"
 
 export default function Login() {
 
@@ -71,32 +71,36 @@ export default function Login() {
                         {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
                         <form onSubmit={handleSubmit(handlelogin)}>
                             <div className="grid gap-5 sm:grid-cols-1">
-                                <div className="space-y-2"></div>
-                                <Input
-                                    label="Email"
-                                    placeholder="Enter your Email"
-                                    type="email"
-                                    icon={Mail}
-                                    className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                                    {...register('email', {
-                                        required: true,
-                                        validate: {
-                                            matchPattern: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || "Email address must be a valid address"
-                                        }
-                                    })}
-                                />
-                                <Input
-                                    label="password"
-                                    type="password"
-                                    className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                                    placeholder="Enter your password"
-                                    autoComplete="current-password"
-                                    icon={Lock}
-                                    {...register('password', {
-                                        required: true
-                                    })}
+                                <div className="space-y-2">
+                                    <Input
+                                        label="Email"
+                                        placeholder="Enter your Email"
+                                        type="email"
+                                        icon={Mail}
+                                        className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                        {...register('email', {
+                                            required: true,
+                                            validate: {
+                                                matchPattern: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || "Email address must be a valid address"
+                                            }
+                                        })}
+                                    />
+                                </div>
+                                <div  className="space-y-2">
+                                    <Input
+                                        label="password"
+                                        type="password"
+                                        className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                        placeholder="Enter your password"
+                                        autoComplete="current-password"
+                                        icon={Lock}
+                                        {...register('password', {
+                                            required: true
+                                        })}
 
-                                />
+                                    />
+                                </div>
+
                                 <Button className="w-full flex justify-center items-center sm:w-auto bg-[#1D293D] text-white hover:bg-[#162131] cursor-pointer" type="submit" >Login</Button>
                             </div>
                         </form>

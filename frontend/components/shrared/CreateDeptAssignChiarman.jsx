@@ -96,7 +96,7 @@ export default function CreateDeptAssignChiarman() {
                         {facultyError && <p className="text-red-500 text-sm">Failed to load faculties</p>}
                     </div>
 
-                    <Button type="submit" className="w-full">
+                    <Button type="submit" className="w-full flex justify-center items-center sm:w-auto bg-[#1D293D] text-white hover:bg-[#162131] cursor-pointer">
                         Create Department
                     </Button>
                 </form>}

@@ -246,8 +246,8 @@ export default function Sidebar() {
           )}
             {user?.role === 'chairman' && (
             <li>
-              <Link to="/dashboard/chairman/manage-chairmans" className="flex items-center gap-2 hover:text-yellow-400">
-                <Users size={18} /> Manage Chairmans
+              <Link to="/dashboard/chairman/edit-teacher" className="flex items-center gap-2 hover:text-yellow-400">
+                <Users size={18} /> Manage Teachers 
               </Link>
             </li>
           )}

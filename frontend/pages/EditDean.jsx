@@ -1,17 +1,18 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import  Input  from "../components/shrared/Input";
+import Input from "../components/shrared/Input";
 import { updateUserData } from "../store/user/user";
 import { useForm } from "react-hook-form";
-import  Button  from "../components/shrared/Button";
+import Button from "../components/shrared/Button";
+import { CalendarDays, Plus, Users, Lock, Mail } from "lucide-react";
 
 export default function EditDean() {
     const { id } = useParams();
     const dispatch = useDispatch();
     const { register, handleSubmit, reset } = useForm();
 
-    const {user } = useSelector((state) => state.auth);
+    const { user } = useSelector((state) => state.auth);
 
     const handleUpdateDeanData = async (data) => {
         try {
@@ -39,51 +40,77 @@ export default function EditDean() {
     // console.log(deans, status);
 
     return (
-        <div className="flex justify-center items-center px-5 min-h-screen">
-            <div className="m-auto w-full max-w-lg rounded-xl bg-gray-100 border border-black/10 p-10">
-                {error && (
-                    <p className="text-red-600 text-sm mb-2 text-center">{error.message}</p>
-                )}
-                <form
-                    onSubmit={handleSubmit(handleUpdateDeanData)}
-                    className=""
-                >
-                    <div className="flex flex-col gap-4 mb-4">
-                        <Input
-                            className="w-1/2"
-                            label="Full Name"
-                            placeholder="Enter full name"
-                            type="text"
-                            {...register("fullname", { required: true })}
-                        />
-                        <Input
-                            label="Email"
-                            placeholder="Enter your Email"
-                            type="email"
-                            {...register('email', {
-                                required: true,
-                                validate: {
-                                    matchPattern: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || "Email address must be a valid address"
-                                }
-                            })}
-                        />
-                        <Input
-                            label="password"
-                            type="password"
-                            placeholder="Enter your password"
-                            autoComplete="current-password"
-                            {...register('password', {
-                                required: true
-                            })}
-
-                        />
+        <div className="min-h-screen bg-muted/30 py-10 px-4 sm:px-6 ">
+            <div className="bg-white border border-gray-200 rounded-lg ">
+                 <div className=" bg-card">
+                    <div className="container mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8 border-b">
+                        <div className="flex items-center gap-3">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
+                                <Users className="h-8 w-8 text-primary-foreground" />
+                            </div>
+                            <h1 className="text-2xl font-bold tracking-tight text-foreground">
+                                Edit Dean Details
+                            </h1>
+                        </div>
                     </div>
+                </div>
+                <div className="container mx-auto max-w-4xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
+                    {error && (
+                        <p className="text-red-600 text-sm mb-2 text-center">{error.message}</p>
+                    )}
+                    <form
+                        onSubmit={handleSubmit(handleUpdateDeanData)}
+                    >
+                        <div className="grid gap-5 sm:grid-cols-2">
+                            <div className="space-y-2">
+                                <Input
+                                    label="Full Name"
+                                    className="flex h-10 w-full items-center rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                    icon={Users}
+                                    placeholder="Enter full name"
+                                    type="text"
+                                    {...register("fullname", { required: true })}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Input
+                                    label="Email"
+                                    placeholder="Enter your Email"
+                                    type="email"
+                                    icon={Mail}
+                                    className="flex h-10 w-full items-center rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                    {...register('email', {
+                                        required: true,
+                                        validate: {
+                                            matchPattern: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || "Email address must be a valid address"
+                                        }
+                                    })}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Input
+                                    label="password"
+                                    type="password"
+                                    icon={Lock}
+                                    className="flex h-10 w-full items-center rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                    placeholder="Enter your password"
+                                    autoComplete="current-password"
+                                    {...register('password', {
+                                        required: true
+                                    })}
 
-                    <Button type="submit" className="w-full">
-                        Update Dean
-                    </Button>
-                </form>
+                                />
+                            </div>
+
+                        </div>
+
+                        <Button type="submit" className="w-full flex justify-center items-center sm:w-auto bg-[#1D293D] text-white hover:bg-[#162131] cursor-pointer">
+                            <Plus className="mr-2 h-4 w-4" />  Update Dean
+                        </Button>
+                    </form>
+                </div>
             </div>
         </div>
+
     )
 }

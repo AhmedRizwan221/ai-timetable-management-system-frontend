@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { Input, Button } from "../index";
 import { useNavigate } from "react-router-dom";
 import { getDeans } from "../../store/user/user.js";
+import { Plus, GraduationCap, Users } from "lucide-react";
 
 export default function CreateDeanAndAssignFaculty() {
     const dispatch = useDispatch();
@@ -16,10 +17,11 @@ export default function CreateDeanAndAssignFaculty() {
     }, [dispatch])
 
     // redux level fetching 
-    const {deans = [], error, status} = useSelector((state) => state.user);
+    const { deans = [], error, status } = useSelector((state) => state.user);
     // console.log(deans);
+    const { user } = useSelector((state) => state.auth);
 
-    const {error: facultyError} = useSelector((state) => state.faculty);
+    const { error: facultyError } = useSelector((state) => state.faculty);
     // send data to redux to create a faculty
     const handleCreateFact = async (data) => {
         try {
@@ -37,43 +39,63 @@ export default function CreateDeanAndAssignFaculty() {
         }
     };
     return (
-        <div className="flex justify-center items-center px-5 min-h-screen">
-            <div className="m-auto w-full max-w-lg rounded-xl bg-gray-100 border border-black/10 p-10">
-            {facultyError && (
-                    <p className="text-red-600 text-sm mb-2 text-center">{facultyError.message}</p>
-                )}
-                <form
-                    onSubmit={handleSubmit(handleCreateFact)}
-                    className=""
-                >
-                    <div className="flex flex-col gap-4 mb-4">
-                        <Input
-                            className="w-1/2"
-                            label="Create Faculty"
-                            placeholder="Enter faculty name"
-                            type="text"
-                            {...register("facultyname", { required: true })}
-                        />
-
-                        <select
-                            className="border border-gray-400 p-2 rounded-lg"
-                            {...register("deanId", { required: true })}
-                        >
-                            <option value="">Select Dean</option>
-                            {deans.map((dean) => (
-                                <option key={dean._id} value={dean._id}>
-                                    {dean.fullName} ({dean.faculty ? "Assigned" : "Not Assigned"})
-                                </option>
-                            ))}
-                        </select>
+        <div className="min-h-screen bg-muted/30 py-10 px-4 sm:px-6 ">
+            <div className="bg-white border border-gray-200 rounded-lg ">
+                <div className=" bg-card">
+                    <div className="container mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8 border-b">
+                        <div className="flex items-center gap-3">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
+                                <GraduationCap className="h-8 w-8 text-primary-foreground" />
+                            </div>
+                            <h1 className="text-2xl font-bold tracking-tight text-foreground">
+                                Create Faculty
+                            </h1>
+                        </div>
                     </div>
+                </div>
+                <div className="container mx-auto max-w-4xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
+                    {facultyError && (
+                        <p className="text-red-600 text-sm mb-2 text-center">{facultyError.message}</p>
+                    )}
+                    <form
+                        onSubmit={handleSubmit(handleCreateFact)}
+                    >
+                        <div className="grid gap-5 sm:grid-cols-1">
+                            <div className="space-y-2">
+                                <Input
+                                    className="flex h-10 w-full items-center rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                    icon={Users}
+                                    label="Create Faculty"
+                                    placeholder="Enter faculty name"
+                                    type="text"
+                                    {...register("facultyname", { required: true })}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="flex items-center gap-1.5">
+                                    <Users className="h-3.5 w-3.5 text-muted-foreground" /> Department
+                                </label>
+                                <select
+                                    className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                    {...register("deanId", { required: true })}
+                                >
+                                    <option value="">Select Dean</option>
+                                    {deans.map((dean) => (
+                                        <option key={dean._id} value={dean._id}>
+                                            {dean.fullName} ({dean.faculty ? "Assigned" : "Not Assigned"})
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
 
-                    <Button type="submit" className="w-full">
-                        Create Faculty
-                    </Button>
-                </form>
+                        </div>
+
+                        <Button type="submit" className="w-full flex justify-center items-center sm:w-auto bg-[#1D293D] text-white hover:bg-[#162131]">
+                            <Plus className="mr-2 h-4 w-4" />  Create Faculty
+                        </Button>
+                    </form>
+                </div>
             </div>
         </div>
     )
 }
-// use that form for creation of department 

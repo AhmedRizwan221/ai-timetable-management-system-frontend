@@ -119,7 +119,7 @@ export default function CreateTeacherChairman() {
                                     {...register("role")}
                                 />
                             </div>
-                            <Button type="submit" className="w-full flex justify-center items-center sm:w-auto bg-[#1D293D] text-white hover:bg-[#162131]">
+                            <Button type="submit" className="w-full flex justify-center items-center sm:w-auto bg-[#1D293D] text-white hover:bg-[#162131] cursor-pointer">
                               <Plus className="mr-2 h-4 w-4" />   {user?.role === "admin"
                                     ? "Create Dean"
                                     : user?.role === 'dean'
