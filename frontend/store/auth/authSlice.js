@@ -31,7 +31,7 @@ export const getUser = createAsyncThunk(
             //     ...response.data.data,
             //     faculty: response.data.data.faculty
             // }
-            // console.log("Respons", response);
+            console.log("Respons", response);
 
             return response.data.data
         } catch (error) {
@@ -79,7 +79,7 @@ const authSlice = createSlice({
             })
             .addCase(getUser.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                const user = action.payload.data;
+                const user = action.payload;
                 state.user = user;
                 state.department = user?.department;
                 state.faculty = user?.faculty;

@@ -24,6 +24,7 @@ import EditChairman from "../pages/EditChairman.jsx";
 import EditTeacher from "../pages/EditTeacher.jsx";
 import CreateTimeTable from "./layout/CreateTimeTable.jsx";
 import CreateCourse from "./layout/CreateCourse.jsx";
+import ManageTeachers from "./dashboard/ManageTeachers.jsx";
 
 export {
     Button,
@@ -51,5 +52,6 @@ export {
     EditTeacher,
     EditDean,
     CreateTimeTable,
-    CreateCourse
+    CreateCourse,
+    ManageTeachers
 }

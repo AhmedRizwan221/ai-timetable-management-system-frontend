@@ -119,7 +119,7 @@ export default function CreateTimeTable() {
                                 <CalendarDays className="h-5 w-5 text-primary-foreground" />
                             </div>
                             <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                                Create Timetable {user?.department.deptName}
+                                Create Timetable {user?.department?.deptName}
                             </h1>
                         </div>
                     </div>
@@ -190,7 +190,7 @@ export default function CreateTimeTable() {
                                     <option value="">Select Section</option>
                                     {sections.map((sect) => (
                                         <option key={sect._id} value={sect._id}>
-                                            {"Section" + " " + sect.sectionName}, {sect?.department.deptName}
+                                            {"Section" + " " + sect.sectionName}, {sect?.department?.deptName}
                                         </option>
                                     ))}
                                 </select>
@@ -212,7 +212,7 @@ export default function CreateTimeTable() {
                                 <CalendarDays className="h-5 w-5 text-primary-foreground" />
                             </div>
                             <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                                Create Timetable Slot {user?.department.deptName}
+                                Create Timetable Slot {user?.department?.deptName}
                             </h1>
                         </div>
                     </div>

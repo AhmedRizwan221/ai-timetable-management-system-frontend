@@ -1,23 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// create faculty
-// export const createFaculty = createAsyncThunk(
-//     "user/createFaculty",
-//     async (facultyData, { rejectWithValue }) => {
-//         try {
-//             const response = await axios.post('http://localhost:8000/api/v1/faculties/create', facultyData, {
-//                 withCredentials: true
-//             });
-//             console.log(response);
-
-//             return response.data.data;
-//         } catch (error) {
-//             return rejectWithValue(error.response?.data || error.message);
-//         }
-//     }
-// )
-
 // fetch deans 
 export const getDeans = createAsyncThunk(
     "user/deans",
@@ -45,6 +28,25 @@ export const getChairmans = createAsyncThunk(
             );
             // console.log(response);
             // console.log(response.data.data);
+            return response.data.data
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
+// fetch all teachers in department
+export const getAllTeachersInDept = createAsyncThunk(
+    "user/getAllTeachersInDept",
+    async (deptId, { rejectWithValue }) => {
+        try {
+            console.log(deptId);
+            const response = await axios.get(`http://localhost:8000/api/v1/users/${deptId}/teachers`,
+                { withCredentials: true }
+            );
+
+            console.log(response.data.data);
+
             return response.data.data
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
@@ -85,7 +87,7 @@ export const deleteUser = createAsyncThunk(
     }
 )
 
-// get teachers 
+// get all teachers 
 export const getTeachers = createAsyncThunk(
     "user/teachers",
     async (_, { rejectWithValue }) => {
@@ -199,12 +201,24 @@ const userSlice = createSlice({
             })
             .addCase(getTeachers.fulfilled, (state, action) => {
                 state.status = 'succeeded',
-                state.teachers = action.payload.teachers,
-                state.totalTeachers = action.payload.totalTeachers
+                    state.teachers = action.payload.teachers,
+                    state.totalTeachers = action.payload.totalTeachers
             })
             .addCase(getTeachers.rejected, (state, action) => {
                 state.status = 'rejected',
-                state.error = action.payload
+                    state.error = action.payload
+            })
+            .addCase(getAllTeachersInDept.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(getAllTeachersInDept.fulfilled, (state, action) => {
+                state.status = 'succeeded',
+                    state.teachers = action.payload.teachersInDept.teachers,
+                    state.totalTeachers = action.payload.TotalTeachersInDept
+            })
+            .addCase(getAllTeachersInDept.rejected, (state, action) => {
+                state.status = 'rejected',
+                    state.error = action.payload
             })
 
     }
