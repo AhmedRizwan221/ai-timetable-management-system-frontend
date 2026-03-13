@@ -14,7 +14,7 @@ export default function CreateTeacherChairman() {
     const [error, setError] = useState("");
 
     const user = useSelector((state) => state.auth.user);
-    console.log(user);
+    // console.log(user);
 
     const handleUser = async (data) => {
         setError("");
@@ -134,6 +134,7 @@ export default function CreateTeacherChairman() {
                                     </option>
                                 </select>
                             </div>)}
+                        </div>
                             <Button type="submit" className="w-full flex justify-center items-center sm:w-auto bg-[#1D293D] text-white hover:bg-[#162131] cursor-pointer">
                                 <Plus className="mr-2 h-4 w-4" />   {user?.role === "admin"
                                     ? "Create Dean"
@@ -141,7 +142,6 @@ export default function CreateTeacherChairman() {
                                         ? "Create Chairman"
                                         : "Create Teacher"}
                             </Button>
-                        </div>
                     </form>
                 </div>
             </div>

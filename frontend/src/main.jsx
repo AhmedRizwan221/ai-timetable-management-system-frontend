@@ -237,7 +237,7 @@ const router = createBrowserRouter([
         )
       },
       {
-        path: '/dashboard/chairman/edit-teacher',
+        path: '/dashboard/chairman/edit-teacher/:id',
         element: (
           <AuthLayout authentication={true}>
             <DashboardLayout>

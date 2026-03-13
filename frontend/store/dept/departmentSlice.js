@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-
 export const departmentCreate = createAsyncThunk(
     "departments/create",
     async (deptData, { rejectWithValue }) => {
@@ -96,7 +95,9 @@ const departmentSlice = createSlice({
         setDepartments: (state, action) => {
             state.departments = action.payload;
         },
-
+        clearError: (state) => {
+            state.error = null
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -142,5 +143,5 @@ const departmentSlice = createSlice({
     },
 });
 
-export const { createDepartment, deleteDepartment, updateDepartment, setDepartments } = departmentSlice.actions;
+export const { deleteDepartment, updateDepartment, setDepartments, clearError } = departmentSlice.actions;
 export default departmentSlice.reducer;

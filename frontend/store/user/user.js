@@ -40,12 +40,12 @@ export const getAllTeachersInDept = createAsyncThunk(
     "user/getAllTeachersInDept",
     async (deptId, { rejectWithValue }) => {
         try {
-            console.log(deptId);
+            // console.log(deptId);
             const response = await axios.get(`http://localhost:8000/api/v1/users/${deptId}/teachers`,
                 { withCredentials: true }
             );
 
-            console.log(response.data.data);
+            // console.log(response.data.data);
 
             return response.data.data
         } catch (error) {
@@ -213,7 +213,7 @@ const userSlice = createSlice({
             })
             .addCase(getAllTeachersInDept.fulfilled, (state, action) => {
                 state.status = 'succeeded',
-                    state.teachers = action.payload.teachersInDept.teachers,
+                    state.teachers = action.payload.teachersInDept,
                     state.totalTeachers = action.payload.TotalTeachersInDept
             })
             .addCase(getAllTeachersInDept.rejected, (state, action) => {

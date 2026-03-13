@@ -69,7 +69,7 @@ export default function EditDean() {
                                     icon={Users}
                                     placeholder="Enter full name"
                                     type="text"
-                                    {...register("fullname", { required: true })}
+                                    {...register("fullname")}
                                 />
                             </div>
                             <div className="space-y-2">
@@ -80,7 +80,6 @@ export default function EditDean() {
                                     icon={Mail}
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                                     {...register('email', {
-                                        required: true,
                                         validate: {
                                             matchPattern: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || "Email address must be a valid address"
                                         }
@@ -95,9 +94,7 @@ export default function EditDean() {
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                                     placeholder="Enter your password"
                                     autoComplete="current-password"
-                                    {...register('password', {
-                                        required: true
-                                    })}
+                                    {...register('password', )}
 
                                 />
                             </div>

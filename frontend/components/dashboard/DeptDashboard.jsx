@@ -8,32 +8,14 @@ export default function DeptDashboard() {
   const dispatch = useDispatch();
   const { user, status } = useSelector((state) => state.auth);
 
-// This will log EVERY time the state changes
-// useEffect(() => {
-//     if (status === true) {
-//         console.log("FINAL USER DATA IN COMPONENT:", user);
-//         console.log("FACULTY ID:", user?.faculty?._id);
-//     }
-// }, [user, status]);
-
-// useEffect(() => {
-//   dispatch(getUser());
-// }, [dispatch]);
-
-
-  const { departments = [] } = useSelector(
-    (state) => state.department
-  );
+  const {departments: [], errpr: departmentError } = useSelector((state) => state.department);
   // console.log("Departments:", departments);
 
 
 
-  // useEffect(() => {
-  //   dispatch(fetchDepartments())
-  // }, [dispatch])
-
-  // if (loading) return <p>Loading...</p>;
-  // if (error) return <p>Error: {error}</p>;
+  useEffect(() => {
+    dispatch(fetchDepartments())
+  }, [dispatch])
 
   return (
     <div className="p-6">

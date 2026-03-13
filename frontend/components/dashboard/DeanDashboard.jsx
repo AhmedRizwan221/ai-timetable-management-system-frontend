@@ -8,9 +8,11 @@ function DeanDashboard() {
     const { user = null, error, status } = useSelector((state) => state.auth);
     console.log(user);
 
-    // useEffect(() => {
-    //     dispatch(getUser());
-    // }, [dispatch])
+    useEffect(() => {
+        if(status === 'idle') {
+            dispatch(getUser());
+        }
+    }, [dispatch, user])
 
 
 
