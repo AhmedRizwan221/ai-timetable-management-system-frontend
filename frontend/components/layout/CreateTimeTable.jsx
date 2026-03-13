@@ -234,7 +234,7 @@ export default function CreateTimeTable() {
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                                     {...registerTimetableSlot("timetableId", { required: true })}
                                 >
-                                    <option> Time Tables</option>
+                                    <option>Select Time Tables</option>
                                     {timeTables.map((temp) => (
                                         <option key={temp._id} value={temp._id}>
                                             {temp.batch.batchName} , {"Sem No" + " " + temp.semester.semesterNumber + " " + "Year No" + temp.semester.studyYear}
@@ -251,9 +251,10 @@ export default function CreateTimeTable() {
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                                     {...registerTimetableSlot("teacherId", { required: true })}
                                 >
+                                    <option>Select Teachers</option>
                                     {teachers.map((teach) => (
                                         <option key={teach._id} value={teach._id}>
-                                            {teach.fullName} { }
+                                            {teach.fullName}, { teach?.departmentTeacher ? teach?.departmentTeacher.deptName : "Not assign "}
                                         </option>
                                     ))}
                                 </select>
