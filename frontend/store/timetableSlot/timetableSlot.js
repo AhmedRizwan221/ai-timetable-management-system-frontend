@@ -24,15 +24,15 @@ export const createTimeTableSlot = createAsyncThunk(
 // get all time table slots
 export const getAllTimeTableSlot = createAsyncThunk(
     "timetableSlot/getallSLots",
-    async (batchId, { rejectWithValue }) => {
-        console.log(data);
+    async (deptId, { rejectWithValue }) => {
+        // console.log(deptId);
         try {
-            console.log(batchId);
-            const response = await axios.post(`http://localhost:8000/api/v1/timetableSlots/${batchId}/timetable`, data, {
+            // console.log(deptId);
+            const response = await axios.get(`http://localhost:8000/api/v1/timetableSlots/${deptId}/timetables`, {
                 withCredentials: true
             });
 
-            console.log(response.data.data);
+            // console.log(response.data.data);
             return response.data.data
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
@@ -41,6 +41,7 @@ export const getAllTimeTableSlot = createAsyncThunk(
 )
 const initialState = {
     timeTableSlot: [],
+    totalSlots: null,
     error: null,
     status: "idle"
 }
@@ -72,7 +73,8 @@ const timeTableSLotSLice = createSlice({
             })
             .addCase(getAllTimeTableSlot.fulfilled, (state, action) => {
                 state.status = 'succeeded'
-                state.timeTableSlot = action.payload
+                state.timeTableSlot = action.payload.timetableSlot,
+                state.totalSlots = action.payload.totaltimetableSlots;
             })
             .addCase(getAllTimeTableSlot.rejected, (state, action) => {
                 state.status = 'rejected',

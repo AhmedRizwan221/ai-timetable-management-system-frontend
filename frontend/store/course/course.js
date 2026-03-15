@@ -47,7 +47,7 @@ export const getAllCoursesInDept = createAsyncThunk(
 
             // console.log(response.data.data);
 
-            return response.data.data.courses
+            return response.data.data
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -58,6 +58,7 @@ export const getAllCoursesInDept = createAsyncThunk(
 
 const initialState = {
     courses: [],
+    totalCourses: null,
     error: null,
     status: "idle"
 }
@@ -78,7 +79,7 @@ const courseSlice = createSlice({
             })
             .addCase(createCourse.fulfilled, (state, action) => {
                 state.status = 'succeeded',
-                    state.courses.push(action.payload)
+                    state.courses.push(action.payload.createdCourse)
             })
             .addCase(createCourse.rejected, (state, action) => {
                 state.status = 'rejected',
@@ -100,7 +101,8 @@ const courseSlice = createSlice({
             })
             .addCase(getAllCoursesInDept.fulfilled, (state, action) => {
                 state.status = 'succeeded',
-                    state.courses = action.payload
+                    state.courses = action.payload.courses
+                    state.totalCourses= action.payload.totalCourses
             })
             .addCase(getAllCoursesInDept.rejected, (state, action) => {
                 state.status = 'rejected',

@@ -232,6 +232,13 @@ export default function Sidebar() {
           )}
           {user?.role === 'chairman' && (
             <li>
+              <Link to="/dashboard/chairman/create-section" className="flex items-center gap-2 hover:text-yellow-400">
+                <Users size={18} /> Create Section
+              </Link>
+            </li>
+          )}
+          {user?.role === 'chairman' && (
+            <li>
               <Link to="/dashboard/chairman/create-timetable" className="flex items-center gap-2 hover:text-yellow-400">
                 <Users size={18} /> Create TimeTable
               </Link>

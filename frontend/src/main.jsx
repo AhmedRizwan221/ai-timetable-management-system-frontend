@@ -8,7 +8,8 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import {
   Login, AuthLayout, SignUp, ChairmanDashboard, SuperAdminDashboard, DashboardLayout, Home, DeptDashboard, CreateTeacherChairman, DeanDashboard, FacultyDashboard, FacultyDepartments, ManageDeans,
   CreateDeptAssignChiarman, CreateDeanAndAssignFaculty, EditDean, EditChairman, EditTeacher, CreateTimeTable, CreateCourse,
-  ManageTeachers
+  ManageTeachers,
+  CreateSection
 } from '../components/index';
 import Department from "../pages/Department";
 
@@ -222,6 +223,16 @@ const router = createBrowserRouter([
           <AuthLayout authentication={true}>
             <DashboardLayout>
               <CreateCourse />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+      {
+        path: '/dashboard/chairman/create-Section',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <CreateSection />
             </DashboardLayout>
           </AuthLayout>
         )
