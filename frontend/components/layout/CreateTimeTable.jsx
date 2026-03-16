@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getDeptallTimeTables } from "../../store/timetable/timeTable";
 import { getUser } from "../../store/auth/authSlice";
@@ -7,8 +7,8 @@ import { useForm } from "react-hook-form";
 import { getSemesters } from "../../store/semester/semester";
 import { getBatches } from "../../store/batch/batch";
 import { getSections } from "../../store/section/section";
-import { createTimeTable } from "../../store/timetable/timeTable";
-import { Navigate } from "react-router-dom";
+import { createTimeTable, clearError } from "../../store/timetable/timeTable";
+import { useNavigate } from "react-router-dom";
 import { createTimeTableSlot } from "../../store/timetableSlot/timetableSlot";
 import { getTeachers } from "../../store/user/user";
 import { getAllCoursesInDept } from "../../store/course/course";
@@ -16,13 +16,13 @@ import { CalendarDays, Users, BookOpen, Layers, Plus, CalendarClock, Clock } fro
 
 export default function CreateTimeTable() {
     const dispatch = useDispatch();
+    const [err, setErr] = useState("");
     const { register: registerTimetable, handleSubmit: handlerTimetable, reset: resetTimetable } = useForm();
-
-    const { register: registerTimetableSlot, handleSubmit: handlerTimetableSlot, reset: resetTimetableSlot } = useForm();
+    const { register: registerTimetableSlot, handleSubmit: handlerTimetableSlot, reset: resetTimetableSlot, watch, unregister } = useForm();
+    const navigate = useNavigate();
 
     const { timeTables = [], error: timetableError } = useSelector((state) => state.timetable);
     // console.log("Time tables : ", timeTables, timeTables?.batch?._id);
-
     const { user, error: userError, status } = useSelector((state) => state.auth);
     // console.log(user);
     // console.log(user?.department?._id);
@@ -57,11 +57,28 @@ export default function CreateTimeTable() {
             dispatch(getSections(user?.department?._id));
             dispatch(getTeachers());
             dispatch(getAllCoursesInDept(user?.department?._id));
+            dispatch(clearError());
         }
     }, [dispatch, user, status]);
+    // if course has practical then we show practicalFacilitator field 
+    const selectedCourseId = watch("courseId");
+    const selectedCourse = courses.find(
+        (c) => c._id === selectedCourseId
+    );
+    // console.log(selectedCourse);
 
+    useEffect(() => {
+        if (!selectedCourse?.hasPractical) {
+            unregister("practicalFacilitatorId");
+        }
+        if(selectedCourse?.hasPractical) {
+            unregister("teacherId");            
+        }
+
+    }, [selectedCourse, unregister]);
 
     const handleCreatTimeTable = async (data) => {
+        setErr(" ");
         try {
             console.log(data);
             await dispatch(createTimeTable({
@@ -74,36 +91,40 @@ export default function CreateTimeTable() {
             alert("TimeTable created successfully");
 
             if (user?.role === 'chairman') {
-                Navigate('/dashboard/chairman')
+                navigate('/dashboard/chairman')
             }
 
         } catch (error) {
-            return error
+            setErr(error);
         }
     }
 
+
+
     const handleCreateTimeTableSlot = async (data) => {
-        console.log("button clicked ",  data.timetableId);
+        setErr(" ");
+        // console.log(data.teacherId);
         try {
             await dispatch(createTimeTableSlot({
                 timetableId: data.timetableId,
                 day: data.day,
                 startTime: data.startTime,
                 endTime: data.endTime,
-                teacherId: data.teacherId,
+                teacherId: data.teacherId || null,
                 courseId: data.courseId,
-                type: "theory",
+                type: data.type,
+                practicalFacilitatorId: data.practicalFacilitatorId || null
             }
             )).unwrap();
             resetTimetableSlot();
             alert("TimeTable Slot created successfully");
 
-            if (user?.role === 'chairman') {
-                Navigate('/dashboard/chairman')
-            }
+            // if (user?.role === 'chairman') {
+            //     navigate('/dashboard/create-timetable')
+            // }
 
         } catch (err) {
-            return err
+            setErr(err);
         }
 
     }
@@ -125,8 +146,8 @@ export default function CreateTimeTable() {
                     </div>
                 </div>
                 <div className="container mx-auto max-w-4xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
-                    {timetableError && (
-                        <p className="text-red-600 text-sm mb-2 text-center">{timetableError.message}</p>
+                    {err && (
+                        <p className="text-red-600 text-sm mb-2 text-center">{err.message}</p>
                     )}
                     <form id="form-1"
                         onSubmit={handlerTimetable(handleCreatTimeTable)}>
@@ -140,7 +161,7 @@ export default function CreateTimeTable() {
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                                     {...registerTimetable("semesterId", { required: true })}
                                 >
-                                    <option>Select Semester</option>
+                                    <option value="">Select Semester</option>
                                     {semesters.map((sem) => (
                                         <option key={sem._id} value={sem._id}>
                                             {"Semester" + sem.semesterNumber} , {"Year" + sem.studyYear}
@@ -156,7 +177,7 @@ export default function CreateTimeTable() {
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                                     {...registerTimetable("batchId", { required: true })}
                                 >
-                                    <option>Select Batch</option>
+                                    <option value="">Select Batch</option>
                                     {batches.map((batch) => (
                                         <option key={batch._id} value={batch._id}>
                                             {"Batch" + " " + batch.batchName}
@@ -219,8 +240,8 @@ export default function CreateTimeTable() {
                 </div>
 
                 <div className="container mx-auto max-w-4xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
-                    {TimeTableSLotError && (
-                        <p className="text-red-600 text-sm mb-2 text-center">{TimeTableSLotError.message}</p>
+                    {err && (
+                        <p className="text-red-600 text-sm mb-2 text-center">{err.message}</p>
                     )}
 
                     <form id="form-2"
@@ -234,7 +255,7 @@ export default function CreateTimeTable() {
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                                     {...registerTimetableSlot("timetableId", { required: true })}
                                 >
-                                    <option>Select Time Tables</option>
+                                    <option value="">Select Time Tables</option>
                                     {timeTables.map((temp) => (
                                         <option key={temp._id} value={temp._id}>
                                             {temp.batch.batchName} , {"Sem No" + " " + temp.semester.semesterNumber + " " + "Year No" + temp.semester.studyYear}
@@ -242,23 +263,25 @@ export default function CreateTimeTable() {
                                     ))}
                                 </select>
                             </div>
+                            {!selectedCourse?.hasPractical && (
+                                <div className="space-y-2">
+                                    <label className="flex items-center gap-1.5">
+                                        <Users className="h-3.5 w-3.5 text-muted-foreground" /> Teacher
+                                    </label>
+                                    <select
+                                        className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                        {...registerTimetableSlot("teacherId", { required: true })}
+                                    >
+                                        <option value="">Select Teachers</option>
+                                        {teachers.map((teach) => (
+                                            <option key={teach._id} value={teach._id}>
+                                                {teach.fullName}, {teach?.departmentTeacher ? teach?.departmentTeacher.deptName : "Not assign "}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            )}
 
-                            <div className="space-y-2">
-                                <label className="flex items-center gap-1.5">
-                                    <Users className="h-3.5 w-3.5 text-muted-foreground" /> Teacher
-                                </label>
-                                <select
-                                    className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                                    {...registerTimetableSlot("teacherId", { required: true })}
-                                >
-                                    <option>Select Teachers</option>
-                                    {teachers.map((teach) => (
-                                        <option key={teach._id} value={teach._id}>
-                                            {teach.fullName}, { teach?.departmentTeacher ? teach?.departmentTeacher.deptName : "Not assign "}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
                             <div className="space-y-2">
                                 <label className="flex items-center gap-1.5">
                                     <CalendarDays className="h-3.5 w-3.5 text-muted-foreground" /> Day
@@ -307,11 +330,42 @@ export default function CreateTimeTable() {
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                                     {...registerTimetableSlot("courseId", { required: true })}
                                 >
+                                     <option value="">Select Course</option>
                                     {courses.map((cour) => (
                                         <option key={cour._id} value={cour._id}>
                                             {cour.courseName} { }
                                         </option>
                                     ))}
+                                </select>
+                            </div>
+                            {selectedCourse?.hasPractical && (
+                                <div className="space-y-2">
+                                    <label className="flex items-center gap-1.5">
+                                        <Users className="h-3.5 w-3.5 text-muted-foreground" /> Practical Facilitator
+                                    </label>
+                                    <select
+                                        className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                        {...registerTimetableSlot("practicalFacilitatorId")}
+                                    >
+                                        <option value="">Select Teachers</option>
+                                        {teachers.map((teach) => (
+                                            <option key={teach._id} value={teach._id}>
+                                                {teach.fullName}, {teach?.departmentTeacher ? teach?.departmentTeacher.deptName : "Not assign "}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            )}
+                            <div className="space-y-2">
+                                <label className="flex items-center gap-1.5">
+                                    <CalendarDays className="h-3.5 w-3.5 text-muted-foreground" /> Type
+                                </label>
+                                <select
+                                    className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                    {...registerTimetableSlot("type", { required: true })}
+                                >
+                                    <option value="theory">Theory</option>
+                                    <option value="practical">Practical</option>
                                 </select>
                             </div>
                         </div>

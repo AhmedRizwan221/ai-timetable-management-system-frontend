@@ -11,8 +11,8 @@ function ChairmanDashboard() {
 
     const dispatch = useDispatch();
     const [selectedBatch, setSelectedBatch] = useState("morning");
-    const [selectedSemester, setSelectedSemester] = useState(2);
-    const [selectedYear, setSelectedYear] = useState(4);
+    const [selectedSemester, setSelectedSemester] = useState(1);
+    const [selectedYear, setSelectedYear] = useState(1);
     const [selectedSection, setSelectedSection] = useState("A");
 
     const { user, status } = useSelector((state) => state.auth);
@@ -20,8 +20,9 @@ function ChairmanDashboard() {
     // console.log(timeTableSlot);
     const { totalTeachers } = useSelector((state) => state.user);
     const { totalCourses, courses } = useSelector((state) => state.course);
+    // console.log(courses);
 
-    const DAYS_OF_WEEK = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+    const Days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 
     // console.log(totalCourses, courses);
     useEffect(() => {
@@ -50,19 +51,37 @@ function ChairmanDashboard() {
 
             // console.log("Batch compare:", slot.batch?.batchName, selectedBatch);
 
-            console.log({
-                matchBatch,
-                matchSemester,
-                matchYear,
-                matchSection
-            });
+            // console.log({
+            //     matchBatch,
+            //     matchSemester,
+            //     matchYear,
+            //     matchSection
+            // });
             return matchBatch && matchSemester && matchYear || matchSection;
         });
     }, [timeTableSlot, selectedBatch, selectedSemester, selectedYear, selectedSection]);
-
     // console.log(filteredTimeTable);
 
+    // get times of particular slot 
+    const timeSlots = [... new Set(
+        filteredTimeTable.map((slot) => `${slot.startTime}-${slot.endTime}`)
+    )];
 
+
+    const getSLot = (day, time) => {
+        return filteredTimeTable.find(
+            slot =>
+                slot.day === day &&
+                `${slot.startTime}-${slot.endTime}` === time
+        );
+    }
+
+    // unique course
+    const uniqueCourses = Array.from(
+        new Map(timeTableSlot.map((item) => [item?.course?.courseName, item])).values()
+    );
+
+    // console.log(uniqueCourses);
     return (
         <div className="">
             <div className="bg-white border border-gray-200 rounded-lg ">
@@ -109,7 +128,7 @@ function ChairmanDashboard() {
                             options={['A', 'B'].map(s => ({ val: s, lab: `Section ${s}` }))}
                         />
                     </div>
-
+                    {/* information grid */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 mt-8">
                         <div className="flex items-center gap-4 bg-[#1D293D] text-white hover:bg-[#162131] py-4 px-4 border border-gray-200 rounded-lg">
                             <CalendarDays className="h-5 w-5 text-primary-foreground" />
@@ -134,14 +153,82 @@ function ChairmanDashboard() {
                         </div>
                     </div>
 
-
-                    {/* main time table stuff */}
-
-                    {filteredTimeTable.map(slot => (
-                        <div key={slot._id}>
-                            {slot.day} | {slot.startTime} - {slot.endTime} | {slot.course.courseName} | {slot.teacher.fullName}
+                    {/* main body of timetable */}
+                    <div className="w-full space-y-8 p-4 bg-white">
+                        {/* Main Timetable */}
+                        <div className="overflow-x-auto">
+                            <table className="min-w-full border-collapse border border-black text-center text-sm">
+                                <thead>
+                                    <tr className="bg-white">
+                                        <th className="border border-black px-2 py-3 font-bold">Day / Time</th>
+                                        {timeSlots.map((time, index) => (
+                                            <th key={index} className="border border-black px-2 py-2 font-bold leading-tight">
+                                                Lecture {index + 1} <br />
+                                                <span className="font-normal text-xs">{time}</span>
+                                            </th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {Days.map((day) => (
+                                        <tr key={day}>
+                                            <td className="border border-black px-4 py-3 font-bold text-left">{day}</td>
+                                            {day === "Friday" ? (
+                                                /* Special handling for Friday spanning across all slots */
+                                                <td colSpan={timeSlots.length} className="border border-black px-4 py-6 text-4xl font-black tracking-widest">
+                                                    FYP-II
+                                                </td>
+                                            ) : (
+                                                timeSlots.map((time) => {
+                                                    const slot = getSLot(day, time);
+                                                    return (
+                                                        <td key={time} className="border border-black px-2 py-3 min-w-[120px]">
+                                                            {slot ? (
+                                                                <div className="whitespace-pre-line font-bold">
+                                                                    {slot.course.courseName}
+                                                                    {/* {slot.isPractical && <div className="text-xs font-normal underline mt-1">SD LAB</div>} */}
+                                                                </div>
+                                                            ) : null}
+                                                        </td>
+                                                    );
+                                                })
+                                            )}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
-                    ))}
+
+                        {/* Course Facilitator Table (Bottom Section) */}
+                        <div className="overflow-x-auto">
+                            <table className="min-w-full border-collapse border border-black text-left text-xs">
+                                <thead>
+                                    <tr className="bg-gray-50">
+                                        <th className="border border-black px-2 py-1 w-12">S.No.</th>
+                                        <th className="border border-black px-2 py-1">Course Name</th>
+                                        <th className="border border-black px-2 py-1 w-24">Credit Hours</th>
+                                        <th className="border border-black px-2 py-1">Course Facilitator</th>
+                                        <th className="border border-black px-2 py-1">Practical Facilitator</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {uniqueCourses.map((timetable, idx) => (
+                                        <tr key={idx}>
+                                            <td className="border border-black px-2 py-1 font-bold">{String(idx + 1).padStart(2, '0')}</td>
+                                            <td className="border border-black px-2 py-1 font-medium">{timetable?.course?.courseName}</td>
+                                            <td className="border border-black px-2 py-1">
+                                                {(timetable?.course?.creditHours?.theory ?? 0) + " + " + (timetable?.course?.creditHours?.practical ?? 0)}
+                                            </td>
+                                            <td className="border border-black px-2 py-1">{timetable?.teacher?.fullName}</td>
+                                            <td className="border border-black px-2 py-1">{timetable?.practicalFacilitator?.fullName || ""}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
                 </main>
             </div>
         </div>

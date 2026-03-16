@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Input from "../shrared/Input";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { createSection } from "../../store/section/section";
 import Button from "../shrared/Button";
@@ -37,6 +37,8 @@ export default function CreateSection() {
     }, [dispatch, user]);
 
     const handleCreateSection = async (data) => {
+        setErr( "");
+        
         try {
             await dispatch(createSection({
                 sectionName: data.sectionName,
