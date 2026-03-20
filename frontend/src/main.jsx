@@ -9,7 +9,8 @@ import {
   Login, AuthLayout, SignUp, ChairmanDashboard, SuperAdminDashboard, DashboardLayout, Home, DeptDashboard, CreateTeacherChairman, DeanDashboard, FacultyDashboard, FacultyDepartments, ManageDeans,
   CreateDeptAssignChiarman, CreateDeanAndAssignFaculty, EditDean, EditChairman, EditTeacher, CreateTimeTable, CreateCourse,
   ManageTeachers,
-  CreateSection
+  CreateSection,
+  ManageTimetable, EditTimeTable
 } from '../components/index';
 import Department from "../pages/Department";
 
@@ -243,6 +244,26 @@ const router = createBrowserRouter([
           <AuthLayout authentication={true}>
             <DashboardLayout>
               <ManageTeachers />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+        {
+        path: '/dashboard/chairman/manage-timetables',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <ManageTimetable />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+        {
+        path: '/dashboard/chairman/edit-timetable/:id',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <EditTimeTable />
             </DashboardLayout>
           </AuthLayout>
         )

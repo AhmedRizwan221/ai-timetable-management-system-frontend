@@ -26,6 +26,8 @@ import CreateTimeTable from "./layout/CreateTimeTable.jsx";
 import CreateCourse from "./layout/CreateCourse.jsx";
 import ManageTeachers from "./dashboard/ManageTeachers.jsx";
 import CreateSection from "./layout/CreateSection.jsx";
+import ManageTimetable from "./dashboard/users/ManageTimetables.jsx";
+import EditTimeTable from "../pages/EditTImeTable.jsx";
 
 export {
     Button,
@@ -55,5 +57,7 @@ export {
     CreateTimeTable,
     CreateCourse,
     ManageTeachers,
-    CreateSection
+    CreateSection,
+    ManageTimetable,
+    EditTimeTable
 }

@@ -39,6 +39,22 @@ export const getAllTimeTableSlot = createAsyncThunk(
         }
     }
 )
+
+export const deleteTimeTableSlot = createAsyncThunk(
+    "timetableSlot/deleteSlot",
+    async (timetableSlotId, { rejectWithValue }) => {
+        try {
+            const response = await axios.delete(`http://localhost:8000/api/v1/timetableSlots/delete${timetableSlotId}`, {
+                withCredentials: true
+            });
+            console.log(response.data.data);
+            return response.data.data._id
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
 const initialState = {
     timeTableSlot: [],
     totalSlots: null,
@@ -74,9 +90,22 @@ const timeTableSLotSLice = createSlice({
             .addCase(getAllTimeTableSlot.fulfilled, (state, action) => {
                 state.status = 'succeeded'
                 state.timeTableSlot = action.payload.timetableSlot,
-                state.totalSlots = action.payload.totaltimetableSlots;
+                    state.totalSlots = action.payload.totaltimetableSlots;
             })
             .addCase(getAllTimeTableSlot.rejected, (state, action) => {
+                state.status = 'rejected',
+                    state.error = action.payload
+            })
+            .addCase(deleteTimeTableSlot.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(deleteTimeTableSlot.fulfilled, (state, action) => {
+                state.status = 'succeeded'
+                const id = action.payload;
+                state.timeTableSlot = state.timeTableSlot.filter((timetable) => timetable._id !== id),
+                    state.totalSlots = state.totalSlots.filter((slot) => slot._id !== id)
+            })
+            .addCase(deleteTimeTableSlot.rejected, (state, action) => {
                 state.status = 'rejected',
                     state.error = action.payload
             })

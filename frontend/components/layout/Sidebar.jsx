@@ -258,6 +258,13 @@ export default function Sidebar() {
               </Link>
             </li>
           )}
+           {user?.role === 'chairman' && (
+            <li>
+              <Link to="/dashboard/chairman/manage-timetables" className="flex items-center gap-2 hover:text-yellow-400">
+                <Users size={18} /> Manage TimeTable and Slots
+              </Link>
+            </li>
+          )}
         </ul>
         <button className="flex items-center gap-2 hover:text-red-400 mt-auto"
           onClick={() => {

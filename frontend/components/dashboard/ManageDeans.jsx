@@ -36,7 +36,6 @@ export default function ManageDeans() {
     return (
         <div className="min-h-screen bg-white p-4 sm:p-8 rounded-lg">
             <div className="mx-auto max-w-5xl space-y-6">
-                {/* Header Section: Now stacks on mobile */}
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex items-center gap-3">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary shrink-0">
@@ -65,7 +64,7 @@ export default function ManageDeans() {
                     <p className="text-red-600 text-sm mb-2 text-center">{error.message}</p>
                 )}
 
-                {/* --- MOBILE VIEW: Cards (Hidden on Medium+ screens) --- */}
+               {/* mobile screen */}
                 <div className="grid grid-cols-1 gap-4 md:hidden">
                     {filterUsers.length === 0 ? (
                         <div className="py-12 text-center text-muted-foreground bg-card rounded-xl border">No Deans found.</div>
@@ -99,7 +98,7 @@ export default function ManageDeans() {
                     )}
                 </div>
 
-                {/* --- TABLE VIEW: Desktop (Hidden on Small screens) --- */}
+                {/* desktop screen */}
                 <div className="hidden md:block rounded-xl border border-border bg-card shadow-sm overflow-hidden">
                     <table className="min-w-full text-left">
                         <thead>

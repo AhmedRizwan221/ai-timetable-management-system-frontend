@@ -227,8 +227,6 @@ function ChairmanDashboard() {
                             </table>
                         </div>
                     </div>
-
-
                 </main>
             </div>
         </div>
