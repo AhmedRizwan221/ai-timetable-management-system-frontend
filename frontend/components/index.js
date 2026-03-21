@@ -33,6 +33,7 @@ import ManageTimeTableSlots from "./dashboard/users/ManageTimeTableSlots.jsx";
 import ManageBatches from "./dashboard/users/ManageBatches.jsx";
 import ManageSections from "./dashboard/users/ManageSections.jsx";
 import ManageCourses from "./dashboard/users/ManageCourses.jsx";
+import EditSection from "../pages/EditSection.jsx";
 
 
 export {
@@ -70,5 +71,6 @@ export {
     ManageTimeTableSlots,
     ManageBatches,
     ManageSections,
-    ManageCourses
+    ManageCourses,
+    EditSection
 }

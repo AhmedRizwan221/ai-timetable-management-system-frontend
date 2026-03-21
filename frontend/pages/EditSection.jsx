@@ -1,29 +1,25 @@
 import React, { useEffect, useState } from "react";
-import Input from "../shrared/Input";
-import { useForm } from "react-hook-form";
+import Input from "../components/shrared/Input";
+import { set, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { createSection } from "../../store/section/section";
-import Button from "../shrared/Button";
+import { updateSection } from "../store/section/section";
+import Button from "../components/shrared/Button";
 import { Clock, CalendarDays, Layers, Plus, BookOpen } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { getBatches } from "../../store/batch/batch";
-import { getSemesters } from "../../store/semester/semester"
+import { useNavigate, useParams } from "react-router-dom";
+import { getBatches } from "../store/batch/batch";
+import { getSemesters } from "../store/semester/semester"
 
 
-export default function CreateSection() {
+export default function EditSection() {
     const { register, handleSubmit, reset } = useForm();
     const dispatch = useDispatch();
     const Navigate = useNavigate();
     const [err, setErr] = useState("")
+    const { sectionId } = useParams();
 
-    const { user, error: userError, status } = useSelector((state) => state.auth);
-    // console.log(user);
-
-    const { batches = [], error: batchError } = useSelector((state) => state.batch);
-    // console.log(batches);
-
+    const { user } = useSelector((state) => state.auth);
+    const { batches = [] } = useSelector((state) => state.batch);
     const { semesters = [] } = useSelector((state) => state.semester);
-    // console.log(semesters);
 
     useEffect(() => {
         if (user) {
@@ -32,18 +28,22 @@ export default function CreateSection() {
         }
     }, [dispatch, user]);
 
-    const handleCreateSection = async (data) => {
+    const handlerUpdateSection = async (data) => {
         setErr("");
-
+        console.log(data);
         try {
-            await dispatch(createSection({
-                sectionName: data.sectionName,
-                batchId: data.batchId,
-                departmentId: user?.department?._id,
-                semesterId: data.semesterId
+            await dispatch(updateSection({
+                sectionId,
+                data: {
+                    sectionName: data.sectionName,
+                    batchId: data.batchId || null,
+                    departmentId: user?.department?._id,
+                    semesterId: data.semesterId || null
+                }
+
             })).unwrap();
             reset();
-            alert("Section created successfully");
+            alert("Section Updated successfully");
 
             if (user.role === 'chairman') {
                 Navigate('/dashboard/chairman')
@@ -64,7 +64,7 @@ export default function CreateSection() {
                                 <CalendarDays className="h-5 w-5 text-primary-foreground" />
                             </div>
                             <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                                Create Section
+                                Update Section
                             </h1>
                         </div>
                     </div>
@@ -73,7 +73,7 @@ export default function CreateSection() {
                     {err && (
                         <p className="text-red-600 text-sm mb-2 text-center">{err.message}</p>
                     )}
-                    <form onSubmit={handleSubmit(handleCreateSection)}>
+                    <form onSubmit={handleSubmit(handlerUpdateSection)}>
                         <div className="grid gap-5 sm:grid-cols-2">
                             <div className="space-y-2">
                                 <Input
@@ -82,7 +82,7 @@ export default function CreateSection() {
                                     type="text"
                                     placeholder="Enter Course Name"
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                                    {...register("sectionName", { required: true })}
+                                    {...register("sectionName")}
                                 />
                             </div>
                             <div className="space-y-2">
@@ -91,7 +91,7 @@ export default function CreateSection() {
                                 </label>
                                 <select
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
-                                    {...register("departmentId", { required: true })}
+                                    {...register("departmentId")}
                                     defaultValue={user?.department?._id} disabled
                                 >
                                     <option value={user?.department?._id}>
@@ -105,7 +105,7 @@ export default function CreateSection() {
                                 </label>
                                 <select
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                                    {...register("batchId", { required: true })}
+                                    {...register("batchId")}
                                 >
                                     <option value="">Select Batch</option>
                                     {batches.map((batch) => (
@@ -121,7 +121,7 @@ export default function CreateSection() {
                                 </label>
                                 <select
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                                    {...register("semesterId", { required: true })}
+                                    {...register("semesterId")}
                                 >
                                     <option value="">Select Batch</option>
                                     {semesters.map((sem) => (
@@ -136,7 +136,7 @@ export default function CreateSection() {
                         <Button className="w-full flex justify-center items-center sm:w-auto bg-[#1D293D] text-white hover:bg-[#162131] cursor-pointer"
                             type="submit"
                         >
-                            <Plus className="mr-2 h-4 w-4" />  Create Section
+                            <Plus className="mr-2 h-4 w-4" />  Update Section
                         </Button>
                     </form>
 

@@ -9,7 +9,7 @@ export const createSection = createAsyncThunk(
             console.log(data);
             const response = await axios.post('http://localhost:8000/api/v1/sections/create', data, { withCredentials: true });
 
-            console.log(response.data.data);
+            // console.log(response.data.data);
 
             return response.data.data
         } catch (error) {
@@ -33,6 +33,41 @@ export const getSections = createAsyncThunk(
         }
     }
 )
+
+// delete section
+export const deleteSection = createAsyncThunk(
+    "section/delete",
+    async (sectionId, { rejectWithValue }) => {
+        try {
+            await axios.delete(`http://localhost:8000/api/v1/sections/delete/${sectionId}`, {
+                withCredentials: true
+            });
+
+            return sectionId
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
+// update section
+export const updateSection = createAsyncThunk(
+    "section/update",
+    async ({ sectionId, data }, { rejectWithValue }) => {
+        try {
+            const response = await axios.patch(`http://localhost:8000/api/v1/sections/update/${sectionId}`, data, {
+                withCredentials: true
+            });
+
+            // console.log(response.data.data);
+
+            return response.data.data.updatedSection
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message)
+        }
+    }
+)
+
 const initialState = {
     sections: [],
     error: null,
@@ -68,6 +103,28 @@ const sectionSlice = createSlice({
                 state.sections = action.payload
             })
             .addCase(getSections.rejected, (state, action) => {
+                state.status = 'rejected';
+                state.error = action.payload
+            })
+            .addCase(deleteSection.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(deleteSection.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.sections = state.sections.filter((section) => section._id !== action.payload)
+            })
+            .addCase(deleteSection.rejected, (state, action) => {
+                state.status = 'rejected';
+                state.error = action.payload
+            })
+            .addCase(updateSection.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(updateSection.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.sections = action.payload
+            })
+            .addCase(updateSection.rejected, (state, action) => {
                 state.status = 'rejected';
                 state.error = action.payload
             })

@@ -15,7 +15,8 @@ import {
   ManageTimeTableSlots,
   ManageBatches,
   ManageSections,
-  ManageCourses
+  ManageCourses,
+  EditSection
 } from '../components/index';
 import Department from "../pages/Department";
 
@@ -233,7 +234,7 @@ const router = createBrowserRouter([
           </AuthLayout>
         )
       },
-       {
+      {
         path: '/dashboard/chairman/manage-courses',
         element: (
           <AuthLayout authentication={true}>
@@ -259,6 +260,16 @@ const router = createBrowserRouter([
           <AuthLayout authentication={true}>
             <DashboardLayout>
               <ManageSections />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+      {
+        path: '/dashboard/chairman/edit-sections/:sectionId',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <EditSection />
             </DashboardLayout>
           </AuthLayout>
         )

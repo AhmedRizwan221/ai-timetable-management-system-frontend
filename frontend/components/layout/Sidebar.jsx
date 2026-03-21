@@ -342,11 +342,11 @@ export default function Sidebar() {
                       <Link to="/dashboard/chairman/create-course" className="hover:text-yellow-400 text-sm">
                         Create Course
                       </Link>
-                      <li>
-                        <Link to="/dashboard/chairman/manage-courses" className="hover:text-yellow-400 text-sm">
-                          Manage Courses
-                        </Link>
-                      </li>
+                    </li>
+                    <li>
+                      <Link to="/dashboard/chairman/manage-courses" className="hover:text-yellow-400 text-sm">
+                        Manage Courses
+                      </Link>
                     </li>
                   </ul>
                 )}
