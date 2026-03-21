@@ -10,7 +10,12 @@ import {
   CreateDeptAssignChiarman, CreateDeanAndAssignFaculty, EditDean, EditChairman, EditTeacher, CreateTimeTable, CreateCourse,
   ManageTeachers,
   CreateSection,
-  ManageTimetable, EditTimeTable
+  ManageTimetable, EditTimeTable,
+  CreateBatch,
+  ManageTimeTableSlots,
+  ManageBatches,
+  ManageSections,
+  ManageCourses
 } from '../components/index';
 import Department from "../pages/Department";
 
@@ -228,12 +233,52 @@ const router = createBrowserRouter([
           </AuthLayout>
         )
       },
+       {
+        path: '/dashboard/chairman/manage-courses',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <ManageCourses />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
       {
         path: '/dashboard/chairman/create-Section',
         element: (
           <AuthLayout authentication={true}>
             <DashboardLayout>
               <CreateSection />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+      {
+        path: '/dashboard/chairman/manage-sections',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <ManageSections />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+      {
+        path: '/dashboard/chairman/create-batch',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <CreateBatch />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+      {
+        path: '/dashboard/chairman/manage-batches',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <ManageBatches />
             </DashboardLayout>
           </AuthLayout>
         )
@@ -248,7 +293,7 @@ const router = createBrowserRouter([
           </AuthLayout>
         )
       },
-        {
+      {
         path: '/dashboard/chairman/manage-timetables',
         element: (
           <AuthLayout authentication={true}>
@@ -258,8 +303,18 @@ const router = createBrowserRouter([
           </AuthLayout>
         )
       },
-        {
-        path: '/dashboard/chairman/edit-timetable/:id',
+      {
+        path: "/dashboard/chairman/manage-timetablesSlots",
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <ManageTimeTableSlots />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+      {
+        path: '/dashboard/chairman/edit-timetable/:timetableId',
         element: (
           <AuthLayout authentication={true}>
             <DashboardLayout>

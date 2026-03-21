@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { Users, Search, User, Pencil, Trash } from "lucide-react";
-import { getDeptallTimeTables } from "../../../store/timetable/timeTable";
+import { clearError, getDeptallTimeTables } from "../../../store/timetable/timeTable";
 import { useNavigate } from "react-router-dom";
 import { deleteTimeTable } from "../../../store/timetable/timeTable";
 
@@ -17,7 +17,8 @@ export default function ManageTimetable() {
 
     useEffect(() => {
         if (user) {
-            dispatch(getDeptallTimeTables(user?.department?._id))
+            dispatch(getDeptallTimeTables(user?.department?._id));
+            dispatch(clearError());
         }
     }, [dispatch]);
 

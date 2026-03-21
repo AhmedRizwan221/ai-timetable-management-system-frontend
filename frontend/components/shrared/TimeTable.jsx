@@ -46,7 +46,7 @@ export default function TimeTableForm(
                             </label>
                             <select
                                 className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                                {...register("semesterId", { required: mode === 'create' })}
+                                {...register("semesterId", { required: true })}
                             >
                                 <option value="">Select Semester</option>
                                 {semesters.map((sem) => (

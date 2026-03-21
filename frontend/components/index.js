@@ -28,6 +28,12 @@ import ManageTeachers from "./dashboard/ManageTeachers.jsx";
 import CreateSection from "./layout/CreateSection.jsx";
 import ManageTimetable from "./dashboard/users/ManageTimetables.jsx";
 import EditTimeTable from "../pages/EditTImeTable.jsx";
+import CreateBatch from "./layout/CreateBatch.jsx";
+import ManageTimeTableSlots from "./dashboard/users/ManageTimeTableSlots.jsx";
+import ManageBatches from "./dashboard/users/ManageBatches.jsx";
+import ManageSections from "./dashboard/users/ManageSections.jsx";
+import ManageCourses from "./dashboard/users/ManageCourses.jsx";
+
 
 export {
     Button,
@@ -59,5 +65,10 @@ export {
     ManageTeachers,
     CreateSection,
     ManageTimetable,
-    EditTimeTable
+    EditTimeTable,
+    CreateBatch,
+    ManageTimeTableSlots,
+    ManageBatches,
+    ManageSections,
+    ManageCourses
 }

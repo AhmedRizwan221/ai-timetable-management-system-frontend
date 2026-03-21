@@ -126,13 +126,16 @@
 
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Home, Users, LogOut, UserCog, Menu, Building2, GraduationCap } from "lucide-react";
+import { Home, Users, LogOut, UserCog, Menu, LayoutGrid, Building2, GraduationCap, ChevronDown, ChevronUp, BookOpen, Calendar } from "lucide-react";
 import { useSelector } from "react-redux";
 
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [isTeacherOpen, setIsTeacherOpen] = useState(false);
+  const [isBatchSectionOpen, setIsBatchSectionOpen] = useState(false);
+  const [isTimeTableOpen, setIsTimeTableOpen] = useState(false);
+  const [isCourseOpen, setIsCourseOpen] = useState(false);
 
   const user = useSelector((state) => state.auth.user);
 
@@ -224,46 +227,131 @@ export default function Sidebar() {
 
           {/* chairman sidebar  */}
           {user?.role === 'chairman' && (
-            <li>
-              <Link to="/dashboard/chairman/create-teacher" className="flex items-center gap-2 hover:text-yellow-400">
-                <Users size={18} /> Create Teacher
-              </Link>
-            </li>
-          )}
-          {user?.role === 'chairman' && (
-            <li>
-              <Link to="/dashboard/chairman/create-section" className="flex items-center gap-2 hover:text-yellow-400">
-                <Users size={18} /> Create Section
-              </Link>
-            </li>
-          )}
-          {user?.role === 'chairman' && (
-            <li>
-              <Link to="/dashboard/chairman/create-timetable" className="flex items-center gap-2 hover:text-yellow-400">
-                <Users size={18} /> Create TimeTable
-              </Link>
-            </li>
-          )}
-          {user?.role === 'chairman' && (
-            <li>
-              <Link to="/dashboard/chairman/create-course" className="flex items-center gap-2 hover:text-yellow-400">
-                <Users size={18} /> Create Course
-              </Link>
-            </li>
-          )}
-          {user?.role === 'chairman' && (
-            <li>
-              <Link to="/dashboard/chairman/manage-teachers" className="flex items-center gap-2 hover:text-yellow-400">
-                <Users size={18} /> Manage Teachers
-              </Link>
-            </li>
-          )}
-           {user?.role === 'chairman' && (
-            <li>
-              <Link to="/dashboard/chairman/manage-timetables" className="flex items-center gap-2 hover:text-yellow-400">
-                <Users size={18} /> Manage TimeTable and Slots
-              </Link>
-            </li>
+            <>
+              <li>
+                <button
+                  onClick={() => setIsTeacherOpen(!isTeacherOpen)}
+                  className="flex items-center justify-between w-full gap-2 hover:text-yellow-400 cursor-pointer"
+                >
+                  <div className="flex items-center gap-2">
+                    <Users size={18} />
+                    <span>Teachers</span>
+                  </div>
+                  {isTeacherOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </button>
+
+                {isTeacherOpen && (
+                  <ul className="pl-6 mt-2 space-y-2 border-l border-gray-600 ">
+                    <li>
+                      <Link to="/dashboard/chairman/create-teacher" className="hover:text-yellow-400 text-sm">
+                        Create Teacher
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/dashboard/chairman/manage-teachers" className="hover:text-yellow-400 text-sm">
+                        Manage Teachers
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </li>
+              <li>
+                <button
+                  onClick={() => setIsBatchSectionOpen(!isBatchSectionOpen)}
+                  className="flex items-center justify-between w-full gap-2 hover:text-yellow-400 cursor-pointer"
+                >
+                  <div className="flex items-center gap-2">
+                    <LayoutGrid size={18} />
+                    <span>Sections & Batches</span>
+                  </div>
+                  {isBatchSectionOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </button>
+
+                {isBatchSectionOpen && (
+                  <ul className="pl-6 mt-2 space-y-2 border-l border-gray-600">
+                    <li>
+                      <Link to="/dashboard/chairman/create-section" className="hover:text-yellow-400 text-sm">
+                        Create Section
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/dashboard/chairman/manage-sections" className="hover:text-yellow-400 text-sm">
+                        Manage Section
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/dashboard/chairman/create-batch" className="hover:text-yellow-400 text-sm">
+                        Create Batch
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/dashboard/chairman/manage-batches" className="hover:text-yellow-400 text-sm">
+                        Manage Batch
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </li>
+              <li>
+                <button
+                  onClick={() => setIsTimeTableOpen(!isTimeTableOpen)}
+                  className="flex items-center justify-between w-full gap-2 hover:text-yellow-400 cursor-pointer"
+                >
+                  <div className="flex items-center gap-2">
+                    <Calendar size={18} />
+                    <span>TimeTable</span>
+                  </div>
+                  {isTimeTableOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </button>
+
+                {isTimeTableOpen && (
+                  <ul className="pl-6 mt-2 space-y-2 border-l border-gray-600">
+                    <li>
+                      <Link to="/dashboard/chairman/create-timetable" className="hover:text-yellow-400 text-sm">
+                        Create TimeTable
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/dashboard/chairman/manage-timetables" className="hover:text-yellow-400 text-sm">
+                        Manage TimeTable
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/dashboard/chairman/manage-timetablesSlots" className="hover:text-yellow-400 text-sm">
+                        Manage TimeTable Slots
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </li>
+              <li>
+                <button
+                  onClick={() => setIsCourseOpen(!isCourseOpen)}
+                  className="flex items-center justify-between w-full gap-2 hover:text-yellow-400 cursor-pointer"
+                >
+                  <div className="flex items-center gap-2">
+                    <BookOpen size={18} />
+                    <span>Courses</span>
+                  </div>
+                  {isCourseOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </button>
+
+                {isCourseOpen && (
+                  <ul className="pl-6 mt-2 space-y-2 border-l border-gray-600">
+                    <li>
+                      <Link to="/dashboard/chairman/create-course" className="hover:text-yellow-400 text-sm">
+                        Create Course
+                      </Link>
+                      <li>
+                        <Link to="/dashboard/chairman/manage-courses" className="hover:text-yellow-400 text-sm">
+                          Manage Courses
+                        </Link>
+                      </li>
+                    </li>
+                  </ul>
+                )}
+              </li>
+            </>
           )}
         </ul>
         <button className="flex items-center gap-2 hover:text-red-400 mt-auto"

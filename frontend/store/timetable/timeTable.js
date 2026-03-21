@@ -39,6 +39,7 @@ export const getDeptallTimeTables = createAsyncThunk(
 export const updateTimeTable = createAsyncThunk(
     "timetable/update",
     async ({timetableId, data}, { rejectWithValue }) => {
+        // console.log("Time table id",timetableId);
         try {
             const response = await axios.patch(`http://localhost:8000/api/v1/timetables/update/${timetableId}`,data, {
                 withCredentials: true

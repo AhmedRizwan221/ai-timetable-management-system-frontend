@@ -15,9 +15,10 @@ export default function EditTimeTable() {
     const dispatch = useDispatch();
     const [err, setErr] = useState("");
     const {timetableId} = useParams();
+    // console.log("Time table id in component", timetableId);
 
     const { user } = useSelector((state) => state.auth);
-    console.log(user);
+    // console.log(user);
 
     const { semesters = [], error: semesterError } = useSelector((state) => state.semester);
     const { batches = [], error: batchError } = useSelector((state) => state.batch);
