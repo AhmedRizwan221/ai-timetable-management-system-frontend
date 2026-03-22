@@ -35,6 +35,7 @@ import ManageSections from "./dashboard/users/ManageSections.jsx";
 import ManageCourses from "./dashboard/users/ManageCourses.jsx";
 import EditSection from "../pages/EditSection.jsx";
 import EditBatch from "../pages/EditBatch.jsx";
+import EditTimeTableSlot from "../pages/EditTimeTableSlot.jsx";
 
 
 export {
@@ -74,5 +75,6 @@ export {
     ManageSections,
     ManageCourses,
     EditSection,
-    EditBatch
+    EditBatch,
+    EditTimeTableSlot
 }

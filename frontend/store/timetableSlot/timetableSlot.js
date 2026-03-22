@@ -44,11 +44,26 @@ export const deleteTimeTableSlot = createAsyncThunk(
     "timetableSlot/deleteSlot",
     async (timetableSlotId, { rejectWithValue }) => {
         try {
-            const response = await axios.delete(`http://localhost:8000/api/v1/timetableSlots/delete${timetableSlotId}`, {
+            await axios.delete(`http://localhost:8000/api/v1/timetableSlots/delete${timetableSlotId}`, {
                 withCredentials: true
             });
+
+            return timetableSlotId
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
+export const updateTimeTableSlot = createAsyncThunk(
+    "timetableSlot/updateSlot",
+    async ({ timetableSlotId, data }, { rejectWithValue }) => {
+        try {
+            const response = await axios.patch(`http://localhost:8000/api/v1/timetableSlots/update${timetableSlotId}`, data, { withCredentials: true });
+
             console.log(response.data.data);
-            return response.data.data._id
+
+            return response.data.data.findTimetableSLot
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -115,6 +130,18 @@ const timeTableSLotSLice = createSlice({
                     state.totalSlots = state.totalSlots.filter((slot) => slot._id !== id)
             })
             .addCase(deleteTimeTableSlot.rejected, (state, action) => {
+                state.status = 'rejected',
+                    state.error = action.payload
+            })
+            .addCase(updateTimeTableSlot.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(updateTimeTableSlot.fulfilled, (state, action) => {
+                state.status = 'succeed';
+                const updateData = action.payload;
+                state.timeTableSlot = state.timeTableSlot.map((slot) => slot._id === updateData._id ? updateData : slot);
+            })
+            .addCase(updateTimeTableSlot.rejected, (state, action) => {
                 state.status = 'rejected',
                     state.error = action.payload
             })

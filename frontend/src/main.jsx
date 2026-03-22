@@ -17,7 +17,8 @@ import {
   ManageSections,
   ManageCourses,
   EditSection,
-  EditBatch
+  EditBatch,
+  EditTimeTableSlot
 } from '../components/index';
 import Department from "../pages/Department";
 
@@ -331,6 +332,16 @@ const router = createBrowserRouter([
           <AuthLayout authentication={true}>
             <DashboardLayout>
               <ManageTimeTableSlots />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+         {
+        path: '/dashboard/chairman/edit-timetableSlots/:timetableSlot',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <EditTimeTableSlot />
             </DashboardLayout>
           </AuthLayout>
         )
