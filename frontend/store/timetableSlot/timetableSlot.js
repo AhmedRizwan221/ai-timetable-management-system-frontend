@@ -77,8 +77,17 @@ const timeTableSLotSLice = createSlice({
                 state.status = 'pending'
             })
             .addCase(createTimeTableSlot.fulfilled, (state, action) => {
-                state.status = 'succeeded'
-                state.timeTableSlot.push(action.payload)
+                state.status = 'Succeeded';
+
+                const index = state.timeTableSlot.findIndex(t => t._id === action.payload._id);
+
+                if (index !== -1) {
+                    // If it exists, update it in place
+                    state.timeTableSlot[index] = action.payload;
+                } else {
+                    // If it's truly a brand new timetable, add it
+                    state.timeTableSlot.push(action.payload);
+                }
             })
             .addCase(createTimeTableSlot.rejected, (state, action) => {
                 state.status = 'rejected',

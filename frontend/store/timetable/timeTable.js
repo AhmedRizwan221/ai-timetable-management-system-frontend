@@ -38,10 +38,10 @@ export const getDeptallTimeTables = createAsyncThunk(
 // update time table
 export const updateTimeTable = createAsyncThunk(
     "timetable/update",
-    async ({timetableId, data}, { rejectWithValue }) => {
+    async ({ timetableId, data }, { rejectWithValue }) => {
         // console.log("Time table id",timetableId);
         try {
-            const response = await axios.patch(`http://localhost:8000/api/v1/timetables/update/${timetableId}`,data, {
+            const response = await axios.patch(`http://localhost:8000/api/v1/timetables/update/${timetableId}`, data, {
                 withCredentials: true
             });
 
@@ -91,8 +91,17 @@ const timetableSlice = createSlice({
                 state.status = 'pending'
             })
             .addCase(createTimeTable.fulfilled, (state, action) => {
-                state.status = 'Succeeded',
-                    state.timeTables.push(action.payload)
+                state.status = 'Succeeded';
+
+                const index = state.timeTables.findIndex(t => t._id === action.payload._id);
+
+                if (index !== -1) {
+                    // If it exists, update it in place
+                    state.timeTables[index] = action.payload;
+                } else {
+                    // If it's truly a brand new timetable, add it
+                    state.timeTables.push(action.payload);
+                }
             })
             .addCase(createTimeTable.rejected, (state, action) => {
                 state.status = 'rejected',

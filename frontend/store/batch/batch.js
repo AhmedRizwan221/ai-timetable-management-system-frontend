@@ -39,11 +39,29 @@ export const deleteBatch = createAsyncThunk(
     "batch/delete",
     async (batchId, { rejectWithValue }) => {
         try {
-            await axios.delete(`http://localhost:8000/api/v1/batches/delete/${deptId}`, {
+            await axios.delete(`http://localhost:8000/api/v1/batches/delete/${batchId}`, {
                 withCredentials: true
             });
 
             return batchId;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
+// update batch
+export const updateBatch = createAsyncThunk(
+    "batch/update",
+    async ({ batchId, data }, { rejectWithValue }) => {
+        try {
+            const response = await axios.patch(`http://localhost:8000/api/v1/batches/update/${batchId}`, data, {
+                withCredentials: true
+            });
+
+            console.log(response.data.data);
+
+            return response.data.data.updatedBatch
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -98,6 +116,18 @@ const batchSlice = createSlice({
                 )
             })
             .addCase(deleteBatch.rejected, (state, action) => {
+                state.status = 'rejected';
+                state.error = action.payload
+            })
+            .addCase(updateBatch.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(updateBatch.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                const updateBatch = action.payload;
+                state.batches = state.batches.map((batch) => batch._id === updateBatch._id ? updateBatch : batch)
+            })
+            .addCase(updateBatch.rejected, (state, action) => {
                 state.status = 'rejected';
                 state.error = action.payload
             })

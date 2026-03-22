@@ -16,7 +16,8 @@ import {
   ManageBatches,
   ManageSections,
   ManageCourses,
-  EditSection
+  EditSection,
+  EditBatch
 } from '../components/index';
 import Department from "../pages/Department";
 
@@ -290,6 +291,16 @@ const router = createBrowserRouter([
           <AuthLayout authentication={true}>
             <DashboardLayout>
               <ManageBatches />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+        {
+        path: '/dashboard/chairman/edit-batches/:batchId',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <EditBatch />
             </DashboardLayout>
           </AuthLayout>
         )

@@ -2,48 +2,50 @@ import React, { useEffect, useState } from "react";
 import Input from "../components/shrared/Input";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { updateSection } from "../store/section/section";
+import { getSections, updateSection } from "../store/section/section";
 import Button from "../components/shrared/Button";
 import { CalendarDays, Layers, Plus, BookOpen } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getBatches } from "../store/batch/batch";
+import { getBatches, updateBatch } from "../store/batch/batch";
 import { getSemesters } from "../store/semester/semester"
 
 
-export default function EditSection() {
+export default function EditBatch() {
     const { register, handleSubmit, reset } = useForm();
     const dispatch = useDispatch();
     const Navigate = useNavigate();
     const [err, setErr] = useState("")
-    const { sectionId } = useParams();
+    const { batchId } = useParams();
 
     const { user } = useSelector((state) => state.auth);
     const { batches = [] } = useSelector((state) => state.batch);
     const { semesters = [] } = useSelector((state) => state.semester);
+    const {sections = []} = useSelector((state) => state.section);
 
     useEffect(() => {
         if (user) {
             dispatch(getBatches(user?.department?._id));
-            dispatch(getSemesters(user?.department?._id))
+            dispatch(getSemesters(user?.department?._id));
+            dispatch(getSections(user?.department?._id))
         }
     }, [dispatch, user]);
 
-    const handlerUpdateSection = async (data) => {
+    const handlerUpdateBatch = async (data) => {
         setErr("");
         console.log(data);
         try {
-            await dispatch(updateSection({
-                sectionId,
+            await dispatch(updateBatch({
+                batchId,
                 data: {
-                    sectionName: data.sectionName,
-                    batchId: data.batchId || null,
+                    batchName: data.batchName,
                     departmentId: user?.department?._id,
-                    semesterId: data.semesterId || null
+                    semesterId: data.semesterId || null,
+                    sectionId: data.sectionId || null
                 }
 
             })).unwrap();
             reset();
-            alert("Section Updated successfully");
+            alert("Batch Updated successfully");
 
             if (user.role === 'chairman') {
                 Navigate('/dashboard/chairman')
@@ -64,7 +66,7 @@ export default function EditSection() {
                                 <CalendarDays className="h-5 w-5 text-primary-foreground" />
                             </div>
                             <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                                Update Section
+                                Update Batch
                             </h1>
                         </div>
                     </div>
@@ -73,16 +75,16 @@ export default function EditSection() {
                     {err && (
                         <p className="text-red-600 text-sm mb-2 text-center">{err.message}</p>
                     )}
-                    <form onSubmit={handleSubmit(handlerUpdateSection)}>
+                    <form onSubmit={handleSubmit(handlerUpdateBatch)}>
                         <div className="grid gap-5 sm:grid-cols-2">
                             <div className="space-y-2">
                                 <Input
-                                    label="Sectoin Name"
+                                    label="Batch Name"
                                     icon={BookOpen}
                                     type="text"
-                                    placeholder="Enter Course Name"
+                                    placeholder="Enter Batch Name"
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                                    {...register("sectionName")}
+                                    {...register("batchName")}
                                 />
                             </div>
                             <div className="space-y-2">
@@ -101,32 +103,32 @@ export default function EditSection() {
                             </div>
                             <div className="space-y-2">
                                 <label className="flex items-center gap-1.5">
-                                    <Layers className="h-3.5 w-3.5 text-muted-foreground" /> Select Batch
-                                </label>
-                                <select
-                                    className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                                    {...register("batchId")}
-                                >
-                                    <option value="">Select Batch</option>
-                                    {batches.map((batch) => (
-                                        <option key={batch._id} value={batch._id}>
-                                            {batch?.batchName}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="flex items-center gap-1.5">
                                     <Layers className="h-3.5 w-3.5 text-muted-foreground" /> Select Semester
                                 </label>
                                 <select
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                                     {...register("semesterId")}
                                 >
-                                    <option value="">Select Batch</option>
+                                    <option value="">Select Semester</option>
                                     {semesters.map((sem) => (
                                         <option key={sem._id} value={sem._id}>
                                             {"semester " + sem?.semesterNumber + " " + "Year" + sem?.studyYear}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="space-y-2">
+                                <label className="flex items-center gap-1.5">
+                                    <Layers className="h-3.5 w-3.5 text-muted-foreground" /> Select Section
+                                </label>
+                                <select
+                                    className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                    {...register("sectionId")}
+                                >
+                                    <option value="">Select Section</option>
+                                    {sections.map((sect) => (
+                                        <option key={sect._id} value={sect._id}>
+                                            {sect?.sectionName}
                                         </option>
                                     ))}
                                 </select>
@@ -136,12 +138,13 @@ export default function EditSection() {
                         <Button className="w-full flex justify-center items-center sm:w-auto bg-[#1D293D] text-white hover:bg-[#162131] cursor-pointer"
                             type="submit"
                         >
-                            <Plus className="mr-2 h-4 w-4" />  Update Section
+                            <Plus className="mr-2 h-4 w-4" />  Update Batch
                         </Button>
                     </form>
 
                 </div>
             </div>
         </div>
+
     )
 }

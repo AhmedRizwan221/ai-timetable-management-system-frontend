@@ -23,7 +23,7 @@ export default function CreateTimeTable() {
     const navigate = useNavigate();
 
     const { timeTables = [], error: timetableError } = useSelector((state) => state.timetable);
-    // console.log("Time tables : ", timeTables, timeTables?.batch?._id);
+    console.log("Time tables : ", timeTables, timeTables?.batch?._id);
     const { user, error: userError, status } = useSelector((state) => state.auth);
     // console.log(user);
     // console.log(user?.department?._id);
@@ -48,9 +48,6 @@ export default function CreateTimeTable() {
 
     // now fetched all courses using deptId and render here 
     useEffect(() => {
-        if (status === 'idle') {
-            dispatch(getUser());
-        }
         if (user) {
             dispatch(getDeptallTimeTables(user?.department?._id));
             dispatch(getSemesters(user?.department?._id));
@@ -60,7 +57,9 @@ export default function CreateTimeTable() {
             dispatch(getAllCoursesInDept(user?.department?._id));
             dispatch(clearError());
         }
-    }, [dispatch, user, status]);
+    }, [dispatch, user]);
+
+
     // if course has practical then we show practicalFacilitator field 
     const selectedCourseId = watch("courseId");
     const selectedCourse = courses.find(
@@ -90,10 +89,6 @@ export default function CreateTimeTable() {
             })).unwrap();
             resetTimetable();
             alert("TimeTable created successfully");
-
-            if (user?.role === 'chairman') {
-                navigate('/dashboard/chairman')
-            }
 
         } catch (error) {
             setErr(error);
@@ -180,7 +175,7 @@ export default function CreateTimeTable() {
                                     <option value="">Select Time Tables</option>
                                     {timeTables.map((temp) => (
                                         <option key={temp._id} value={temp._id}>
-                                            {temp.batch.batchName} , {"Sem No" + " " + temp.semester.semesterNumber + " " + "Year No" + temp.semester.studyYear}
+                                            {temp?.batch?.batchName} , {"Sem No" + " " + temp.semester.semesterNumber + " " + "Year No" + temp.semester.studyYear}
                                         </option>
                                     ))}
                                 </select>
@@ -197,7 +192,7 @@ export default function CreateTimeTable() {
                                         <option value="">Select Teachers</option>
                                         {teachers.map((teach) => (
                                             <option key={teach._id} value={teach._id}>
-                                                {teach.fullName}, {teach?.departmentTeacher ? teach?.departmentTeacher.deptName : "Not assign "}
+                                                {teach?.fullName}, {teach?.departmentTeacher ? teach?.departmentTeacher.deptName : "Not assign "}
                                             </option>
                                         ))}
                                     </select>

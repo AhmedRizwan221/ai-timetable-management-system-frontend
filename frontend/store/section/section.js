@@ -122,7 +122,8 @@ const sectionSlice = createSlice({
             })
             .addCase(updateSection.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.sections = action.payload
+                const updateData = action.payload;
+                state.sections = state.sections.map((section) => section._id === updateData._id ? updateData : section);
             })
             .addCase(updateSection.rejected, (state, action) => {
                 state.status = 'rejected';
