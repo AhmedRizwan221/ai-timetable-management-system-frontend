@@ -136,6 +136,7 @@ export default function Sidebar() {
   const [isBatchSectionOpen, setIsBatchSectionOpen] = useState(false);
   const [isTimeTableOpen, setIsTimeTableOpen] = useState(false);
   const [isCourseOpen, setIsCourseOpen] = useState(false);
+  const [isSemesterOpen, setIsSemesterOpen] = useState(false);
 
   const user = useSelector((state) => state.auth.user);
 
@@ -319,6 +320,32 @@ export default function Sidebar() {
                     <li>
                       <Link to="/dashboard/chairman/manage-timetablesSlots" className="hover:text-yellow-400 text-sm">
                         Manage TimeTable Slots
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </li>
+              <li>
+                <button
+                  onClick={() => setIsSemesterOpen(!isSemesterOpen)}
+                  className="flex items-center justify-between w-full gap-2 hover:text-yellow-400 cursor-pointer"
+                >
+                  <div className="flex items-center gap-2">
+                    <Calendar size={18} />
+                    <span>Semester</span>
+                  </div>
+                  {isSemesterOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </button>
+                {isSemesterOpen && (
+                  <ul className="pl-6 mt-2 space-y-2 border-l border-gray-600">
+                    <li>
+                      <Link to="/dashboard/chairman/create-semester" className="hover:text-yellow-400 text-sm">
+                        Create Semester
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/dashboard/chairman/manage-semesters" className="hover:text-yellow-400 text-sm">
+                        Manage Semesters
                       </Link>
                     </li>
                   </ul>

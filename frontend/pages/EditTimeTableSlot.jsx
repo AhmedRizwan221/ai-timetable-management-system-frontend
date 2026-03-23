@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import { updateTimeTableSlot } from "../store/timetableSlot/timetableSlot";
+import { updateTimeTableSlot,getAllTimeTableSlot } from "../store/timetableSlot/timetableSlot";
 import { getTeachers } from "../store/user/user";
 import { useParams } from "react-router-dom";
 import {getAllCoursesInDept} from "../store/course/course.js";
@@ -22,12 +22,12 @@ export default function EditTimeTableSlot() {
     const { courses = [] } = useSelector((state) => state.course);
     const { teachers = [], totalTeachers, error: teacherError } = useSelector((state) => state.user);
 
-
     useEffect(() => {
         if (user) {
             dispatch(getDeptallTimeTables(user?.department?._id));
             dispatch(getTeachers());
             dispatch(getAllCoursesInDept(user?.department?._id));
+            dispatch(getAllTimeTableSlot(user?.department?._id))
         }
     }, [dispatch, user]);
 

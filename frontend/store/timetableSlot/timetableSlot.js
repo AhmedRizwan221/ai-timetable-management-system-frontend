@@ -14,7 +14,7 @@ export const createTimeTableSlot = createAsyncThunk(
             });
 
             // console.log(response.data.data);
-            return response.data.data
+            return response.data.data.createdSlot
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -73,6 +73,7 @@ export const updateTimeTableSlot = createAsyncThunk(
 const initialState = {
     timeTableSlot: [],
     totalSlots: null,
+    timeTables: [],
     error: null,
     status: "idle"
 }
@@ -113,7 +114,8 @@ const timeTableSLotSLice = createSlice({
             })
             .addCase(getAllTimeTableSlot.fulfilled, (state, action) => {
                 state.status = 'succeeded'
-                state.timeTableSlot = action.payload.timetableSlot,
+                state.timeTableSlot = action.payload.timetableSlot;
+                state.timeTables = action.payload.timetables;
                     state.totalSlots = action.payload.totaltimetableSlots;
             })
             .addCase(getAllTimeTableSlot.rejected, (state, action) => {

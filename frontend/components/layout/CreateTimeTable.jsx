@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getDeptallTimeTables } from "../../store/timetable/timeTable";
-import { getUser } from "../../store/auth/authSlice";
 import Button from "../shrared/Button";
 import { useForm } from "react-hook-form";
 import { getSemesters } from "../../store/semester/semester";
@@ -9,7 +8,7 @@ import { getBatches } from "../../store/batch/batch";
 import { getSections } from "../../store/section/section";
 import { createTimeTable, clearError } from "../../store/timetable/timeTable";
 import { useNavigate } from "react-router-dom";
-import { createTimeTableSlot } from "../../store/timetableSlot/timetableSlot";
+import { createTimeTableSlot, getAllTimeTableSlot } from "../../store/timetableSlot/timetableSlot";
 import { getTeachers } from "../../store/user/user";
 import { getAllCoursesInDept } from "../../store/course/course";
 import { CalendarDays, Users, BookOpen, Layers, Plus, CalendarClock, Clock } from "lucide-react";
@@ -22,8 +21,8 @@ export default function CreateTimeTable() {
     const { register: registerTimetableSlot, handleSubmit: handlerTimetableSlot, reset: resetTimetableSlot, watch, unregister } = useForm();
     const navigate = useNavigate();
 
-    const { timeTables = [], error: timetableError } = useSelector((state) => state.timetable);
-    console.log("Time tables : ", timeTables, timeTables?.batch?._id);
+    // const { timeTables = [], error: timetableError } = useSelector((state) => state.timetabelSlot);
+    // console.log("Time tables : ", timeTables, timeTables?.batch?._id);
     const { user, error: userError, status } = useSelector((state) => state.auth);
     // console.log(user);
     // console.log(user?.department?._id);
@@ -43,13 +42,13 @@ export default function CreateTimeTable() {
     const { courses = [], error: courseError } = useSelector((state) => state.course);
     // console.log("Courses", courses)
 
-    const { timeTableSlot = [], error: TimeTableSLotError } = useSelector((state) => state.timetabelSlot)
-    // console.log("Batch All time tables", timeTableSlot);
+    const { timeTableSlot = [], error: TimeTableSLotError, timeTables= [] } = useSelector((state) => state.timetabelSlot)
+    // console.log("Batch All time tables", timeTables);
 
     // now fetched all courses using deptId and render here 
     useEffect(() => {
         if (user) {
-            dispatch(getDeptallTimeTables(user?.department?._id));
+            dispatch(getAllTimeTableSlot(user?.department?._id));
             dispatch(getSemesters(user?.department?._id));
             dispatch(getBatches(user?.department?._id));
             dispatch(getSections(user?.department?._id));
