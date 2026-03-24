@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { Users, Search, User, Pencil, Trash } from "lucide-react";
+import { Pencil, Trash, Book } from "lucide-react";
 import { getAllCoursesInDept, clearError, deleteCourse } from "../../../store/course/course";
 import { useNavigate } from "react-router-dom";
 
@@ -29,15 +29,17 @@ export default function ManageCourses() {
     }
 
     return (
-        <div className="min-h-screen bg-white p-4 sm:p-8 rounded-lg">
-            <div className="mx-auto max-w-5xl space-y-6">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary shrink-0">
-                            <Users className="h-6 w-6 sm:h-8 sm:w-8 text-primary-foreground" />
-                        </div>
-                        <div>
-                            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">Courses Management</h1>
+        <div className="min-h-screen bg-muted/30 py-10 px-4 sm:px-6">
+            <div className="bg-white border border-gray-200 rounded-lg">
+                <div className="bg-card">
+                    <div className="container mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8 border-b">
+                        <div className="flex items-center gap-3">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
+                                <Book className="h-10 w-10 text-primary-foreground" />
+                            </div>
+                            <h1 className="text-2xl font-bold tracking-tight text-foreground">
+                                Courses Managment
+                            </h1>
                         </div>
                     </div>
                 </div>
@@ -77,38 +79,40 @@ export default function ManageCourses() {
                 </div>
 
                 {/* desktop screen */}
-                <div className="hidden md:block rounded-xl border border-border bg-card shadow-sm overflow-hidden">
-                    <table className="min-w-full text-left">
-                        <thead>
-                            <tr className="bg-[#1D293D] text-white">
-                                <th className="px-6 py-3 font-semibold text-sm">S.No</th>
-                                <th className="px-6 py-3 font-semibold text-sm">Course Name</th>
-                                <th className="px-6 py-3 font-semibold text-sm">Semester</th>
-                                <th className="px-6 py-3 font-semibold text-sm">Year</th>
-                                <th className="px-6 py-3 text-right font-semibold text-sm">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {courses.map((course, index) => (
-                                <tr key={course._id} className="border-t hover:bg-muted/40 transition-colors group">
-                                    <td className="px-6 py-4 text-sm">{index + 1}</td>
-                                    <td className="px-6 py-4 text-sm">{course?.courseName}</td>
-                                    <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">
-                                        <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0">{course?.semester?.semesterNumber}</div>
-                                    </td>
-                                    <td  className="px-6 py-4 text-sm">
-                                        <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0">{course.semester?.studyYear}
-                                        </div></td>
-                                    <td className="px-6 py-4">
-                                        <div className="flex justify-end gap-3">
-                                            <button onClick={() => navigate(`/dashboard/chairman/edit-courses/${course._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
-                                            <button onClick={() => courseDeleteHandler(course._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
-                                        </div>
-                                    </td>
+                <div className="container mx-auto max-w-4xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
+                    <div className="hidden md:block rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+                        <table className="min-w-full text-left">
+                            <thead>
+                                <tr className="bg-[#1D293D] text-white">
+                                    <th className="px-6 py-3 font-semibold text-sm">S.No</th>
+                                    <th className="px-6 py-3 font-semibold text-sm">Course Name</th>
+                                    <th className="px-6 py-3 font-semibold text-sm">Semester</th>
+                                    <th className="px-6 py-3 font-semibold text-sm">Year</th>
+                                    <th className="px-6 py-3 text-right font-semibold text-sm">Actions</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {courses.map((course, index) => (
+                                    <tr key={course._id} className="border-t hover:bg-muted/40 transition-colors group">
+                                        <td className="px-6 py-4 text-sm">{index + 1}</td>
+                                        <td className="px-6 py-4 text-sm">{course?.courseName}</td>
+                                        <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">
+                                            <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0">{course?.semester?.semesterNumber}</div>
+                                        </td>
+                                        <td className="px-6 py-4 text-sm">
+                                            <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0">{course.semester?.studyYear}
+                                            </div></td>
+                                        <td className="px-6 py-4">
+                                            <div className="flex justify-end gap-3">
+                                                <button onClick={() => navigate(`/dashboard/chairman/edit-courses/${course._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
+                                                <button onClick={() => courseDeleteHandler(course._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

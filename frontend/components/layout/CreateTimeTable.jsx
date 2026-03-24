@@ -19,31 +19,16 @@ export default function CreateTimeTable() {
     const [err, setErr] = useState("");
     const { register: registerTimetable, handleSubmit: handlerTimetable, reset: resetTimetable } = useForm();
     const { register: registerTimetableSlot, handleSubmit: handlerTimetableSlot, reset: resetTimetableSlot, watch, unregister } = useForm();
-    const navigate = useNavigate();
 
-    // const { timeTables = [], error: timetableError } = useSelector((state) => state.timetabelSlot);
-    // console.log("Time tables : ", timeTables, timeTables?.batch?._id);
-    const { user, error: userError, status } = useSelector((state) => state.auth);
-    // console.log(user);
-    // console.log(user?.department?._id);
+    // fetch data from redux state
+    const { user } = useSelector((state) => state.auth);
+    const { semesters = [] } = useSelector((state) => state.semester);
+    const { batches = [] } = useSelector((state) => state.batch);
+    const { sections = [] } = useSelector((state) => state.section);
+    const { teachers = [] } = useSelector((state) => state.user);
+    const { courses = [] } = useSelector((state) => state.course);
+    const { timeTables = [] } = useSelector((state) => state.timetabelSlot);
 
-    const { semesters = [], error: semesterError } = useSelector((state) => state.semester);
-    // console.log("Semester of dept: ", semesters);
-
-    const { batches = [], error: batchError } = useSelector((state) => state.batch);
-    // console.log("Batches of dept: ", batches);
-
-    const { sections = [], error: sectionError } = useSelector((state) => state.section);
-    // console.log("Sections of dept", sections);
-
-    const { teachers = [], totalTeachers, error: teacherError } = useSelector((state) => state.user);
-    // console.log("Teachers" , teachers, "Total Teachers ",totalTeachers);
-
-    const { courses = [], error: courseError } = useSelector((state) => state.course);
-    // console.log("Courses", courses)
-
-    const { timeTableSlot = [], error: TimeTableSLotError, timeTables= [] } = useSelector((state) => state.timetabelSlot)
-    // console.log("Batch All time tables", timeTables);
 
     // now fetched all courses using deptId and render here 
     useEffect(() => {
@@ -127,7 +112,6 @@ export default function CreateTimeTable() {
     return (
         // time table card
         <div className="min-h-screen bg-muted/30 py-10 px-4 sm:px-6">
-
             <TimeTableForm
                 onSubmit={handleCreatTimeTable}
                 buttonText="Create"
@@ -165,7 +149,7 @@ export default function CreateTimeTable() {
                         <div className="grid gap-5 sm:grid-cols-2">
                             <div className="space-y-2">
                                 <label className="flex items-center gap-1.5" >
-                                    <CalendarClock className="h-3.5 w-3.5 text-muted-foreground" />
+                                    <CalendarClock className="h-6 w-6 text-muted-foreground" />
                                     Time Tables </label>
                                 <select
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"

@@ -5,8 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { createCourse } from "../../store/course/course";
 import Button from "../shrared/Button";
 import { getSemesters } from "../../store/semester/semester";
-import { CalendarDays, Layers, Plus, BookOpen } from "lucide-react";
+import { CalendarDays, Layers, Plus, BookOpen, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import {getTeachers} from "../../store/user/user";
 
 
 export default function CreateCourse() {
@@ -19,10 +20,15 @@ export default function CreateCourse() {
     // console.log(user);
     const { semesters = [], error: semesterError } = useSelector((state) => state.semester);
     // console.log(semesters);
+    const {teachers = []} = useSelector((state) => state.user);
+    console.log(teachers);
 
     useEffect(() => {
-        dispatch(getSemesters(user?.department?._id));
-    }, [dispatch])
+        if(user) {
+            dispatch(getSemesters(user?.department?._id));
+            dispatch(getTeachers());
+        }
+    }, [dispatch, user])
 
     const handlerCreateCourse = async (data) => {
         setErr("");
@@ -32,7 +38,8 @@ export default function CreateCourse() {
                 theoryCredits: data.theoryCredits,
                 practicalCredits: data.practicalCredits || null,
                 semesterId: data.semesterId,
-                departmentId: user?.department?._id
+                departmentId: user?.department?._id,
+                teacherId: data.teacherId
             })).unwrap();
             reset();
             alert("Course created successfully");
@@ -105,6 +112,22 @@ export default function CreateCourse() {
                                     {semesters.map((sem) => (
                                         <option key={sem._id} value={sem._id}>
                                             {"Semester" + sem.semesterNumber} , {"Year" + sem.studyYear}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                             <div className="space-y-2">
+                                <label className="flex items-center gap-1.5">
+                                    <User className="h-3.5 w-3.5 text-muted-foreground" /> Select Teacher
+                                </label>
+                                <select
+                                    className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                    {...register("teacherId", { required: true })}
+                                >
+                                    <option>Select Semester</option>
+                                    {teachers.map((tech) => (
+                                        <option key={tech._id} value={tech._id}>
+                                            { tech?.fullName} , {"Department" + tech.departmentTeacher?.deptName}
                                         </option>
                                     ))}
                                 </select>

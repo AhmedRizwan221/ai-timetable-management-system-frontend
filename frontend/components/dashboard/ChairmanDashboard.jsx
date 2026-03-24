@@ -85,19 +85,30 @@ function ChairmanDashboard() {
     return (
         <div className="">
             <div className="bg-white border border-gray-200 rounded-lg ">
-                <header className="p-6 border-b bg-white flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 bg-blue-50 rounded-lg">
-                            <GraduationCap className="h-8 w-8 text-[#1D293D]" />
+                <header className="p-4 sm:p-6 border-b bg-white flex items-center justify-between gap-4">
+                    {/* Left Side: Profile Info */}
+                    <div className="flex items-center gap-3 min-w-0">
+                        <div className="p-2 bg-blue-50 rounded-lg shrink-0">
+                            <GraduationCap className="h-6 w-6 sm:h-8 sm:w-8 text-[#1D293D]" />
                         </div>
-                        <div>
-                            <h1 className="text-2xl font-bold text-gray-900">{user?.fullName || "Chairman"}</h1>
-                            <p className="text-sm text-gray-500">{user?.department?.deptName || "Department"}</p>
+                        <div className="min-w-0 flex flex-col">
+                            <h1 className="text-lg sm:text-2xl font-bold text-gray-900 truncate">
+                                {user?.fullName || "Chairman"}
+                            </h1>
+                            <p className="text-xs sm:text-sm text-gray-500 truncate">
+                                {user?.department?.deptName || "Department"}
+                            </p>
                         </div>
                     </div>
-                    <button className="flex items-center gap-2 bg-[#1D293D] text-white px-5 py-2.5 rounded-lg hover:bg-[#2a3a54] transition-colors shadow-sm">
-                        <FileDown size={18} />
-                        Download PDF
+
+                    {/* Right Side: Action Button */}
+                    <button
+                        title="Download PDF"
+                        className="flex items-center justify-center gap-2 bg-[#1D293D] text-white p-2.5 sm:px-5 sm:py-2.5 rounded-lg hover:bg-[#2a3a54] transition-all shadow-sm shrink-0"
+                    >
+                        <FileDown size={20} />
+                        {/* Hidden on mobile, shown on small screens (640px) and up */}
+                        <span className="hidden sm:inline font-medium">Download PDF</span>
                     </button>
                 </header>
                 <main className="p-4">
