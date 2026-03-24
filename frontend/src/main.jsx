@@ -20,7 +20,9 @@ import {
   EditBatch,
   EditTimeTableSlot,
   CreateSemester,
-  EditSemesters
+  EditSemesters,
+  ManageSemesters,
+  EditCourse
 } from '../components/index';
 import Department from "../pages/Department";
 
@@ -248,6 +250,16 @@ const router = createBrowserRouter([
           </AuthLayout>
         )
       },
+        {
+        path: '/dashboard/chairman/edit-courses/:courseId',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <EditCourse />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
       {
         path: '/dashboard/chairman/create-Section',
         element: (
@@ -323,7 +335,7 @@ const router = createBrowserRouter([
         element: (
           <AuthLayout authentication={true}>
             <DashboardLayout>
-              <ManageBatches />
+              <ManageSemesters />
             </DashboardLayout>
           </AuthLayout>
         )

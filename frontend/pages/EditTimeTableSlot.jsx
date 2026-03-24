@@ -18,7 +18,8 @@ export default function EditTimeTableSlot() {
 
     const { user } = useSelector((state) => state.auth);
     // console.log(user);
-    const { timeTables = [] } = useSelector((state) => state.timetable);
+    // const { timeTables = [] } = useSelector((state) => state.timetable);
+    const {timeTables=[]} = useSelector((state) => state.timetabelSlot);
     const { courses = [] } = useSelector((state) => state.course);
     const { teachers = [], totalTeachers, error: teacherError } = useSelector((state) => state.user);
 

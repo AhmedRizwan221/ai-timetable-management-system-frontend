@@ -39,6 +39,7 @@ import EditSection from "../pages/EditSection.jsx";
 import EditBatch from "../pages/EditBatch.jsx";
 import EditTimeTableSlot from "../pages/EditTimeTableSlot.jsx";
 import EditSemesters from "../pages/EditSemesters.jsx";
+import EditCourse from "../pages/EditCourse.jsx";
 
 
 export {
@@ -82,5 +83,6 @@ export {
     EditSection,
     EditBatch,
     EditTimeTableSlot,
-    EditSemesters
+    EditSemesters,
+    EditCourse
 }

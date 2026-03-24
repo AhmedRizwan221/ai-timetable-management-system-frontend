@@ -11,7 +11,6 @@ export default function ManageTimetable() {
 
     const { timeTables = [], error: timetableError } = useSelector((state) => state.timetable);
     console.log("TIme Tables ", timeTables);
-    const { } = useSelector((state) => state.timetabelSlot);
     const { user } = useSelector((state) => state.auth);
     console.log(user);
 

@@ -174,7 +174,7 @@ export default function CreateTimeTable() {
                                     <option value="">Select Time Tables</option>
                                     {timeTables.map((temp) => (
                                         <option key={temp._id} value={temp._id}>
-                                            {temp?.batch?.batchName} , {"Sem No" + " " + temp.semester.semesterNumber + " " + "Year No" + temp.semester.studyYear}
+                                            {temp?.batch?.batchName} , {"Sem No" + " " + temp?.semester?.semesterNumber + " " + "Year No" + temp.semester?.studyYear}
                                         </option>
                                     ))}
                                 </select>
@@ -191,7 +191,7 @@ export default function CreateTimeTable() {
                                         <option value="">Select Teachers</option>
                                         {teachers.map((teach) => (
                                             <option key={teach._id} value={teach._id}>
-                                                {teach?.fullName}, {teach?.departmentTeacher ? teach?.departmentTeacher.deptName : "Not assign "}
+                                                {teach?.fullName}, {teach?.departmentTeacher ? teach?.departmentTeacher?.deptName : "Not assign "}
                                             </option>
                                         ))}
                                     </select>
@@ -266,7 +266,7 @@ export default function CreateTimeTable() {
                                         <option value="">Select Teachers</option>
                                         {teachers.map((teach) => (
                                             <option key={teach._id} value={teach._id}>
-                                                {teach.fullName}, {teach?.departmentTeacher ? teach?.departmentTeacher.deptName : "Not assign "}
+                                                {teach.fullName}, {teach?.departmentTeacher ? teach?.departmentTeacher?.deptName : "Not assign "}
                                             </option>
                                         ))}
                                     </select>

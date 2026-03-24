@@ -54,6 +54,19 @@ export const getAllCoursesInDept = createAsyncThunk(
     }
 )
 
+// delete course 
+export const deleteCourse = createAsyncThunk(
+    "course/delete",
+    async (courseId, { rejectWithValue }) => {
+        try {
+            await axios.delete(`http://localhost:8000/api/v1/courses/delete/${courseId}`, { withCredentials: true });
+
+            return courseId
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
 
 
 const initialState = {
@@ -102,9 +115,21 @@ const courseSlice = createSlice({
             .addCase(getAllCoursesInDept.fulfilled, (state, action) => {
                 state.status = 'succeeded',
                     state.courses = action.payload.courses
-                    state.totalCourses= action.payload.totalCourses
+                state.totalCourses = action.payload.totalCourses
             })
             .addCase(getAllCoursesInDept.rejected, (state, action) => {
+                state.status = 'rejected',
+                    state.error = action.payload
+            })
+            .addCase(deleteCourse.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(deleteCourse.fulfilled, (state, action) => {
+                state.status = 'succeeded'
+                const id = action.payload;
+                state.courses = state.courses.filter((course) => course._id !== id)
+            })
+            .addCase(deleteCourse.rejected, (state, action) => {
                 state.status = 'rejected',
                     state.error = action.payload
             })
