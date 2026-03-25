@@ -17,7 +17,6 @@ import DeanDashboard from "./dashboard/DeanDashboard.jsx";
 import FacultyDashboard from "./dashboard/facultyDasbhoard.jsx";
 import FacultyDepartments from "./dashboard/FacultyDepartments.jsx";
 import ManageDeans from "./dashboard/users/ManageDeans.jsx";
-import CreateDeanAndAssignFaculty from "./shrared/CreateDeanAndAssignFaculty.jsx";
 import CreateDeptAssignChiarman from "./shrared/CreateDeptAssignChiarman.jsx";
 import EditDean from "../pages/EditDean.jsx";
 import EditChairman from "../pages/EditChairman.jsx";
@@ -30,16 +29,19 @@ import ManageTimetable from "./dashboard/users/ManageTimetables.jsx";
 import EditTimeTable from "../pages/EditTImeTable.jsx";
 import CreateBatch from "./layout/CreateBatch.jsx";
 import CreateSemester from "./layout/CreateSemester.jsx";
+import CreateFaculty from "./layout/CreateFaculty.jsx";
 import ManageTimeTableSlots from "./dashboard/users/ManageTimeTableSlots.jsx";
 import ManageBatches from "./dashboard/users/ManageBatches.jsx";
 import ManageSections from "./dashboard/users/ManageSections.jsx";
 import ManageCourses from "./dashboard/users/ManageCourses.jsx";
 import ManageSemesters from "./dashboard/users/ManageSemesters.jsx";
+import ManageFaculties from "./dashboard/users/ManageFaculties.jsx";
 import EditSection from "../pages/EditSection.jsx";
 import EditBatch from "../pages/EditBatch.jsx";
 import EditTimeTableSlot from "../pages/EditTimeTableSlot.jsx";
 import EditSemesters from "../pages/EditSemesters.jsx";
 import EditCourse from "../pages/EditCourse.jsx";
+import EditFaculty from "../pages/EditFaculty.jsx";
 
 
 export {
@@ -62,7 +64,6 @@ export {
     FacultyDashboard,
     FacultyDepartments,
     ManageDeans,
-    CreateDeanAndAssignFaculty,
     CreateDeptAssignChiarman,
     EditChairman,
     EditTeacher,
@@ -75,14 +76,17 @@ export {
     EditTimeTable,
     CreateBatch,
     CreateSemester,
+    CreateFaculty,
     ManageTimeTableSlots,
     ManageBatches,
     ManageSections,
     ManageCourses,
     ManageSemesters,
+    ManageFaculties,
     EditSection,
     EditBatch,
     EditTimeTableSlot,
     EditSemesters,
-    EditCourse
+    EditCourse,
+    EditFaculty
 }

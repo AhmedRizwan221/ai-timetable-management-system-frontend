@@ -71,6 +71,25 @@ export const updateTimeTableSlot = createAsyncThunk(
     }
 )
 
+// get all time table slots
+export const getFacultyAllTimeTableSlots = createAsyncThunk(
+    "timetableSlot/getFacultySlots",
+    async (facultyId, { rejectWithValue }) => {
+        // console.log(deptId);
+        try {
+            // console.log(deptId);
+            const response = await axios.get(`http://localhost:8000/api/v1/timetableSlots/${facultyId}/timetableSlots`, {
+                withCredentials: true
+            });
+
+            // console.log(response.data.data);
+            return response.data.data
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
 const initialState = {
     timeTableSlot: [],
     totalSlots: null,
@@ -144,6 +163,19 @@ const timeTableSLotSLice = createSlice({
                 state.timeTableSlot = state.timeTableSlot.map((slot) => slot._id === updateData._id ? updateData : slot);
             })
             .addCase(updateTimeTableSlot.rejected, (state, action) => {
+                state.status = 'rejected',
+                    state.error = action.payload
+            })
+            .addCase(getFacultyAllTimeTableSlots.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(getFacultyAllTimeTableSlots.fulfilled, (state, action) => {
+                state.status = 'succeeded'
+                state.timeTableSlot = action.payload.timetableSlot;
+                state.timeTables = action.payload.timetablesSlots;
+                state.totalSlots = action.payload.totaltimetableSlots;
+            })
+            .addCase(getFacultyAllTimeTableSlots.rejected, (state, action) => {
                 state.status = 'rejected',
                     state.error = action.payload
             })

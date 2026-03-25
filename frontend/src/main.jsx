@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import {
   Login, AuthLayout, SignUp, ChairmanDashboard, SuperAdminDashboard, DashboardLayout, Home, DeptDashboard, CreateTeacherChairman, DeanDashboard, FacultyDashboard, FacultyDepartments, ManageDeans,
-  CreateDeptAssignChiarman, CreateDeanAndAssignFaculty, EditDean, EditChairman, EditTeacher, CreateTimeTable, CreateCourse,
+  CreateDeptAssignChiarman, EditDean, EditChairman, EditTeacher, CreateTimeTable, CreateCourse,
   ManageTeachers,
   CreateSection,
   ManageTimetable, EditTimeTable,
@@ -22,7 +22,10 @@ import {
   CreateSemester,
   EditSemesters,
   ManageSemesters,
-  EditCourse
+  EditCourse,
+  CreateFaculty,
+  ManageFaculties,
+  EditFaculty
 } from '../components/index';
 import Department from "../pages/Department";
 
@@ -109,7 +112,27 @@ const router = createBrowserRouter([
         element: (
           <AuthLayout authentication={true}>
             <DashboardLayout>
-              <CreateDeanAndAssignFaculty />
+              <CreateFaculty />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+      {
+        path: '/dashboard/superadmin/manage-faculties',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <ManageFaculties />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+      {
+        path: '/dashboard/superadmin/edit-faculties/:facultyId',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <EditFaculty />
             </DashboardLayout>
           </AuthLayout>
         )
@@ -250,7 +273,7 @@ const router = createBrowserRouter([
           </AuthLayout>
         )
       },
-        {
+      {
         path: '/dashboard/chairman/edit-courses/:courseId',
         element: (
           <AuthLayout authentication={true}>
@@ -330,7 +353,7 @@ const router = createBrowserRouter([
           </AuthLayout>
         )
       },
-        {
+      {
         path: '/dashboard/chairman/manage-semesters',
         element: (
           <AuthLayout authentication={true}>
@@ -340,7 +363,7 @@ const router = createBrowserRouter([
           </AuthLayout>
         )
       },
-        {
+      {
         path: '/dashboard/chairman/edit-semesters/:semesterId',
         element: (
           <AuthLayout authentication={true}>

@@ -109,7 +109,6 @@ export const getTeachers = createAsyncThunk(
 export const getAllTeachersInFaculty = createAsyncThunk(
     "user/getAllTeachersInFacutly",
     async (facultyId, { rejectWithValue }) => {
-        console.log(facultyId);
         try {
             const response = await axios.get(`http://localhost:8000/api/v1/users/faculty/${facultyId}/teachers`,
                 { withCredentials: true }

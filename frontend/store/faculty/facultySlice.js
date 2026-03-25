@@ -34,6 +34,37 @@ export const fetchFaculties = createAsyncThunk(
     }
 )
 
+export const facultyUpdate = createAsyncThunk(
+    "faculties/update",
+    async ({ facultyId, data }, { rejectWithValue }) => {
+        try {
+            const response = await axios.patch(`http://localhost:8000/api/v1/faculties/update/${facultyId}`, data, {
+                withCredentials: true
+            });
+
+            // console.log(response.data.data);
+            return response.data.data
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
+// delete faculty
+export const deleteFaculty = createAsyncThunk(
+    "faculties/delete",
+    async (facultyId, { rejectWithValue }) => {
+        try {
+            await axios.delete(`http://localhost:8000/api/v1/faculties/delete/${facultyId}`, {withCredentials: true});
+
+            return facultyId
+
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
 const initialState = {
     faculties: [],
     status: 'idle',
@@ -44,21 +75,9 @@ const facultySlice = createSlice({
     name: "facultySlice",
     initialState,
     reducers: {
-        // createFaculty: (state, action) => {
-        //     state.faculties.push(action.payload.faculty)
-        // },
-        deleteFaculty: (state, action) => {
-            state.faculties = state.faculties.filter((fact) => fact._id !== action.payload.facultyId)
-        },
-        updateFaculty: (state, action) => {
-            const index = state.faculties.findIndex(
-                (fact) => fact._id === action.payload._id
-            );
-
-            if (index !== -1) {
-                state.faculties[index] = action.payload;
-            }
-        },
+        clearError: (state) => {
+            state.error = null;
+        }
     },
 
     extraReducers: (builder) => {
@@ -68,11 +87,11 @@ const facultySlice = createSlice({
             })
             .addCase(facultyCreate.fulfilled, (state, action) => {
                 state.status = 'succeeded',
-                state.faculties.push(action.payload)
+                    state.faculties.push(action.payload)
             })
             .addCase(facultyCreate.rejected, (state, action) => {
                 state.status = 'rejected',
-                state.error = action.payload
+                    state.error = action.payload
             })
             .addCase(fetchFaculties.pending, (state) => {
                 state.status = "loading";
@@ -85,9 +104,34 @@ const facultySlice = createSlice({
                 state.status = "failed";
                 state.error = action.payload;
             })
+            .addCase(facultyUpdate.pending, (state) => {
+                state.status = "loading";
+            })
+            .addCase(facultyUpdate.fulfilled, (state, action) => {
+                state.status = "succeeded";
+                const updatedData = action.payload;
+                state.faculties = state.faculties.map((item) => item._id === updatedData ? updatedData : item);
+
+            })
+            .addCase(facultyUpdate.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.payload;
+            })
+            .addCase(deleteFaculty.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(deleteFaculty.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                const id = action.payload;
+                state.faculties = state.faculties.filter((faculty) => faculty._id !== id)
+            })
+            .addCase(deleteFaculty.rejected, (state, action) => {
+                state.status = 'rejected',
+                    state.error = action.payload
+            })
     }
 })
 
-export const {  deleteFaculty, updateFaculty } = facultySlice.actions;
+export const { clearError } = facultySlice.actions;
 
 export default facultySlice.reducer

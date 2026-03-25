@@ -2,15 +2,14 @@ import React, { useState, useEffect } from "react";
 import { facultyCreate } from "../../store/faculty/facultySlice.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import { Input, Button } from "../index";
+import { Input, Button } from "../index.js";
 import { useNavigate } from "react-router-dom";
 import { getDeans } from "../../store/user/user.js";
 import { Plus, GraduationCap, Users } from "lucide-react";
 
-export default function CreateDeanAndAssignFaculty() {
+export default function CreateFaculty() {
     const dispatch = useDispatch();
     const { register, handleSubmit, reset } = useForm();
-    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(getDeans());
@@ -31,9 +30,7 @@ export default function CreateDeanAndAssignFaculty() {
             })).unwrap();
             reset();
             alert("Faculty created successfully!");
-            if (user?.role === 'admin') {
-                navigate('/dashboard/superadmin');
-            }
+           
         } catch (error) {
             return error
         }
@@ -90,7 +87,7 @@ export default function CreateDeanAndAssignFaculty() {
 
                         </div>
 
-                        <Button type="submit" className="w-full flex justify-center items-center sm:w-auto bg-[#1D293D] text-white hover:bg-[#162131]">
+                        <Button type="submit" className="w-full flex justify-center items-center sm:w-auto bg-[#1D293D] text-white hover:bg-[#162131] cursor-pointer">
                             <Plus className="mr-2 h-4 w-4" />  Create Faculty
                         </Button>
                     </form>

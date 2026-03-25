@@ -343,15 +343,31 @@ export default function Sidebar() {
     admin: [
       { name: "Dashboard", icon: <Home size={18} />, path: "/dashboard/superadmin" },
       { name: "Faculties", icon: <GraduationCap size={18} />, path: "/dashboard/facultyDashboard" },
-      { name: "Create Dean", icon: <Users size={18} />, path: "/dashboard/superadmin/create-dean" },
-      { name: "Create Faculty", icon: <UserCog size={24} />, path: "/dashboard/superadmin/create-faculty" },
-      { name: "Manage Deans", icon: <UserCog size={24} />, path: "/dashboard/superadmin/manage-deans" },
+      {
+        name: "Deans",
+        icon: <Users size={18} />,
+        submenu: [
+          { name: "Create Dean", path: "/dashboard/superadmin/create-dean" },
+          { name: "Manage Deans", path: "/dashboard/superadmin/manage-deans" },
+        ]
+      },
+      {
+        name: "Faculty",
+        icon: <GraduationCap size={18} />,
+        submenu: [
+          { name: "Create Faculty", path: "/dashboard/superadmin/create-faculty" },
+          { name: "Manage Faculties", path: "/dashboard/superadmin/manage-faculties" }
+        ]
+      },
+
+
     ],
     dean: [
       { name: "Dashboard", icon: <Home size={18} />, path: "/dashboard/dean" },
       { name: "Create Chairman", icon: <Users size={18} />, path: "/dashboard/dean/create-chairman" },
       { name: "Departments", icon: <Building2 size={24} />, path: "/dashboard/dean/departments" },
       { name: "Create Department", icon: <Building2 size={24} />, path: "/dashboard/dean/create-department" },
+      { name: "Update Department", icon: <Building2 size={24} />, path: "/dashboard/dean/update-department" }
     ],
     chairman: [
       { name: "Dashboard", icon: <Home size={18} />, path: "/dashboard/chairman" },
@@ -456,15 +472,15 @@ export default function Sidebar() {
               </li>
             )
           )}
-        <button
-          className="flex items-center gap-2 hover:text-red-400 mt-6 md:mt-auto transition-colors cursor-pointer"
-          onClick={() => {
-            localStorage.clear();
-            window.location.href = "/";
-          }}
-        >
-          <LogOut size={18} /> Logout
-        </button>
+          <button
+            className="flex items-center gap-2 hover:text-red-400 mt-6 md:mt-auto transition-colors cursor-pointer"
+            onClick={() => {
+              localStorage.clear();
+              window.location.href = "/";
+            }}
+          >
+            <LogOut size={18} /> Logout
+          </button>
         </ul>
       </nav>
 

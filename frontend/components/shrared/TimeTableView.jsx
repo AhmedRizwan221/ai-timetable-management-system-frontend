@@ -8,22 +8,23 @@ import { GraduationCap, FileDown, Users, CalendarDays } from "lucide-react"
 const Days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 
 function TimeTableView({
-    slots = [],
+    slots,
     user,
     totalTeachers,
     totalCourses,
-    totalChairmans
+    totalChairmans,
+    timeTableSlot = []
 }) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    console.log(user);
+    // console.log(user);
 
     const [selectedBatch, setSelectedBatch] = useState("morning");
     const [selectedSemester, setSelectedSemester] = useState(1);
     const [selectedYear, setSelectedYear] = useState(1);
     const [selectedSection, setSelectedSection] = useState("A");
 
-    const { timeTableSlot = [], error, totalSlots } = useSelector((state) => state.timetabelSlot);
+    // const { timeTableSlot = [], error, totalSlots } = useSelector((state) => state.timetabelSlot);
 
     // filter functionality
     const filteredTimeTable = useMemo(() => {
@@ -64,6 +65,10 @@ function TimeTableView({
                 `${slot.startTime}-${slot.endTime}` === time
         );
     }
+
+    const uniqueCourses = Array.from(
+        new Map(timeTableSlot.map((item) => [item?.course?.courseName, item])).values()
+    );
 
 
     return (
@@ -152,82 +157,71 @@ function TimeTableView({
                         </div>
                     </div>
                 </div>
+                <div className="w-full space-y-8 p-4 bg-white">
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full border-collapse border border-black text-center text-sm">
+                            <thead>
+                                <tr className="bg-white">
+                                    <th className="border border-black px-2 py-3 font-bold">Day / Time</th>
+                                    {timeSlots.map((time, index) => (
+                                        <th key={index} className="border border-black px-2 py-2 font-bold leading-tight">
+                                            Lecture {index + 1} <br />
+                                            <span className="font-normal text-xs">{time}</span>
+                                        </th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {Days.map((day) => (
+                                    <tr key={day}>
+                                        <td className="border border-black px-4 py-3 font-bold text-left">{day}</td>
+                                        {
+                                            timeSlots.map((time) => {
+                                                const slot = getSLot(day, time);
+                                                return (
+                                                    <td key={time} className="border border-black px-2 py-3 min-w-[120px]">
+                                                        {slot ? (
+                                                            <div className="whitespace-pre-line font-bold">
+                                                                {slot.type === 'theory' ? slot.course?.courseName : slot.course?.courseName + "(Lab)"}
+                                                            </div>
+                                                        ) : null}
+                                                    </td>
+                                                );
+                                            })
+                                        }
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full border-collapse border border-black text-left text-xs">
+                            <thead>
+                                <tr className="bg-gray-50">
+                                    <th className="border border-black px-2 py-1 w-12">S.No.</th>
+                                    <th className="border border-black px-2 py-1">Course Name</th>
+                                    <th className="border border-black px-2 py-1 w-24">Credit Hours</th>
+                                    <th className="border border-black px-2 py-1">Course Facilitator</th>
+                                    <th className="border border-black px-2 py-1">Practical Facilitator</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {uniqueCourses.map((timetable, idx) => (
+                                    <tr key={idx}>
+                                        <td className="border border-black px-2 py-1 font-bold">{String(idx + 1).padStart(2, '0')}</td>
+                                        <td className="border border-black px-2 py-1 font-medium">{timetable?.course?.courseName}</td>
+                                        <td className="border border-black px-2 py-1">
+                                            {(timetable?.course?.creditHours?.theory ?? 0) + " + " + (timetable?.course?.creditHours?.practical ?? 0)}
+                                        </td>
+                                        <td className="border border-black px-2 py-1">{timetable?.teacher?.fullName}</td>
+                                        <td className="border border-black px-2 py-1">{timetable?.practicalFacilitator?.fullName || ""}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </main>
-            <table className="min-w-full border border-black text-center text-sm">
-
-                {/* HEADER */}
-                <thead>
-                    <tr>
-                        <th className="border px-3 py-2">Day / Time</th>
-                        {timeSlots.map((time, i) => (
-                            <th key={i} className="border px-3 py-2">
-                                Lecture {i + 1}
-                                <br />
-                                <span className="text-xs">{time}</span>
-                            </th>
-                        ))}
-                    </tr>
-                </thead>
-
-
-                {/* BODY */}
-                <tbody>
-                    {Days.map((day) => (
-                        <tr key={day}>
-                            <td className="border px-3 py-2 font-bold text-left">{day}</td>
-
-                            {timeSlots.map((time) => {
-                                const slot = getSlot(day, time);
-
-                                return (
-                                    <td key={time} className="border px-2 py-3 relative group">
-                                        {slot && (
-                                            <div className="font-semibold text-sm">
-
-                                                {/* Course */}
-                                                {slot.course?.courseName}
-
-                                                {/* LAB */}
-                                                {slot.type === "practical" && (
-                                                    <div className="text-xs underline mt-1">
-                                                        {slot.course?.courseName} LAB
-                                                    </div>
-                                                )}
-
-                                                {/* Teacher */}
-                                                <div className="text-xs text-gray-500 mt-1">
-                                                    {slot.type === "theory"
-                                                        ? slot.teacher?.fullName
-                                                        : slot.practicalTeacher?.fullName}
-                                                </div>
-
-                                                {/* ACTIONS (ONLY CHAIRMAN) */}
-                                                {isChairman && (
-                                                    <div className="flex gap-2 mt-2 justify-center opacity-0 group-hover:opacity-100 transition">
-                                                        <button
-                                                            onClick={() => navigate(`/dashboard/chairman/edit-timetableSlots/${slot._id}`)}
-                                                            className="p-1 hover:bg-gray-200 rounded"
-                                                        >
-                                                            <Pencil size={14} />
-                                                        </button>
-
-                                                        <button
-                                                            onClick={() => console.log("delete", slot._id)}
-                                                            className="p-1 hover:bg-red-100 rounded"
-                                                        >
-                                                            <Trash size={14} className="text-red-500" />
-                                                        </button>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        )}
-                                    </td>
-                                );
-                            })}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
         </div>
     );
 }
