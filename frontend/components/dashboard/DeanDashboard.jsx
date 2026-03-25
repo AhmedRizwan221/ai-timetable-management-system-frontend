@@ -1,33 +1,40 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { getAllTimeTableSlot } from "../../store/timetableSlot/timetableSlot";
 import { useDispatch, useSelector } from "react-redux";
-import { getUser } from "../../store/auth/authSlice";
+import { getAllTeachersInFaculty, getChairmans } from "../../store/user/user";
+import { getAllCoursesInDept } from "../../store/course/course";
+import TimeTableView from "../shrared/TimeTableView";
 
 function DeanDashboard() {
     const dispatch = useDispatch();
 
-    const { user = null, error, status } = useSelector((state) => state.auth);
+    const { user } = useSelector((state) => state.auth);
+    // console.log(user);
+    const { totalSlots } = useSelector((state) => state.timetabelSlot);
+    // console.log(timeTableSlot);
+    const { totalTeachers } = useSelector((state) => state.user);
+    console.log(totalTeachers);
+    const {totalChairmans=null, } = useSelector((state) => state.user);
+    // console.log(totalChairmans);
+
     console.log(user);
 
     useEffect(() => {
-        if(status === 'idle') {
-            dispatch(getUser());
+        if (user) {
+            dispatch(getAllTeachersInFaculty(user?.faculty._id));
+            dispatch(getChairmans());
+            // dispatch(getAllCoursesInDept(user?.department?._id));
         }
-    }, [dispatch, user])
-
-
+    }, [dispatch, user]);
 
     return (
-        <div className="">
-            <div className="flex justify-between">
-                <h1 className="text-3xl md:text-4xl font-bold text-gray-800">Dean Name: {user?.fullName}</h1>
-                <span className="block text-lg md:text-xl font-medium text-gray-800 mt-1">Dean of Faculty </span>
-            </div>
-            <div>
-                <p>Total Departments </p>
-                
-            </div>
 
-        </div>
+        <TimeTableView
+            slots={totalSlots}
+            user={user}
+            totalTeachers={totalTeachers}
+            totalChairmans={totalChairmans}
+        />
     )
 }
 

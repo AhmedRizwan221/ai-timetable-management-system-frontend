@@ -11,7 +11,7 @@ export const createSection = createAsyncThunk(
 
             // console.log(response.data.data);
 
-            return response.data.data
+            return response.data.data.createdSection
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -89,7 +89,12 @@ const sectionSlice = createSlice({
             })
             .addCase(createSection.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.sections.push(action.payload)
+                const index = state.sections.findIndex(t => t._id === action.payload);
+                if(index !== -1) {
+                    state.sections[index] = action.payload
+                }else {
+                    state.sections.push(action.payload)
+                }
             })
             .addCase(createSection.rejected, (state, action) => {
                 state.status = 'rejected';

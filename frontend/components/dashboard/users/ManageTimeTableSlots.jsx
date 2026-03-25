@@ -87,25 +87,34 @@ export default function ManageTimeTableSlots() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {timeTableSlot.map((timetableSlot, index) => (
-                                    <tr key={timetableSlot._id} className="border-t hover:bg-muted/40 transition-colors group">
-                                        <td className="px-6 py-4 text-sm">{index + 1}</td>
-                                        <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">
-                                            <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0">{timetableSlot?.course?.courseName}</div>
-
-                                        </td>
-                                        <td className="px-6 py-4 text-sm">{timetableSlot?.day}</td>
-                                        <td className="px-6 py-4">
-                                            {timetableSlot?.batch?.batchName === 'morning' ? "Morning" : "Evening"}
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="flex justify-end gap-3">
-                                                <button onClick={() => navigate(`/dashboard/chairman/edit-timetableSlots/${timetableSlot._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
-                                                <button onClick={() => deleteTimeTableSlot(timetableSlot._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
-                                            </div>
+                                {timeTableSlot.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="5" className="text-center py-10 text-muted-foreground">
+                                            No TimeTable Slots found.
                                         </td>
                                     </tr>
-                                ))}
+                                ) : (
+
+
+                                    timeTableSlot.map((slot, index) => (
+                                        <tr key={slot._id} className="border-t hover:bg-muted/40 transition-colors group">
+                                            <td className="px-6 py-4 text-sm">{index + 1}</td>
+                                            <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">
+                                                <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0">{slot?.course?.courseName}</div>
+
+                                            </td>
+                                            <td className="px-6 py-4 text-sm">{slot?.day}</td>
+                                            <td className="px-6 py-4">
+                                                {slot?.batch?.batchName === 'morning' ? "Morning" : "Evening"}
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex justify-end gap-3">
+                                                    <button onClick={() => navigate(`/dashboard/chairman/edit-timetableSlots/${slot._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
+                                                    <button onClick={() => timetableSlotDeleteHandler(slot._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )))}
                             </tbody>
                         </table>
                     </div>

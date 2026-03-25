@@ -456,9 +456,8 @@ export default function Sidebar() {
               </li>
             )
           )}
-        </ul>
         <button
-          className="flex items-center gap-2 hover:text-red-400 mt-6 md:mt-auto transition-colors"
+          className="flex items-center gap-2 hover:text-red-400 mt-6 md:mt-auto transition-colors cursor-pointer"
           onClick={() => {
             localStorage.clear();
             window.location.href = "/";
@@ -466,6 +465,7 @@ export default function Sidebar() {
         >
           <LogOut size={18} /> Logout
         </button>
+        </ul>
       </nav>
 
       {/* Mobile sidebar */}

@@ -98,7 +98,7 @@ export default function TimeTableForm(
                                 <option value="">Select Section</option>
                                 {sections.map((sect) => (
                                     <option key={sect._id} value={sect._id}>
-                                        {"Section" + " " + sect.sectionName}, {sect?.department?.deptName}
+                                        {"Section" + " " + sect.sectionName + " " + sect.batch?.batchName} {sect?.department?.deptName}
                                     </option>
                                 ))}
                             </select>

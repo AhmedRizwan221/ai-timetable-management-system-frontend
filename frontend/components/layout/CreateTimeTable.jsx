@@ -45,21 +45,19 @@ export default function CreateTimeTable() {
 
 
     // if course has practical then we show practicalFacilitator field 
-    const selectedCourseId = watch("courseId");
-    const selectedCourse = courses.find(
-        (c) => c._id === selectedCourseId
-    );
+    const selectedType = watch("type");
+
     // console.log(selectedCourse);
 
     useEffect(() => {
-        if (!selectedCourse?.hasPractical) {
+        if (selectedType === 'theory') {
             unregister("practicalFacilitatorId");
         }
-        if (selectedCourse?.hasPractical) {
+        if (selectedType === 'practical') {
             unregister("teacherId");
         }
 
-    }, [selectedCourse, unregister]);
+    }, [selectedType, unregister]);
 
     const handleCreatTimeTable = async (data) => {
         setErr(" ");
@@ -163,7 +161,20 @@ export default function CreateTimeTable() {
                                     ))}
                                 </select>
                             </div>
-                            {!selectedCourse?.hasPractical && (
+                            <div className="space-y-2">
+                                <label className="flex items-center gap-1.5">
+                                    <CalendarDays className="h-3.5 w-3.5 text-muted-foreground" /> Type
+                                </label>
+                                <select
+                                    className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                    {...registerTimetableSlot("type", { required: true })}
+                                >
+                                    <option value="">Select Type</option>
+                                    <option value="theory">Theory</option>
+                                    <option value="practical">Practical</option>
+                                </select>
+                            </div>
+                            {selectedType === 'theory' && (
                                 <div className="space-y-2">
                                     <label className="flex items-center gap-1.5">
                                         <Users className="h-3.5 w-3.5 text-muted-foreground" /> Teacher
@@ -176,6 +187,25 @@ export default function CreateTimeTable() {
                                         {teachers.map((teach) => (
                                             <option key={teach._id} value={teach._id}>
                                                 {teach?.fullName}, {teach?.departmentTeacher ? teach?.departmentTeacher?.deptName : "Not assign "}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            )}
+                                {/* if type is practical we show practical teacher */}
+                            {selectedType === 'practical' && (
+                                <div className="space-y-2">
+                                    <label className="flex items-center gap-1.5">
+                                        <Users className="h-3.5 w-3.5 text-muted-foreground" /> Practical Facilitator
+                                    </label>
+                                    <select
+                                        className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                        {...registerTimetableSlot("practicalFacilitatorId")}
+                                    >
+                                        <option value="">Select Teachers</option>
+                                        {teachers.map((teach) => (
+                                            <option key={teach._id} value={teach._id}>
+                                                {teach.fullName}, {teach?.departmentTeacher ? teach?.departmentTeacher?.deptName : "Not assign "}
                                             </option>
                                         ))}
                                     </select>
@@ -236,36 +266,6 @@ export default function CreateTimeTable() {
                                             {cour.courseName} { }
                                         </option>
                                     ))}
-                                </select>
-                            </div>
-                            {selectedCourse?.hasPractical && (
-                                <div className="space-y-2">
-                                    <label className="flex items-center gap-1.5">
-                                        <Users className="h-3.5 w-3.5 text-muted-foreground" /> Practical Facilitator
-                                    </label>
-                                    <select
-                                        className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                                        {...registerTimetableSlot("practicalFacilitatorId")}
-                                    >
-                                        <option value="">Select Teachers</option>
-                                        {teachers.map((teach) => (
-                                            <option key={teach._id} value={teach._id}>
-                                                {teach.fullName}, {teach?.departmentTeacher ? teach?.departmentTeacher?.deptName : "Not assign "}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                            )}
-                            <div className="space-y-2">
-                                <label className="flex items-center gap-1.5">
-                                    <CalendarDays className="h-3.5 w-3.5 text-muted-foreground" /> Type
-                                </label>
-                                <select
-                                    className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                                    {...registerTimetableSlot("type", { required: true })}
-                                >
-                                    <option value="theory">Theory</option>
-                                    <option value="practical">Practical</option>
                                 </select>
                             </div>
                         </div>

@@ -1,9 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { getAllTimeTableSlot } from "../../store/timetableSlot/timetableSlot";
 import { useDispatch, useSelector } from "react-redux";
-import { getUser } from "../../store/auth/authSlice";
-import { GraduationCap, Layers, CalendarDays, Users, FileDown } from "lucide-react"
-import Input from "../shrared/Input";
+import { GraduationCap, Layers, CalendarDays, Users, FileDown } from "lucide-react";
 import { getAllTeachersInDept } from "../../store/user/user";
 import { getAllCoursesInDept } from "../../store/course/course";
 
@@ -15,7 +13,7 @@ function ChairmanDashboard() {
     const [selectedYear, setSelectedYear] = useState(1);
     const [selectedSection, setSelectedSection] = useState("A");
 
-    const { user, status } = useSelector((state) => state.auth);
+    const { user } = useSelector((state) => state.auth);
     const { timeTableSlot = [], error, totalSlots } = useSelector((state) => state.timetabelSlot);
     // console.log(timeTableSlot);
     const { totalTeachers } = useSelector((state) => state.user);
@@ -26,9 +24,6 @@ function ChairmanDashboard() {
 
     // console.log(totalCourses, courses);
     useEffect(() => {
-        if (status === 'idle') {
-            dispatch(getUser());
-        }
         if (user) {
             dispatch(getAllTimeTableSlot(user?.department?._id));
             dispatch(getAllTeachersInDept(user?.department?._id));
@@ -47,7 +42,7 @@ function ChairmanDashboard() {
                 selectedBatch.toLowerCase().trim();
             const matchSemester = Number(slot?.semester?.semesterNumber) === Number(selectedSemester);
             const matchYear = Number(slot?.semester?.studyYear) === Number(selectedYear);
-            const matchSection = slot.section?.sectionName.toLowerCase() === selectedSection;
+            const matchSection = slot.section?.sectionName.toLowerCase().trim() === selectedSection?.toLowerCase().trim();
 
             // console.log("Batch compare:", slot.batch?.batchName, selectedBatch);
 
@@ -57,7 +52,7 @@ function ChairmanDashboard() {
             //     matchYear,
             //     matchSection
             // });
-            return matchBatch && matchSemester && matchYear || matchSection;
+            return matchBatch && matchSemester && matchYear && matchSection;
         });
     }, [timeTableSlot, selectedBatch, selectedSemester, selectedYear, selectedSection]);
     // console.log(filteredTimeTable);
@@ -84,7 +79,7 @@ function ChairmanDashboard() {
     // console.log(uniqueCourses);
     return (
         <div className="">
-            <div className="bg-white border border-gray-200 rounded-lg ">
+            <div className="bg-white border border-gray-200 rounded-lg">
                 <header className="p-4 sm:p-6 border-b bg-white flex items-center justify-between gap-4">
                     {/* Left Side: Profile Info */}
                     <div className="flex items-center gap-3 min-w-0">
@@ -135,7 +130,7 @@ function ChairmanDashboard() {
                         <FilterSelect
                             label="Section"
                             value={selectedSection}
-                            onChange={(e) => setSelectedSection(Number(e.target.value))}
+                            onChange={(e) => setSelectedSection(e.target.value)}
                             options={['A', 'B'].map(s => ({ val: s, lab: `Section ${s}` }))}
                         />
                     </div>
@@ -184,27 +179,20 @@ function ChairmanDashboard() {
                                     {Days.map((day) => (
                                         <tr key={day}>
                                             <td className="border border-black px-4 py-3 font-bold text-left">{day}</td>
-                                            {day === "Friday" ? (
-                                                /* Special handling for Friday spanning across all slots */
-                                                <td colSpan={timeSlots.length} className="border border-black px-4 py-6 text-4xl font-black tracking-widest">
-                                                    FYP-II
-                                                </td>
-                                            ) : (
+                                            {
                                                 timeSlots.map((time) => {
                                                     const slot = getSLot(day, time);
                                                     return (
                                                         <td key={time} className="border border-black px-2 py-3 min-w-[120px]">
                                                             {slot ? (
                                                                 <div className="whitespace-pre-line font-bold">
-                                                                    {slot.course.courseName}
-                                                                    {/* {slot.isPractical && <div className="text-xs font-normal underline mt-1">SD LAB</div>} */}
+                                                                    {slot.type === 'theory' ? slot.course?.courseName : slot.course?.courseName + "(Lab)"}
                                                                 </div>
                                                             ) : null}
                                                         </td>
                                                     );
                                                 })
-                                            )}
-                                        </tr>
+                                            }                                        </tr>
                                     ))}
                                 </tbody>
                             </table>
