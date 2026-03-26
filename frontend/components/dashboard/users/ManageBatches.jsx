@@ -97,23 +97,30 @@ export default function ManageBatches() {
                             </tr>
                         </thead>
                         <tbody>
-                            {batches.map((batch, index) => (
-                                <tr key={batch._id} className="border-t hover:bg-muted/40 transition-colors group">
-                                    <td className="px-6 py-4 text-sm">{index + 1}</td>
-                                    <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">
-                                        <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0"><GraduationCap className="h-4 w-4" /></div>
-                                        {batch.batchName === 'morning' ? "Morning" : "Evening"}
-                                    </td>
-                                    <td className="px-6 py-4 text-muted-foreground text-sm truncate max-w-[150px] lg:max-w-none">{"Semester" + " " + batch?.semester?.semesterNumber + " " + "Year" + " " + batch?.semester?.studyYear}</td>
-                                    <td className="px-6 py-4 text-sm">{batch?.department?.deptName || "Not Assigned"}</td>
-                                    <td className="px-6 py-4">
-                                        <div className="flex justify-end gap-3">
-                                            <button onClick={() => navigate(`/dashboard/chairman/edit-batches/${batch._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
-                                            <button onClick={() => handlerDeleteBatch(batch._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
+                            {batches.length === 0 ?
+                                (
+                                    <tr>
+                                        <td colSpan="5" className="py-12 text-center text-muted-foreground bg-card">No Batches found.
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    batches.map((batch, index) => (
+                                        <tr key={batch._id} className="border-t hover:bg-muted/40 transition-colors group">
+                                            <td className="px-6 py-4 text-sm">{index + 1}</td>
+                                            <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">
+                                                <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0"><GraduationCap className="h-4 w-4" /></div>
+                                                {batch.batchName === 'morning' ? "Morning" : "Evening"}
+                                            </td>
+                                            <td className="px-6 py-4 text-muted-foreground text-sm truncate max-w-[150px] lg:max-w-none">{"Semester" + " " + batch?.semester?.semesterNumber + " " + "Year" + " " + batch?.semester?.studyYear}</td>
+                                            <td className="px-6 py-4 text-sm">{batch?.department?.deptName || "Not Assigned"}</td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex justify-end gap-3">
+                                                    <button onClick={() => navigate(`/dashboard/chairman/edit-batches/${batch._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
+                                                    <button onClick={() => handlerDeleteBatch(batch._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )))}
                         </tbody>
                     </table>
                 </div>

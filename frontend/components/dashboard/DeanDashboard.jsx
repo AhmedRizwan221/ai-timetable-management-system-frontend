@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { getFacultyAllTimeTableSlots } from "../../store/timetableSlot/timetableSlot";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllTeachersInFaculty, getChairmans } from "../../store/user/user";
+import { getAllTeachersInFaculty } from "../../store/user/user";
 import TimeTableView from "../shrared/TimeTableView";
 
 function DeanDashboard() {
@@ -22,7 +22,7 @@ function DeanDashboard() {
         if (user) {
             dispatch(getFacultyAllTimeTableSlots(user?.faculty._id));
             dispatch(getAllTeachersInFaculty(user?.faculty._id));
-            dispatch(getChairmans());
+            // dispatch(getChairmans());
             // dispatch(getAllCoursesInDept(user?.department?._id));
         }
     }, [dispatch, user]);

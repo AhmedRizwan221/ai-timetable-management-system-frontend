@@ -1,53 +1,53 @@
 import React, { useState, useEffect } from "react";
-import { departmentCreate, clearError } from "../../store/dept/departmentSlice.js";
+import { clearError, departmentUpdate } from "../store/dept/departmentSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import { Input, Button } from "../index";
-import { useNavigate } from "react-router-dom";
-import { getChairmans } from "../../store/user/user.js";
-import { fetchFaculties } from "../../store/faculty/facultySlice.js";
-import { Building2, CalendarDays, Users } from "lucide-react"
-import { getUser } from "../../store/auth/authSlice.js";
+import { Input, Button } from "../components/index.js";
+import { useNavigate, useParams } from "react-router-dom";
+import { fetchFaculties } from "../store/faculty/facultySlice.js";
+import { Building2, CalendarDays, Users, Plus } from "lucide-react"
 
-export default function CreateDeptAssignChiarman() {
+
+export default function EditDepartment() {
     const dispatch = useDispatch();
     const { register, handleSubmit, reset } = useForm();
     const navigate = useNavigate();
 
-    const { chairmans = [], error: chairmanError, status: chairmanStatus } = useSelector((state) => state.user);
-    const { faculties = [], error: facultyError, status: facultyStatus } = useSelector((state) => state.faculty)
-    const {error: deptError} = useSelector((state) => state.department);
+    const { departmentId } = useParams();
+
+    const { chairmans = [], error: chairmanError } = useSelector((state) => state.user);
+    const { faculties = [], error: facultyError } = useSelector((state) => state.faculty)
+    const { error: deptError } = useSelector((state) => state.department);
     const { user } = useSelector((state) => state.auth);
 
     useEffect(() => {
-        if(!user) {
-            dispatch(getUser());
+        if (user) {
+            dispatch(fetchFaculties());
         }
-        dispatch(getChairmans());
-        dispatch(fetchFaculties());
     }, [dispatch, user])
 
-
     // send data to redux to create a faculty
-    const handleCreateDept = async (data) => {
+    const handlerUpdateDepartment = async (data) => {
         dispatch(clearError());
 
         try {
-            await dispatch(departmentCreate({
-                deptName: data.departmentname,
-                chairmanId: data.chairmanId,
-                facultyId: data.facultyId
+            await dispatch(departmentUpdate({
+                departmentId,
+                data: {
+                    deptName: data.departmentname,
+                    chairmanId: data.chairmanId,
+                    facultyId: data.facultyId
+                }
             })).unwrap();
             reset();
-            alert("Department created successfully!");
-            if (user?.role === 'dean') {
-                navigate('/dashboard/dean');
-            }
+            alert("Department Updated successfully!");
+
         } catch (error) {
             //    console.log(error);
             return error
         }
     };
+
     return (
         < div className="min-h-screen bg-muted/30 py-10 px-4 sm:px-6 " >
             <div className="bg-white border border-gray-200 rounded-lg ">
@@ -57,8 +57,7 @@ export default function CreateDeptAssignChiarman() {
                             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
                                 <CalendarDays className="h-5 w-5 text-primary-foreground" />
                             </div>
-                            <h1 className="text-2xl font-bold tracking-tight text-foreground">Create Department and Assign Chairman
-                            </h1>
+                            <h1 className="text-2xl font-bold tracking-tight text-foreground">Update Department</h1>
                         </div>
                     </div>
                 </div>
@@ -68,7 +67,7 @@ export default function CreateDeptAssignChiarman() {
                     )}
                     {chairmanError && <p className="text-red-500 text-sm">Failed to load chairmans</p>}
                     {facultyError && <p className="text-red-500 text-sm">Failed to load faculties</p>}
-                    <form onSubmit={handleSubmit(handleCreateDept)}>
+                    <form onSubmit={handleSubmit(handlerUpdateDepartment)}>
                         <div className="grid gap-5 sm:grid-cols-2">
                             <div className="space-y-2">
                                 <Input
@@ -77,7 +76,7 @@ export default function CreateDeptAssignChiarman() {
                                     icon={Users}
                                     placeholder="Enter department name"
                                     type="text"
-                                    {...register("departmentname", { required: true })}
+                                    {...register("departmentname")}
                                 />
                             </div>
                             <div className="space-y-2">
@@ -86,7 +85,7 @@ export default function CreateDeptAssignChiarman() {
                                 </label>
                                 <select
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
-                                    {...register("chairmanId", { required: true })}
+                                    {...register("chairmanId")}
                                 >
                                     <option value="">Select Chairman</option>
                                     {chairmans.map((chair) => (
@@ -101,8 +100,8 @@ export default function CreateDeptAssignChiarman() {
                                     <Building2 className="h-3.5 w-3.5 text-muted-foreground" /> Select Faculty
                                 </label>
                                 <select
-                                   className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
-                                    {...register("facultyId", { required: true })}
+                                    className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
+                                    {...register("facultyId")}
                                 >
                                     <option value="">Select Faculty</option>
                                     {faculties.map((fact) => (
@@ -115,7 +114,7 @@ export default function CreateDeptAssignChiarman() {
                         </div>
 
                         <Button type="submit" className="w-full flex justify-center items-center sm:w-auto bg-[#1D293D] text-white hover:bg-[#162131] cursor-pointer">
-                            Create Department
+                            <Plus className="mr-2 h-4 w-4" /> Update Department
                         </Button>
                     </form>
 

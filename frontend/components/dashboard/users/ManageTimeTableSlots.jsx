@@ -94,8 +94,6 @@ export default function ManageTimeTableSlots() {
                                         </td>
                                     </tr>
                                 ) : (
-
-
                                     timeTableSlot.map((slot, index) => (
                                         <tr key={slot._id} className="border-t hover:bg-muted/40 transition-colors group">
                                             <td className="px-6 py-4 text-sm">{index + 1}</td>

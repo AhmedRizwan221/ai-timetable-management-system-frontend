@@ -67,6 +67,37 @@ export const getDepartment = createAsyncThunk(
     }
 )
 
+export const departmentUpdate = createAsyncThunk(
+    "department/update",
+    async ({ departmentId, data }, { rejectWithValue }) => {
+        try {
+            const response = await axios.patch(`http://localhost:8000/api/v1/departments/update/${departmentId}`, data, { withCredentials: true });
+
+            // console.log(response.data.data);
+
+            return response.data.data.updatedDepartment
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
+export const departmentDelete = createAsyncThunk(
+    "department/delete",
+    async (departmentId, { rejectWithValue }) => {
+        console.log(departmentId);
+        try {
+            await axios.delete(`http://localhost:8000/api/v1/departments/delete/${departmentId}`, {
+                withCredentials: true
+            });
+
+            return departmentId
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
 
 const initialState = {
     departments: [],
@@ -81,20 +112,6 @@ const departmentSlice = createSlice({
     name: "departmentSlice",
     initialState,
     reducers: {
-        deleteDepartment: (state, action) => {
-            state.departments = state.departments.filter((dept) => dept._id !== action.payload.departmentId);
-        },
-        updateDepartment: (state, action) => {
-            const updateDept = action.payload.department;
-            const index = state.departments.findIndex((dept) => dept._id === updateDept._id);
-
-            if (index !== -1) {
-                state.departments[index] = updateDept;
-            }
-        },
-        setDepartments: (state, action) => {
-            state.departments = action.payload;
-        },
         clearError: (state) => {
             state.error = null
         }
@@ -121,7 +138,7 @@ const departmentSlice = createSlice({
             })
             .addCase(departmentCreate.fulfilled, (state, action) => {
                 state.status = 'Succeeded';
-                    state.departments.push(action.payload)
+                state.departments.push(action.payload)
             })
             .addCase(departmentCreate.rejected, (state, action) => {
                 state.status = 'rejected';
@@ -140,8 +157,32 @@ const departmentSlice = createSlice({
                 state.status = 'rejected';
                 state.error = action.payload
             })
+            .addCase(departmentUpdate.pending, (state) => {
+                state.status = 'Loading'
+            })
+            .addCase(departmentUpdate.fulfilled, (state, action) => {
+                state.status = 'Succeeded';
+                const updateData = action.payload;
+                state.departments = state.departments.map((dept) => dept._id === updateData._id ? updateData : dept)
+            })
+            .addCase(departmentUpdate.rejected, (state, action) => {
+                state.status = 'rejected';
+                state.error = action.payload
+            })
+            .addCase(departmentDelete.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(departmentDelete.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                const id = action.payload;
+                state.departments = state.departments.filter(dept => dept._id !== id);
+            })
+            .addCase(departmentDelete.rejected, (state, action) => {
+                state.status = 'rejected',
+                    state.error = action.payload
+            })
     },
 });
 
-export const { deleteDepartment, updateDepartment, setDepartments, clearError } = departmentSlice.actions;
+export const { clearError } = departmentSlice.actions;
 export default departmentSlice.reducer;

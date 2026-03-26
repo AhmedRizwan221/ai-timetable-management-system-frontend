@@ -124,28 +124,35 @@ export default function ManageDeans() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filterUsers.map((dean, index) => (
-                                    <tr key={dean._id} className="border-t hover:bg-muted/40 transition-colors group">
-                                        <td className="px-6 py-4 text-sm">{index + 1}</td>
-                                        <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">
-                                            <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0"><User className="h-4 w-4" /></div>
-                                            {dean.fullName}
-                                        </td>
-                                        <td className="px-6 py-4 text-muted-foreground text-sm truncate max-w-[150px] lg:max-w-none">{dean.email}</td>
-                                        <td className="px-6 py-4 text-sm">{dean.faculty?.facultyName || "Not Assigned"}</td>
-                                        <td className="px-6 py-4">
-                                            <span className={`px-2 py-1 text-xs rounded-md font-medium ${dean.faculty ? "bg-[#1D293D] text-white hover:bg-[#162131]" : "bg-gray-100 text-gray-500"}`}>
-                                                {dean.faculty ? "Active" : "InActive"}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="flex justify-end gap-3">
-                                                <button onClick={() => navigate(`/dashboard/superadmin/edit-dean/${dean._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
-                                                <button onClick={() => deleteHandler(dean._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
-                                            </div>
+                                {filterUsers.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="6" className="py-12 text-center text-muted-foreground bg-card">No Deans found.
                                         </td>
                                     </tr>
-                                ))}
+                                ) : (
+                                    filterUsers.map((dean, index) => (
+                                        <tr key={dean._id} className="border-t hover:bg-muted/40 transition-colors group">
+                                            <td className="px-6 py-4 text-sm">{index + 1}</td>
+                                            <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">
+                                                <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0"><User className="h-4 w-4" /></div>
+                                                {dean.fullName}
+                                            </td>
+                                            <td className="px-6 py-4 text-muted-foreground text-sm truncate max-w-[150px] lg:max-w-none">{dean.email}</td>
+                                            <td className="px-6 py-4 text-sm">{dean.faculty?.facultyName || "Not Assigned"}</td>
+                                            <td className="px-6 py-4">
+                                                <span className={`px-2 py-1 text-xs rounded-md font-medium ${dean.faculty ? "bg-[#1D293D] text-white hover:bg-[#162131]" : "bg-gray-100 text-gray-500"}`}>
+                                                    {dean.faculty ? "Active" : "InActive"}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex justify-end gap-3">
+                                                    <button onClick={() => navigate(`/dashboard/superadmin/edit-dean/${dean._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
+                                                    <button onClick={() => deleteHandler(dean._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
                             </tbody>
                         </table>
                     </div>

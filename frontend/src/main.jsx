@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import {
   Login, AuthLayout, SignUp, ChairmanDashboard, SuperAdminDashboard, DashboardLayout, Home, DeptDashboard, CreateTeacherChairman, DeanDashboard, FacultyDashboard, FacultyDepartments, ManageDeans,
-  CreateDeptAssignChiarman, EditDean, EditChairman, EditTeacher, CreateTimeTable, CreateCourse,
+  EditDean, EditChairman, EditTeacher, CreateTimeTable, CreateCourse,
   ManageTeachers,
   CreateSection,
   ManageTimetable, EditTimeTable,
@@ -25,7 +25,11 @@ import {
   EditCourse,
   CreateFaculty,
   ManageFaculties,
-  EditFaculty
+  EditFaculty,
+  CreateDepartment,
+  ManageChairmans,
+  ManageDepartments,
+  EditDepartment
 } from '../components/index';
 import Department from "../pages/Department";
 
@@ -170,12 +174,11 @@ const router = createBrowserRouter([
         )
       },
       {
-        // here we need a separate component for faculty and dean
         path: '/dashboard/dean/create-department',
         element: (
           <AuthLayout authentication={true}>
             <DashboardLayout>
-              <CreateDeptAssignChiarman />
+              <CreateDepartment />
             </DashboardLayout>
           </AuthLayout>
         )
@@ -190,6 +193,26 @@ const router = createBrowserRouter([
           </AuthLayout>
         )
       },
+       {
+        path: '/dashboard/dean/manage-departments',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <ManageDepartments />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+         {
+        path: '/dashboard/dean/edit-department/:departmentId',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <EditDepartment />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
       {
         path: '/dashboard/dean/create-chairman',
         element: (
@@ -200,6 +223,27 @@ const router = createBrowserRouter([
           </AuthLayout>
         )
       },
+      {
+        path: '/dashboard/dean/manage-chairmans',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <ManageChairmans />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+        {
+        path: '/dashboard/dean/edit-chairmans/:id',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <EditChairman />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+
       //chairman route  
       {
         path: '/dashboard/chairman',

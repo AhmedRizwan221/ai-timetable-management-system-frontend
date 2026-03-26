@@ -97,23 +97,29 @@ export default function ManageSections() {
                             </tr>
                         </thead>
                         <tbody>
-                            {sections.map((sect, index) => (
-                                <tr key={sect._id} className="border-t hover:bg-muted/40 transition-colors group">
-                                    <td className="px-6 py-4 text-sm">{index + 1}</td>
-                                    <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">
-                                        <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0"><GraduationCap className="h-4 w-4" /></div>
-                                        {sect.sectionName}
-                                    </td>
-                                    <td className="px-6 py-4 text-muted-foreground text-sm truncate max-w-[150px] lg:max-w-none">{sect?.batch?.batchName === 'morning' ? "Morning" : "Evening"}</td>
-                                    <td className="px-6 py-4 text-sm">{sect?.department?.deptName || "Not Assigned"}</td>
-                                    <td className="px-6 py-4">
-                                        <div className="flex justify-end gap-3">
-                                            <button onClick={() => navigate(`/dashboard/chairman/edit-sections/${sect._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
-                                            <button onClick={() => handlerDeleteSection(sect._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
-                                        </div>
+                            {sections.length === 0 ? (
+                                <tr>
+                                    <td colSpan="5" className="py-12 text-center text-muted-foreground bg-card">No Sections found.
                                     </td>
                                 </tr>
-                            ))}
+                            ) : (
+                                sections.map((sect, index) => (
+                                    <tr key={sect._id} className="border-t hover:bg-muted/40 transition-colors group">
+                                        <td className="px-6 py-4 text-sm">{index + 1}</td>
+                                        <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">
+                                            <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0"><GraduationCap className="h-4 w-4" /></div>
+                                            {sect.sectionName}
+                                        </td>
+                                        <td className="px-6 py-4 text-muted-foreground text-sm truncate max-w-[150px] lg:max-w-none">{sect?.batch?.batchName === 'morning' ? "Morning" : "Evening"}</td>
+                                        <td className="px-6 py-4 text-sm">{sect?.department?.deptName || "Not Assigned"}</td>
+                                        <td className="px-6 py-4">
+                                            <div className="flex justify-end gap-3">
+                                                <button onClick={() => navigate(`/dashboard/chairman/edit-sections/${sect._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
+                                                <button onClick={() => handlerDeleteSection(sect._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )))}
                         </tbody>
                     </table>
                 </div>

@@ -17,7 +17,6 @@ import DeanDashboard from "./dashboard/DeanDashboard.jsx";
 import FacultyDashboard from "./dashboard/facultyDasbhoard.jsx";
 import FacultyDepartments from "./dashboard/FacultyDepartments.jsx";
 import ManageDeans from "./dashboard/users/ManageDeans.jsx";
-import CreateDeptAssignChiarman from "./shrared/CreateDeptAssignChiarman.jsx";
 import EditDean from "../pages/EditDean.jsx";
 import EditChairman from "../pages/EditChairman.jsx";
 import EditTeacher from "../pages/EditTeacher.jsx";
@@ -29,6 +28,7 @@ import ManageTimetable from "./dashboard/users/ManageTimetables.jsx";
 import EditTimeTable from "../pages/EditTImeTable.jsx";
 import CreateBatch from "./layout/CreateBatch.jsx";
 import CreateSemester from "./layout/CreateSemester.jsx";
+import CreateDepartment from "./layout/CreateDepartment.jsx";
 import CreateFaculty from "./layout/CreateFaculty.jsx";
 import ManageTimeTableSlots from "./dashboard/users/ManageTimeTableSlots.jsx";
 import ManageBatches from "./dashboard/users/ManageBatches.jsx";
@@ -36,12 +36,15 @@ import ManageSections from "./dashboard/users/ManageSections.jsx";
 import ManageCourses from "./dashboard/users/ManageCourses.jsx";
 import ManageSemesters from "./dashboard/users/ManageSemesters.jsx";
 import ManageFaculties from "./dashboard/users/ManageFaculties.jsx";
+import ManageChairmans from "./dashboard/users/ManageChairmans.jsx";
+import ManageDepartments from "./dashboard/users/ManageDepartments.jsx";
 import EditSection from "../pages/EditSection.jsx";
 import EditBatch from "../pages/EditBatch.jsx";
 import EditTimeTableSlot from "../pages/EditTimeTableSlot.jsx";
 import EditSemesters from "../pages/EditSemesters.jsx";
 import EditCourse from "../pages/EditCourse.jsx";
 import EditFaculty from "../pages/EditFaculty.jsx";
+import EditDepartment from "../pages/EditDepartment.jsx";
 
 
 export {
@@ -64,7 +67,7 @@ export {
     FacultyDashboard,
     FacultyDepartments,
     ManageDeans,
-    CreateDeptAssignChiarman,
+    CreateDepartment,
     EditChairman,
     EditTeacher,
     EditDean,
@@ -83,10 +86,13 @@ export {
     ManageCourses,
     ManageSemesters,
     ManageFaculties,
+    ManageChairmans,
+    ManageDepartments,
     EditSection,
     EditBatch,
     EditTimeTableSlot,
     EditSemesters,
     EditCourse,
-    EditFaculty
+    EditFaculty,
+    EditDepartment
 }

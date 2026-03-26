@@ -5,12 +5,14 @@ import { Plus } from "lucide-react";
 export default function EditUser({
     title = "User",
     fields = [],
-    error,
+    err={},
     onSubmit,
     handleSubmit,
     register,
     buttonText = "Update",
+    Icon
 }) {
+    console.log(err);
     return (
         <div className="min-h-screen bg-muted/30 py-10 px-4 sm:px-6 ">
             <div className="bg-white border border-gray-200 rounded-lg ">
@@ -22,6 +24,7 @@ export default function EditUser({
                             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
                                 <icon className="h-6 w-6 text-white" />
                             </div>
+                             {Icon && <Icon className="h-3.5 w-3.5 text-muted-foreground" />}
                             <h1 className="text-2xl font-bold">
                                 Edit {title} Details
                             </h1>
@@ -31,9 +34,9 @@ export default function EditUser({
 
                 {/* Form */}
                 <div className="container mx-auto max-w-4xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
-                    {error && (
+                    {err && (
                         <p className="text-red-600 text-sm mb-4 text-center">
-                            {error.message}
+                            {err.message}
                         </p>
                     )}
 

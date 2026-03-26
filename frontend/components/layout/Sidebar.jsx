@@ -364,10 +364,23 @@ export default function Sidebar() {
     ],
     dean: [
       { name: "Dashboard", icon: <Home size={18} />, path: "/dashboard/dean" },
-      { name: "Create Chairman", icon: <Users size={18} />, path: "/dashboard/dean/create-chairman" },
-      { name: "Departments", icon: <Building2 size={24} />, path: "/dashboard/dean/departments" },
-      { name: "Create Department", icon: <Building2 size={24} />, path: "/dashboard/dean/create-department" },
-      { name: "Update Department", icon: <Building2 size={24} />, path: "/dashboard/dean/update-department" }
+      {
+        name: "Chairmans",
+        icon: <Users size={18} />,
+        submenu: [
+          { name: "Create Chairman",  path: "/dashboard/dean/create-chairman" },
+           { name: "Manage Chairmans", path: "/dashboard/dean/manage-chairmans" }
+        ]
+      },
+      {
+        name: "Departments",
+        icon:  <Building2 size={24} />,
+        submenu: [
+          { name: "Create Department", path: "/dashboard/dean/create-department" },
+          { name: "Manage Department", path: "/dashboard/dean/manage-departments" },
+          { name: "Departments", path: "/dashboard/dean/departments" },
+        ]
+      },
     ],
     chairman: [
       { name: "Dashboard", icon: <Home size={18} />, path: "/dashboard/chairman" },

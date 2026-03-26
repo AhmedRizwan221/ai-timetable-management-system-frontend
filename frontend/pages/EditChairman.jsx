@@ -4,6 +4,7 @@ import { updateUserData } from "../store/user/user";
 import { useForm } from "react-hook-form";
 import { Users, Lock, Mail } from "lucide-react";
 import EditUser from "../components/shrared/EditUser";
+import { useState } from "react";
 
 
 export default function EditChairman() {
@@ -11,10 +12,12 @@ export default function EditChairman() {
     const dispatch = useDispatch();
     const { register, handleSubmit, reset } = useForm();
     const navigate = useNavigate();
+    const [err, setErr] = useState("");
 
     const { user } = useSelector((state) => state.auth);
 
     const handleUpdateChairman = async (data) => {
+        setErr("");
         try {
             await dispatch(updateUserData({
                 role: 'chairman',
@@ -32,7 +35,7 @@ export default function EditChairman() {
             }
         } catch (error) {
             //    console.log(error);
-            return error
+               setErr(error);
         }
     }
 
@@ -41,13 +44,14 @@ export default function EditChairman() {
             title="Chairman"
             buttonText="Update"
             fields={[
-                { name: "fullname", label: "Full Name", type: "text", icon: Users },
-                { name: "email", label: "Email", type: "email", icon: Mail },
-                { name: "password", label: "Password", type: "password", icon: Lock }
+                { name: "fullname", label: "Full Name", type: "text", icon: Users, placeholder: "Enter Full Name" },
+                { name: "email", label: "Email", type: "email", icon: Mail, placeholder: "Email" },
+                { name: "password", label: "Password", type: "password", icon: Lock, placeholder: "Password" }
             ]}
             register={register}
             handleSubmit={handleSubmit}
             onSubmit={handleUpdateChairman}
+            err={err}
         />
     )
 }

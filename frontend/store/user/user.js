@@ -114,7 +114,7 @@ export const getAllTeachersInFaculty = createAsyncThunk(
                 { withCredentials: true }
             );
 
-            console.log(response.data.data);
+            // console.log(response.data.data);
             return response.data.data
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
@@ -122,6 +122,22 @@ export const getAllTeachersInFaculty = createAsyncThunk(
     }
 )
 
+// get all faculty chairmans
+export const getAllChairmansInFaculty = createAsyncThunk(
+    "user/getAllChairmansInFacutly",
+    async (facultyId, { rejectWithValue }) => {
+        try {
+            const response = await axios.get(`http://localhost:8000/api/v1/users/faculty/${facultyId}/chairmans`,
+                { withCredentials: true }
+            );
+
+            // console.log(response.data.data);
+            return response.data.data
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
 
 const initialState = {
     deans: [],
@@ -247,6 +263,18 @@ const userSlice = createSlice({
                     state.totalTeachers = action.payload.TotalTeachersInFaculty
             })
             .addCase(getAllTeachersInFaculty.rejected, (state, action) => {
+                state.status = 'rejected',
+                    state.error = action.payload
+            })
+            .addCase(getAllChairmansInFaculty.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(getAllChairmansInFaculty.fulfilled, (state, action) => {
+                state.status = 'succeeded',
+                    state.chairmans = action.payload.chairmansInFaculty,
+                    state.totalChairmans = action.payload.TotalChairmansInFaculty
+            })
+            .addCase(getAllChairmansInFaculty.rejected, (state, action) => {
                 state.status = 'rejected',
                     state.error = action.payload
             })

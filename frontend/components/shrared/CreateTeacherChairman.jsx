@@ -14,11 +14,11 @@ export default function CreateTeacherChairman() {
     const [error, setError] = useState("");
 
     const user = useSelector((state) => state.auth.user);
-    console.log(user);
+    // console.log(user);
 
     const handleUser = async (data) => {
         setError("");
-        // console.log(data);
+        console.log(data);
         try {
             const response = await axios.post('http://localhost:8000/api/v1/users/register', data, {
                 withCredentials: true
@@ -134,28 +134,28 @@ export default function CreateTeacherChairman() {
                                     </option>
                                 </select>
                             </div>)}
-                             {user?.role === 'chairman' && (<div className="space-y-2">
+                            {user?.role === 'dean' && (<div className="space-y-2">
                                 <label className="flex items-center gap-1.5">
                                     <BookOpen className="h-3.5 w-3.5 text-muted-foreground" /> Faculty
                                 </label>
                                 <select
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
                                     {...register("facultyId", { required: true })}
-                                    value={user?.department?.faculty?._id} disabled
+                                    value={user?.faculty?._id} disabled
                                 >
-                                    <option value={user?.department?.faculty?._id}>
-                                        {user?.department?.faculty?.facultyName}
+                                    <option value={user?.faculty?._id}>
+                                        {user?.faculty?.facultyName}
                                     </option>
                                 </select>
                             </div>)}
                         </div>
-                            <Button type="submit" className="w-full flex justify-center items-center sm:w-auto bg-[#1D293D] text-white hover:bg-[#162131] cursor-pointer">
-                                <Plus className="mr-2 h-4 w-4" />   {user?.role === "admin"
-                                    ? "Create Dean"
-                                    : user?.role === 'dean'
-                                        ? "Create Chairman"
-                                        : "Create Teacher"}
-                            </Button>
+                        <Button type="submit" className="w-full flex justify-center items-center sm:w-auto bg-[#1D293D] text-white hover:bg-[#162131] cursor-pointer">
+                            <Plus className="mr-2 h-4 w-4" />   {user?.role === "admin"
+                                ? "Create Dean"
+                                : user?.role === 'dean'
+                                    ? "Create Chairman"
+                                    : "Create Teacher"}
+                        </Button>
                     </form>
                 </div>
             </div>

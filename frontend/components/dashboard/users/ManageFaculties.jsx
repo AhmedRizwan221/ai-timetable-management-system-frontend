@@ -90,21 +90,27 @@ export default function ManageFaculties() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {faculties.map((fact, index) => (
-                                    <tr key={fact._id} className="border-t hover:bg-muted/40 transition-colors group">
-                                        <td className="px-6 py-4 text-sm">{index + 1}</td>
-                                        <td className="px-6 py-4 text-sm">{fact?.facultyName}</td>
-                                        <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">
-                                            <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0">{fact?.dean ? fact.dean?.fullName : "Not Assigned"}</div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="flex justify-end gap-3">
-                                                <button onClick={() => navigate(`/dashboard/superadmin/edit-faculties/${fact._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
-                                                <button onClick={() => facultyDeleteHandler(fact._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
-                                            </div>
+                                {faculties.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="4" className="py-12 text-center text-muted-foreground bg-card">No Faculties found.
                                         </td>
                                     </tr>
-                                ))}
+                                ) : (
+                                    faculties.map((fact, index) => (
+                                        <tr key={fact._id} className="border-t hover:bg-muted/40 transition-colors group">
+                                            <td className="px-6 py-4 text-sm">{index + 1}</td>
+                                            <td className="px-6 py-4 text-sm">{fact?.facultyName}</td>
+                                            <td className="px-6 py-4 text-sm">
+                                                <div className="text-muted-foreground font-medium">{fact?.dean ? fact.dean?.fullName : "Not Assigned"}</div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex justify-end gap-3">
+                                                    <button onClick={() => navigate(`/dashboard/superadmin/edit-faculties/${fact._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
+                                                    <button onClick={() => facultyDeleteHandler(fact._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )))}
                             </tbody>
                         </table>
                     </div>

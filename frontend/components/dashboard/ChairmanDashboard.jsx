@@ -15,7 +15,7 @@ function ChairmanDashboard() {
 
     const { user } = useSelector((state) => state.auth);
     const { timeTableSlot = [], error, totalSlots } = useSelector((state) => state.timetabelSlot);
-    // console.log(timeTableSlot);
+    console.log(timeTableSlot);
     const { totalTeachers } = useSelector((state) => state.user);
     const { totalCourses, courses } = useSelector((state) => state.course);
     // console.log(courses);
@@ -192,7 +192,8 @@ function ChairmanDashboard() {
                                                         </td>
                                                     );
                                                 })
-                                            }                                        </tr>
+                                            }
+                                        </tr>
                                     ))}
                                 </tbody>
                             </table>

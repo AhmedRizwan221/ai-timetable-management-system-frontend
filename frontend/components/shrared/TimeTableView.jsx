@@ -24,8 +24,6 @@ function TimeTableView({
     const [selectedYear, setSelectedYear] = useState(1);
     const [selectedSection, setSelectedSection] = useState("A");
 
-    // const { timeTableSlot = [], error, totalSlots } = useSelector((state) => state.timetabelSlot);
-
     // filter functionality
     const filteredTimeTable = useMemo(() => {
         if (!slots) return [];
