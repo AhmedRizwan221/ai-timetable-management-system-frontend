@@ -20,9 +20,7 @@ export const fetchDepartments = createAsyncThunk(
     "department/fetchAllDeptFaculty",
     async (facultyId, { rejectWithValue }) => {
         try {
-            if (!facultyId) {
-                return rejectWithValue("Faculty ID is required");
-            }
+            // console.log(facultyId);
             const response = await axios.get(`http://localhost:8000/api/v1/departments/allDepartments/${facultyId}/departments`, {
                 withCredentials: true
             })

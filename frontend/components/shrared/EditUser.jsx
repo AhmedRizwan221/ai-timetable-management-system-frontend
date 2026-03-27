@@ -5,7 +5,7 @@ import { Plus } from "lucide-react";
 export default function EditUser({
     title = "User",
     fields = [],
-    err={},
+    err = {},
     onSubmit,
     handleSubmit,
     register,
@@ -22,9 +22,9 @@ export default function EditUser({
                     <div className="container mx-auto max-w-4xl px-4 py-6">
                         <div className="flex items-center gap-3">
                             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
-                                <icon className="h-6 w-6 text-white" />
+                                {/* <icon className="h-6 w-6 text-white" /> */}
+                                {Icon && <Icon className="h-3.5 w-3.5 text-muted-foreground" />}
                             </div>
-                             {Icon && <Icon className="h-3.5 w-3.5 text-muted-foreground" />}
                             <h1 className="text-2xl font-bold">
                                 Edit {title} Details
                             </h1>

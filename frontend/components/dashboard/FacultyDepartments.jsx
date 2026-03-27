@@ -20,9 +20,10 @@ export default function FacultyDepartments() {
     // console.log(departments);
     return (
         <div className="px-4 py-6">
+            <h1 className="text-2xl font-semibold mb-4">All Departments</h1>
             <div className="flex flex-wrap gap-6">
                 {status === "loading" && <p>Loading Faculties...</p>}
-                {status === "failed" && <p>Error: {error}</p>}
+                {status === "failed" && <p>Error: {error.message}</p>}
                 {status === "succeeded" && departments.length > 0 ? (
                     departments.map((dept, index) =>
                         dept?._id ? (

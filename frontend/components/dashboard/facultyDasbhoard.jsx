@@ -3,13 +3,14 @@ import FacultyCard from "../layout/facultyCard";
 import { motion } from "framer-motion";
 
 export default function FacultyDashboard() {
-    const { faculties = [], error, status } = useSelector((state) => state.faculty)
+    const { faculties = [], error, status } = useSelector((state) => state.faculty);
     // console.log(faculties);
     return (
         <div className="px-4 py-6">
+            <h1 className="text-2xl font-semibold mb-4">All Faculties</h1>
             <div className="flex flex-wrap gap-6">
                 {status === "loading" && <p>Loading Faculties...</p>}
-                {status === "failed" && <p>Error: {error}</p>}
+                {status === "failed" && <p>Error: {error.message}</p>}
                 {status === "succeeded" && faculties.length > 0 ? (
                     faculties.map((fact, index) =>
                         fact?._id ? (

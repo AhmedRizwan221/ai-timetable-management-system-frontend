@@ -41,7 +41,27 @@ export const getAllCoursesInDept = createAsyncThunk(
     "course/getallCourse",
     async (deptId, { rejectWithValue }) => {
         try {
+            // console.log(deptId);
             const response = await axios.get(`http://localhost:8000/api/v1/courses/all-courses/${deptId}`, {
+                withCredentials: true
+            });
+
+            // console.log(response.data.data);
+
+            return response.data.data
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
+// get all courses in faculty
+export const getAllCoursesInFaculty = createAsyncThunk(
+    "course/getallCoursesInFaculty",
+    async (facultyId, { rejectWithValue }) => {
+        try {
+            // console.log(deptId);
+            const response = await axios.get(`http://localhost:8000/api/v1/courses/faculty/${facultyId}/courses`, {
                 withCredentials: true
             });
 
@@ -130,6 +150,18 @@ const courseSlice = createSlice({
                 state.courses = state.courses.filter((course) => course._id !== id)
             })
             .addCase(deleteCourse.rejected, (state, action) => {
+                state.status = 'rejected',
+                    state.error = action.payload
+            })
+            .addCase(getAllCoursesInFaculty.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(getAllCoursesInFaculty.fulfilled, (state, action) => {
+                state.status = 'succeeded',
+                    state.courses = action.payload.courses
+                state.totalCourses = action.payload.totalCourses
+            })
+            .addCase(getAllCoursesInFaculty.rejected, (state, action) => {
                 state.status = 'rejected',
                     state.error = action.payload
             })

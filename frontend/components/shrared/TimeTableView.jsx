@@ -26,15 +26,17 @@ function TimeTableView({
 
     // filter functionality
     const filteredTimeTable = useMemo(() => {
-        if (!slots) return [];
+        if (!timeTableSlot) return [];
 
-        return slots.filter((slot) => {
+        return timeTableSlot.filter((slot) => {
             // console.log(slot);
             const matchBatch = slot.batch?.batchName?.toLowerCase().trim() ===
                 selectedBatch.toLowerCase().trim();
             const matchSemester = Number(slot?.semester?.semesterNumber) === Number(selectedSemester);
             const matchYear = Number(slot?.semester?.studyYear) === Number(selectedYear);
-            const matchSection = slot.section?.sectionName.toLowerCase().trim() === selectedSection?.toLowerCase().trim();
+            const matchSection = slot.section
+                ? slot.section.sectionName.toLowerCase().trim() === selectedSection?.toLowerCase().trim()
+                : true;
 
             // console.log("Batch compare:", slot.batch?.batchName, selectedBatch);
 
@@ -170,25 +172,36 @@ function TimeTableView({
                                 </tr>
                             </thead>
                             <tbody>
-                                {Days.map((day) => (
-                                    <tr key={day}>
-                                        <td className="border border-black px-4 py-3 font-bold text-left">{day}</td>
-                                        {
-                                            timeSlots.map((time) => {
-                                                const slot = getSLot(day, time);
-                                                return (
-                                                    <td key={time} className="border border-black px-2 py-3 min-w-[120px]">
-                                                        {slot ? (
-                                                            <div className="whitespace-pre-line font-bold">
-                                                                {slot.type === 'theory' ? slot.course?.courseName : slot.course?.courseName + "(Lab)"}
-                                                            </div>
-                                                        ) : null}
-                                                    </td>
-                                                );
-                                            })
-                                        }
+                                {timeSlots.length === 0 ? (
+                                    <tr>
+                                        <td
+                                            colSpan={timeSlots.length + 1 || 2}
+                                            className="text-center py-6 font-semibold text-red-500"
+                                        >
+                                            No slots found
+                                        </td>
                                     </tr>
-                                ))}
+                                ) : (
+                                    Days.map((day) => (
+                                        <tr key={day}>
+                                            <td className="border border-black px-4 py-3 font-bold text-left">{day}</td>
+                                            {
+                                                timeSlots.map((time) => {
+                                                    const slot = getSLot(day, time);
+                                                    return (
+                                                        <td key={time} className="border border-black px-2 py-3 min-w-[120px]">
+                                                            {slot ? (
+                                                                <div className="whitespace-pre-line font-bold">
+                                                                    {slot.type === 'theory' ? slot.course?.courseName : slot.course?.courseName + "(Lab)"}
+                                                                </div>
+                                                            ) : null}
+                                                        </td>
+                                                    );
+                                                })
+
+                                            }
+                                        </tr>
+                                    )))}
                             </tbody>
                         </table>
                     </div>

@@ -18,7 +18,7 @@ function ChairmanDashboard() {
     console.log(timeTableSlot);
     const { totalTeachers } = useSelector((state) => state.user);
     const { totalCourses, courses } = useSelector((state) => state.course);
-    // console.log(courses);
+    // console.log(user);
 
     const Days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 
@@ -38,11 +38,14 @@ function ChairmanDashboard() {
 
         return timeTableSlot.filter((slot) => {
             // console.log(slot);
+            console.log(slot?.semester?.studyYear);
             const matchBatch = slot.batch?.batchName?.toLowerCase().trim() ===
                 selectedBatch.toLowerCase().trim();
             const matchSemester = Number(slot?.semester?.semesterNumber) === Number(selectedSemester);
             const matchYear = Number(slot?.semester?.studyYear) === Number(selectedYear);
-            const matchSection = slot.section?.sectionName.toLowerCase().trim() === selectedSection?.toLowerCase().trim();
+              const matchSection = slot.section
+            ? slot.section.sectionName.toLowerCase().trim() === selectedSection?.toLowerCase().trim()
+            : true;
 
             // console.log("Batch compare:", slot.batch?.batchName, selectedBatch);
 

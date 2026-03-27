@@ -1,29 +1,25 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { getFacultyAllTimeTableSlots } from "../../store/timetableSlot/timetableSlot";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllTeachersInFaculty } from "../../store/user/user";
+import { getAllTeachersInFaculty, getAllChairmansInFaculty } from "../../store/user/user";
 import TimeTableView from "../shrared/TimeTableView";
+import { getAllCoursesInFaculty } from "../../store/course/course";
 
 function DeanDashboard() {
     const dispatch = useDispatch();
 
     const { user } = useSelector((state) => state.auth);
-    // console.log(user);
-    const { totalSlots, timetabelSlot = [] } = useSelector((state) => state.timetabelSlot);
-    console.log(timetabelSlot);
+    const { totalSlots, timeTableSlot = [], error: TimeTableSlotError } = useSelector((state) => state.timetabelSlot);
     const { totalTeachers } = useSelector((state) => state.user);
-    // console.log(totalTeachers);
     const { totalChairmans = null, } = useSelector((state) => state.user);
-    // console.log(totalChairmans);
-
-    // console.log(user);
+    const { totalCourses, courses } = useSelector((state) => state.course);
 
     useEffect(() => {
         if (user) {
             dispatch(getFacultyAllTimeTableSlots(user?.faculty._id));
             dispatch(getAllTeachersInFaculty(user?.faculty._id));
-            // dispatch(getChairmans());
-            // dispatch(getAllCoursesInDept(user?.department?._id));
+            dispatch(getAllCoursesInFaculty(user?.faculty._id));
+            dispatch(getAllChairmansInFaculty(user?.faculty._id))
         }
     }, [dispatch, user]);
 
@@ -34,7 +30,8 @@ function DeanDashboard() {
             user={user}
             totalTeachers={totalTeachers}
             totalChairmans={totalChairmans}
-            timeTableSlot={timetabelSlot}
+            timeTableSlot={timeTableSlot}
+            totalCourses={totalCourses}
         />
     )
 }

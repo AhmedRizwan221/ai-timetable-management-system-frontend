@@ -1,4 +1,4 @@
-import { CalendarDays, Users, BookOpen, Layers, Plus, CalendarClock, Clock } from "lucide-react";
+import { CalendarDays, Users, BookOpen, Layers, Plus, CalendarClock, Clock, Building2 } from "lucide-react";
 import Button from "../shrared/Button";
 
 export default function TimeTableForm(
@@ -101,6 +101,20 @@ export default function TimeTableForm(
                                         {"Section" + " " + sect.sectionName + " " + sect.batch?.batchName} {sect?.department?.deptName}
                                     </option>
                                 ))}
+                            </select>
+                        </div>
+                         <div className="space-y-2">
+                            <label className="flex items-center gap-1.5">
+                                <Building2 className="h-3.5 w-3.5 text-muted-foreground" /> Faculty
+                            </label>
+                            <select
+                                className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
+                                {...register("facultyId", { required: mode === 'create' })}
+                                defaultValue={user?.department?.faculty?._id} disabled
+                            >
+                                <option value={user?.department?.faculty?._id}>
+                                    {user?.department?.faculty?.facultyName}
+                                </option>
                             </select>
                         </div>
                     </div>

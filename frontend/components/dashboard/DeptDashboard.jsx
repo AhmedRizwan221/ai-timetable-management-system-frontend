@@ -2,20 +2,21 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDepartments } from "../../store/dept/departmentSlice";
 import DepartmentCard from "../layout/DepartmentCard";
-import { getUser } from "../../store/auth/authSlice";
 
 export default function DeptDashboard() {
   const dispatch = useDispatch();
-  const { user, status } = useSelector((state) => state.auth);
-
-  const {departments: [], errpr: departmentError } = useSelector((state) => state.department);
+  const { user } = useSelector((state) => state.auth);
+  // console.log(user);
+  const { departments = [], errpr: departmentError } = useSelector((state) => state.department);
   // console.log("Departments:", departments);
 
 
 
   useEffect(() => {
-    dispatch(fetchDepartments())
-  }, [dispatch])
+    if(user) {
+      dispatch(fetchDepartments(user.faculty?._id));
+    }
+  }, [dispatch, user]);
 
   return (
     <div className="p-6">
@@ -24,7 +25,7 @@ export default function DeptDashboard() {
         {departments && departments.length > 0 ?
           departments.map((dept) => (
             <DepartmentCard key={dept._id} department={dept} />
-          )) : "No department is found "}
+          )) : "No departments found "}
       </div>
     </div>
   );
