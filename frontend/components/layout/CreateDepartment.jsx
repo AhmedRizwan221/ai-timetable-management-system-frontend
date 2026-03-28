@@ -5,7 +5,8 @@ import { useForm } from "react-hook-form";
 import { Input, Button } from "../index";
 import { useNavigate } from "react-router-dom";
 import { fetchFaculties } from "../../store/faculty/facultySlice.js";
-import { Building2, CalendarDays, Users, Plus } from "lucide-react"
+import { Building2, CalendarDays, Users, Plus } from "lucide-react";
+import {getChairmans} from "../../store/user/user.js";
 
 
 export default function CreateDepartment() {
@@ -13,14 +14,17 @@ export default function CreateDepartment() {
     const { register, handleSubmit, reset } = useForm();
     const navigate = useNavigate();
 
-    const { chairmans = [], error: chairmanError, status: chairmanStatus } = useSelector((state) => state.user);
+    const { chairmans = [], error: chairmanError } = useSelector((state) => state.user);
     const { faculties = [], error: facultyError, status: facultyStatus } = useSelector((state) => state.faculty)
     const { error: deptError } = useSelector((state) => state.department);
     const { user } = useSelector((state) => state.auth);
 
+    // console.log(chairmans);
+
     useEffect(() => {
         if (user) {
             dispatch(fetchFaculties());
+            dispatch(getChairmans());
         }
     }, [dispatch, user])
 
@@ -95,18 +99,15 @@ export default function CreateDepartment() {
                             </div>
                             <div className="space-y-2">
                                 <label className="flex items-center gap-1.5">
-                                    <Building2 className="h-3.5 w-3.5 text-muted-foreground" /> Select Faculty
+                                    <Building2 className="h-3.5 w-3.5 text-muted-foreground" />  Faculty
                                 </label>
                                 <select
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
-                                    {...register("facultyId", { required: true })}
+                                    {...register("facultyId")} disabled
                                 >
-                                    <option value="">Select Faculty</option>
-                                    {faculties.map((fact) => (
-                                        <option key={fact._id} value={fact._id}>
-                                            {fact.facultyName}
-                                        </option>
-                                    ))}
+                                    <option value={user?.faculty?._id}>
+                                        {user?.faculty?.facultyName}
+                                    </option>
                                 </select>
                             </div>
                         </div>

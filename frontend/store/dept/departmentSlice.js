@@ -8,7 +8,7 @@ export const departmentCreate = createAsyncThunk(
             const response = await axios.post('http://localhost:8000/api/v1/departments/create', deptData, {
                 withCredentials: true
             })
-            return response.data.data.departments;
+            return response.data.data.createdDepartment;
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -18,14 +18,21 @@ export const departmentCreate = createAsyncThunk(
 // fetch departments in faculty
 export const fetchDepartments = createAsyncThunk(
     "department/fetchAllDeptFaculty",
-    async (facultyId, { rejectWithValue }) => {
+    async ({ facultyId, page, limit }, { rejectWithValue }) => {
         try {
             // console.log(facultyId);
             const response = await axios.get(`http://localhost:8000/api/v1/departments/allDepartments/${facultyId}/departments`, {
+                params: {
+                    page,
+                    limit,
+                    sortBy: "createdAt",
+                    sortType: "desc"
+                }
+            }, {
                 withCredentials: true
             })
-            // console.log(response.data.data.departments);
-            return response.data.data.departments;
+            // console.log(response.data.data);
+            return response.data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -99,11 +106,19 @@ export const departmentDelete = createAsyncThunk(
 
 const initialState = {
     departments: [],
+    totalDepartments: null,
     department: null,
     teachers: [],
     courses: [],
     status: 'idle',
-    error: null
+    error: null,
+
+    // pagination data 
+    totalPages: 0,
+    currentPage: 1,
+    limit: 10,
+    hasNextPage: false,
+    hasPrevPage: false
 }
 
 const departmentSlice = createSlice({
@@ -125,7 +140,15 @@ const departmentSlice = createSlice({
             })
             .addCase(fetchDepartments.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.departments = action.payload;
+                state.departments = action.payload.facultyALlDepartments;
+                state.totalDepartments = action.payload.totalDepartmentsInFaculty;
+                // pagination data 
+                state.totalPages = action.payload.pagination.totalPages;
+                state.currentPage = action.payload.pagination.currentPage;
+                state.hasNextPage = action.payload.pagination.hasNextPage;
+                state.hasPrevPage = action.payload.pagination.hasPrevPage;
+                state.limit = action.payload.pagination.limit
+
             })
             .addCase(fetchDepartments.rejected, (state, action) => {
                 state.status = "failed";

@@ -125,14 +125,39 @@ export const getAllTeachersInFaculty = createAsyncThunk(
 // get all faculty chairmans
 export const getAllChairmansInFaculty = createAsyncThunk(
     "user/getAllChairmansInFacutly",
-    async (facultyId, { rejectWithValue }) => {
+    async ({ facultyId, page, limit }, { rejectWithValue }) => {
         try {
+            // console.log(facultyId);
             const response = await axios.get(`http://localhost:8000/api/v1/users/faculty/${facultyId}/chairmans`,
+                {
+                    params: {
+                        page,
+                        limit,
+                        sortBy: "createdAt",
+                        sortType: "desc"
+                    }
+                },
                 { withCredentials: true }
             );
 
             // console.log(response.data.data);
             return response.data.data
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
+// get chairmans count in faculty
+export const getAllChairmansCountInFaculty = createAsyncThunk(
+    "user/totalChairmans",
+    async (facultyId, { rejectWithValue }) => {
+        try {
+            const response = await axios.get(`http://localhost:8000/api/v1/users/totalChairmans/${facultyId}`, { withCredentials: true });
+
+            // console.log(response.data.data);
+
+            return response.data.data.totalChairmans
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -147,7 +172,14 @@ const initialState = {
     totalChairmans: null,
     totalTeachers: null,
     status: "idle",
-    error: null
+    error: null,
+
+    // pagination data 
+    totalPages: 0,
+    currentPage: 1,
+    limit: 10,
+    hasNextPage: false,
+    hasPrevPage: false
 }
 
 const userSlice = createSlice({
@@ -272,9 +304,26 @@ const userSlice = createSlice({
             .addCase(getAllChairmansInFaculty.fulfilled, (state, action) => {
                 state.status = 'succeeded',
                     state.chairmans = action.payload.chairmansInFaculty,
-                    state.totalChairmans = action.payload.TotalChairmansInFaculty
+                    state.totalChairmans = action.payload.TotalChairmansInFaculty,
+                    // pagination data
+                    state.totalPages = action.payload.pagination.totalPages,
+                    state.currentPage = action.payload.pagination.currentPage,
+                    state.limit = action.payload.pagination.limit,
+                    state.hasNextPage = action.payload.pagination.hasNextPage,
+                    state.hasPrevPage = action.payload.pagination.hasPrevPage
             })
             .addCase(getAllChairmansInFaculty.rejected, (state, action) => {
+                state.status = 'rejected',
+                    state.error = action.payload
+            })
+            .addCase(getAllChairmansCountInFaculty.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(getAllChairmansCountInFaculty.fulfilled, (state, action) => {
+                state.status = 'succeeded',
+                    state.totalChairmans = action.payload
+            })
+            .addCase(getAllChairmansCountInFaculty.rejected, (state, action) => {
                 state.status = 'rejected',
                     state.error = action.payload
             })

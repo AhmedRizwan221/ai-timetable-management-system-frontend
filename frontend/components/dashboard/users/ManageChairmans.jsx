@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearError, deleteUser, getAllChairmansInFaculty } from "../../../store/user/user.js";
 import { useNavigate } from "react-router-dom";
-import { Users, Search, User, Pencil, Trash } from "lucide-react";
+import { Users, Search, User, Pencil, Trash, ChevronLeft, ChevronRight } from "lucide-react";
 import Input from "../../shrared/Input.jsx";
 
 
@@ -10,20 +10,25 @@ export default function ManageChairmans() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [search, setSearch] = useState("");
+    const [page, setPage] = useState(1);
 
 
-    const { user, status } = useSelector((state) => state.auth);
+    const { user } = useSelector((state) => state.auth);
     // console.log(user, user?.role);
 
-    const { chairmans = [], error, totalTeachers } = useSelector((state) => state.user);
-    // console.log(chairmans);
+    const { chairmans = [], error, totalPages, currentPage, limit, hasPrevPage, hasNextPage } = useSelector((state) => state.user);
+    // console.log(chairmans, totalPages, currentPage, limit, hasNextPage, hasPrevPage);
 
     useEffect(() => {
         if (user) {
-            dispatch(getAllChairmansInFaculty(user?.faculty?._id));
+            dispatch(getAllChairmansInFaculty({
+                facultyId: user?.faculty?._id,
+                page: page,
+                limit: 5
+            }));
             dispatch(clearError());
         }
-    }, [dispatch, user]);
+    }, [dispatch, user, page]);
 
     const filterUsers = chairmans.filter((teach) =>
         teach?.fullName?.toLowerCase().includes(search.trim().toLowerCase()) ||
@@ -32,9 +37,14 @@ export default function ManageChairmans() {
 
     // delete button handler 
     const deleteHandler = (id) => {
-        const deleteConfrim = window.confirm("Are you sure to delete Chairman?");
-        if (deleteConfrim) {
-            dispatch(deleteUser(id))
+        try {
+            const deleteConfrim = window.confirm("Are you sure to delete Chairman?");
+            if (deleteConfrim) {
+                dispatch(deleteUser(id))
+            }
+            
+        } catch (error) {
+            return error
         }
     }
 
@@ -123,7 +133,6 @@ export default function ManageChairmans() {
                                     <th className="px-6 py-3 font-semibold text-sm">Name</th>
                                     <th className="px-6 py-3 font-semibold text-sm">Email</th>
                                     <th className="px-6 py-3 font-semibold text-sm">Faculty</th>
-                                    <th className="px-6 py-3 font-semibold text-sm">Status</th>
                                     <th className="px-6 py-3 text-right font-semibold text-sm">Actions</th>
                                 </tr>
                             </thead>
@@ -144,11 +153,11 @@ export default function ManageChairmans() {
                                                 </td>
                                                 <td className="px-6 py-4 text-muted-foreground text-sm truncate max-w-[150px] lg:max-w-none">{chair.email}</td>
                                                 <td className="px-6 py-4 text-sm">{chair.facultyChairmans?.facultyName || "Not Assigned"}</td>
-                                                <td className="px-6 py-4">
+                                                {/* <td className="px-6 py-4">
                                                     <span className={`px-2 py-1 text-xs rounded-md font-medium ${chair.facultyChairmans ? "bg-[#1D293D] text-white hover:bg-[#162131]" : "bg-gray-100 text-gray-500"}`}>
                                                         {chair.facultyChairmans ? "Active" : "InActive"}
                                                     </span>
-                                                </td>
+                                                </td> */}
                                                 <td className="px-6 py-4">
                                                     <div className="flex justify-end gap-3">
                                                         <button onClick={() => navigate(`/dashboard/dean/edit-chairmans/${chair._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
@@ -159,6 +168,55 @@ export default function ManageChairmans() {
                                         )))}
                             </tbody>
                         </table>
+                    </div>
+                    <div className="flex items-center justify-between border-t bg-white px-4 py-3 sm:px-6 mt-4">
+                        <div className="flex flex-1 justify-between sm:hidden">
+                            {/* Mobile View: Simple Buttons */}
+                            <button
+                                disabled={!hasPrevPage}
+                                onClick={() => setPage(currentPage - 1)}
+                                className="relative inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                Previous
+                            </button>
+                            <button
+                                disabled={!hasNextPage}
+                                onClick={() => setPage(currentPage + 1)}
+                                className="relative ml-3 inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                Next
+                            </button>
+                        </div>
+
+                        <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+                            <div>
+                                <p className="text-sm text-slate-700">
+                                    Showing Page <span className="font-semibold">{currentPage}</span> of{' '}
+                                    <span className="font-semibold">{totalPages}</span>
+                                </p>
+                            </div>
+
+                            <div className="flex space-x-2">
+                                {/* Desktop View: Icons with Text */}
+                                <button
+                                    onClick={() => setPage(currentPage - 1)}
+                                    disabled={!hasPrevPage}
+                                    className="flex items-center px-4 py-2 text-sm font-medium text-slate-600 bg-[#1D293D] text-white rounded-lg hover:bg-[#162131] transition-colors duration-200 disabled:opacity-40 disabled:hover:bg-slate-100 disabled:hover:text-slate-600 cursor-pointer disabled:cursor-not-allowed"
+                                >
+                                    <ChevronLeft className="w-4 h-4 mr-1" />
+                                    Previous
+                                </button>
+
+                                <button
+                                    onClick={() => setPage(currentPage + 1)}
+                                    disabled={!hasNextPage}
+                                    className="flex items-center px-4 py-2 text-sm font-medium text-slate-600 bg-[#1D293D] text-white rounded-lg hover:bg-[#162131] transition-colors duration-200 disabled:opacity-40 disabled:hover:bg-slate-100 disabled:hover:text-slate-600 cursor-pointer disabled:cursor-not-allowed"
+                                >
+                                    Next
+                                    <ChevronRight className="w-4 h-4 ml-1" />
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
