@@ -17,7 +17,7 @@ function DepartmentDetails() {
     // console.log(departments);
 
     const { courses = [] } = useSelector((state) => state.course);
-    console.log(courses);
+    // console.log(courses);
 
     const { teachers = [], error: TeacherError, totalTeachers } = useSelector((state) => state.user);
     // console.log(teachers, totalTeachers);

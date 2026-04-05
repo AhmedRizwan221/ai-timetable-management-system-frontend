@@ -18,6 +18,7 @@ export default function ManageChairmans() {
 
     const { chairmans = [], error, totalPages, currentPage, limit, hasPrevPage, hasNextPage } = useSelector((state) => state.user);
     // console.log(chairmans, totalPages, currentPage, limit, hasNextPage, hasPrevPage);
+    // console.log(chairmans);
 
     useEffect(() => {
         if (user) {
@@ -34,6 +35,8 @@ export default function ManageChairmans() {
         teach?.fullName?.toLowerCase().includes(search.trim().toLowerCase()) ||
         teach?.email?.toLowerCase().includes(search.trim().toLowerCase())
     )
+
+    // console.log(filterUsers);
 
     // delete button handler 
     const deleteHandler = (id) => {
@@ -152,12 +155,7 @@ export default function ManageChairmans() {
                                                     {chair.fullName}
                                                 </td>
                                                 <td className="px-6 py-4 text-muted-foreground text-sm truncate max-w-[150px] lg:max-w-none">{chair.email}</td>
-                                                <td className="px-6 py-4 text-sm">{chair.facultyChairmans?.facultyName || "Not Assigned"}</td>
-                                                {/* <td className="px-6 py-4">
-                                                    <span className={`px-2 py-1 text-xs rounded-md font-medium ${chair.facultyChairmans ? "bg-[#1D293D] text-white hover:bg-[#162131]" : "bg-gray-100 text-gray-500"}`}>
-                                                        {chair.facultyChairmans ? "Active" : "InActive"}
-                                                    </span>
-                                                </td> */}
+                                                <td className="px-6 py-4 text-sm">{user.faculty?.facultyName || "Not Assigned"}</td>
                                                 <td className="px-6 py-4">
                                                     <div className="flex justify-end gap-3">
                                                         <button onClick={() => navigate(`/dashboard/dean/edit-chairmans/${chair._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>

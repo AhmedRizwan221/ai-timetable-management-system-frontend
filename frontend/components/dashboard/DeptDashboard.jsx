@@ -21,7 +21,7 @@ export default function DeptDashboard() {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-semibold mb-4">All Departments</h1>
-      <div className="flex flex-wrap gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
         {departments && departments.length > 0 ?
           departments.map((dept) => (
             <DepartmentCard key={dept._id} department={dept} />

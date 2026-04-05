@@ -14,7 +14,6 @@ function DeanDashboard() {
     const { totalChairmans = null, } = useSelector((state) => state.user);
     const { totalCourses } = useSelector((state) => state.course);
 
-
     useEffect(() => {
         if (user) {
             dispatch(getFacultyAllTimeTableSlots(user?.faculty._id));

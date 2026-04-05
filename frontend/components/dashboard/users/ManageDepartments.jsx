@@ -15,7 +15,7 @@ export default function ManageDepartments() {
     const { user } = useSelector((state) => state.auth);
     // console.log(user);
     const { departments = [], error, totalPages, currentPage, limit, hasPrevPage, hasNextPage } = useSelector((state) => state.department);
-    console.log(departments);
+    // console.log(departments);
 
     useEffect(() => {
         if (user) {

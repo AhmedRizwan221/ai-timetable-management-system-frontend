@@ -1,7 +1,4 @@
-import React, { useMemo, useState } from "react";
-import { Pencil, Trash } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useMemo, useState, useEffect } from "react";
 import { GraduationCap, FileDown, Users, CalendarDays } from "lucide-react"
 // import Button from "../shrared/Button";
 
@@ -15,14 +12,17 @@ function TimeTableView({
     totalChairmans,
     timeTableSlot = []
 }) {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    // console.log(user);
+
 
     const [selectedBatch, setSelectedBatch] = useState("morning");
     const [selectedSemester, setSelectedSemester] = useState(1);
     const [selectedYear, setSelectedYear] = useState(1);
     const [selectedSection, setSelectedSection] = useState("A");
+    const [selectedDepartment, setSelectedDepartment] = useState();
+    // console.log(selectedDepartment);
+
+
+
 
     // filter functionality
     const filteredTimeTable = useMemo(() => {
@@ -37,18 +37,20 @@ function TimeTableView({
             const matchSection = slot.section
                 ? slot.section.sectionName.toLowerCase().trim() === selectedSection?.toLowerCase().trim()
                 : true;
-
-            // console.log("Batch compare:", slot.batch?.batchName, selectedBatch);
+            const matchDepartment = slot?.department?.deptName === selectedDepartment;
+            // console.log("department compare:", slot?.department?.deptName);
 
             // console.log({
             //     matchBatch,
             //     matchSemester,
             //     matchYear,
-            //     matchSection
+            //     matchSection,
+            //     matchDepartment
             // });
-            return matchBatch && matchSemester && matchYear && matchSection;
+            return matchBatch && matchSemester && matchYear && matchSection && matchDepartment && new Map(timeTableSlot.map((item) => [item?.course?.courseName, item])).values();
         });
-    }, [timeTableSlot, selectedBatch, selectedSemester, selectedYear, selectedSection]);
+        
+    }, [timeTableSlot, selectedBatch, selectedSemester, selectedYear, selectedSection, selectedDepartment]);
     // console.log(filteredTimeTable);
 
 
@@ -66,10 +68,17 @@ function TimeTableView({
         );
     }
 
-    const uniqueCourses = Array.from(
-        new Map(timeTableSlot.map((item) => [item?.course?.courseName, item])).values()
-    );
 
+    const uniqueDepartment = Array.from(
+        new Map(timeTableSlot.map((timetable) => [timetable?.department?.deptName, timetable])).values()
+    )
+    // console.log("Unique departments", uniqueDepartment)
+
+    useEffect(() => {
+        if (uniqueDepartment.length > 0 && !selectedDepartment) {
+            setSelectedDepartment(uniqueDepartment[0]?.department?.deptName);
+        }
+    }, [uniqueDepartment, selectedDepartment]);
 
     return (
         <div className="bg-white border border-gray-200 rounded-lg">
@@ -94,7 +103,7 @@ function TimeTableView({
                 </button>
             </header>
             <main className="p-4">
-                <div className="flex items-center justify-between gap-2">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
                     <FilterSelect
                         label="Batch"
                         value={selectedBatch}
@@ -118,6 +127,12 @@ function TimeTableView({
                         value={selectedSection}
                         onChange={(e) => setSelectedSection(e.target.value)}
                         options={['A', 'B'].map(s => ({ val: s, lab: `Section ${s}` }))}
+                    />
+                    <FilterSelect
+                        label="Department"
+                        value={selectedDepartment}
+                        onChange={(e) => setSelectedDepartment(e.target.value)}
+                        options={uniqueDepartment.map(s => ({ val: s.department?.deptName, lab: `Department ${s.department?.deptName}` }))}
                     />
                 </div>
 
@@ -157,8 +172,10 @@ function TimeTableView({
                         </div>
                     </div>
                 </div>
+
                 <div className="w-full space-y-8 p-4 bg-white">
                     <div className="overflow-x-auto">
+                        {/* <h1>Department {dept} Semester {selectedSemester} Year {selectedYear}</h1> */}
                         <table className="min-w-full border-collapse border border-black text-center text-sm">
                             <thead>
                                 <tr className="bg-white">
@@ -182,6 +199,7 @@ function TimeTableView({
                                         </td>
                                     </tr>
                                 ) : (
+
                                     Days.map((day) => (
                                         <tr key={day}>
                                             <td className="border border-black px-4 py-3 font-bold text-left">{day}</td>
@@ -217,7 +235,7 @@ function TimeTableView({
                                 </tr>
                             </thead>
                             <tbody>
-                                {uniqueCourses.map((timetable, idx) => (
+                                {filteredTimeTable.map((timetable, idx) => (
                                     <tr key={idx}>
                                         <td className="border border-black px-2 py-1 font-bold">{String(idx + 1).padStart(2, '0')}</td>
                                         <td className="border border-black px-2 py-1 font-medium">{timetable?.course?.courseName}</td>
