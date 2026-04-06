@@ -1,24 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteUser, getDeans } from "../../../store/user/user.js";
+import { deleteUser, getDeans, clearError } from "../../../store/user/user.js";
 import { useNavigate } from "react-router-dom";
-import { Users, Search, User, Pencil, Trash } from "lucide-react";
+import { Users, Search, User, Pencil, Trash, ChevronLeft, ChevronRight } from "lucide-react";
 import Input from "../../shrared/Input.jsx";
 
 export default function ManageDeans() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [search, setSearch] = useState("");
+    const [page, setPage] = useState(1);
 
 
     const { user } = useSelector((state) => state.auth);
-    const { deans = [], error, totalDeans } = useSelector((state) => state.user);
+    const { deans = [], error, totalDeans, totalPages, currentPage, limit, hasPrevPage, hasNextPage } = useSelector((state) => state.user);
 
     useEffect(() => {
         if (user?.role === 'admin') {
-            dispatch(getDeans());
+            dispatch(getDeans({
+                page: page,
+                limit: 5
+            }));
+            dispatch(clearError());
         }
-    }, [dispatch])
+    }, [dispatch, user, page])
 
 
     const filterUsers = deans.filter((dean) =>
@@ -155,6 +160,55 @@ export default function ManageDeans() {
                                 )}
                             </tbody>
                         </table>
+                    </div>
+                    <div className="flex items-center justify-between border-t bg-white px-4 py-3 sm:px-6 mt-4">
+                        <div className="flex flex-1 justify-between sm:hidden">
+                            {/* Mobile View: Simple Buttons */}
+                            <button
+                                disabled={!hasPrevPage}
+                                onClick={() => setPage(currentPage - 1)}
+                                className="relative inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                Previous
+                            </button>
+                            <button
+                                disabled={!hasNextPage}
+                                onClick={() => setPage(currentPage + 1)}
+                                className="relative ml-3 inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                Next
+                            </button>
+                        </div>
+
+                        <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+                            <div>
+                                <p className="text-sm text-slate-700">
+                                    Showing Page <span className="font-semibold">{currentPage}</span> of{' '}
+                                    <span className="font-semibold">{totalPages}</span>
+                                </p>
+                            </div>
+
+                            <div className="flex space-x-2">
+                                {/* Desktop View: Icons with Text */}
+                                <button
+                                    onClick={() => setPage(currentPage - 1)}
+                                    disabled={!hasPrevPage}
+                                    className="flex items-center px-4 py-2 text-sm font-medium text-slate-600 bg-[#1D293D] text-white rounded-lg hover:bg-[#162131] transition-colors duration-200 disabled:opacity-40 disabled:hover:bg-slate-100 disabled:hover:text-slate-600 cursor-pointer disabled:cursor-not-allowed"
+                                >
+                                    <ChevronLeft className="w-4 h-4 mr-1" />
+                                    Previous
+                                </button>
+
+                                <button
+                                    onClick={() => setPage(currentPage + 1)}
+                                    disabled={!hasNextPage}
+                                    className="flex items-center px-4 py-2 text-sm font-medium text-slate-600 bg-[#1D293D] text-white rounded-lg hover:bg-[#162131] transition-colors duration-200 disabled:opacity-40 disabled:hover:bg-slate-100 disabled:hover:text-slate-600 cursor-pointer disabled:cursor-not-allowed"
+                                >
+                                    Next
+                                    <ChevronRight className="w-4 h-4 ml-1" />
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

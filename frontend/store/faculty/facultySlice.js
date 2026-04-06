@@ -21,13 +21,21 @@ export const facultyCreate = createAsyncThunk(
 // fetch all faculties 
 export const fetchFaculties = createAsyncThunk(
     "faculties/all-faculties",
-    async (_, { rejectWithValue }) => {
+    async ({ page, limit }, { rejectWithValue }) => {
         try {
-            const response = await axios.get('http://localhost:8000/api/v1/faculties/all-faculties', {
+            const response = await axios.get('http://localhost:8000/api/v1/faculties/all-faculties',
+                {
+                    params: {
+                        page,
+                        limit,
+                        sortBy: "createdAt",
+                        sortType: "desc"
+                    }
+                }, {
                 withCredentials: true
             })
-            // console.log(response);
-            return response.data.data.faculties
+            // console.log(response.data.data);
+            return response.data.data
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -55,7 +63,7 @@ export const deleteFaculty = createAsyncThunk(
     "faculties/delete",
     async (facultyId, { rejectWithValue }) => {
         try {
-            await axios.delete(`http://localhost:8000/api/v1/faculties/delete/${facultyId}`, {withCredentials: true});
+            await axios.delete(`http://localhost:8000/api/v1/faculties/delete/${facultyId}`, { withCredentials: true });
 
             return facultyId
 
@@ -68,7 +76,14 @@ export const deleteFaculty = createAsyncThunk(
 const initialState = {
     faculties: [],
     status: 'idle',
-    error: null
+    error: null,
+
+    // pagination data 
+    totalPages: 0,
+    currentPage: 1,
+    limit: 10,
+    hasNextPage: false,
+    hasPrevPage: false
 }
 
 const facultySlice = createSlice({
@@ -98,11 +113,20 @@ const facultySlice = createSlice({
             })
             .addCase(fetchFaculties.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.faculties = action.payload;  // store data here
+                state.faculties = action.payload.faculties;  // store data here
+
+                  // pagination data 
+                state.totalPages = action.payload.pagination.totalPages;
+                state.currentPage = action.payload.pagination.currentPage;
+                state.hasNextPage = action.payload.pagination.hasNextPage;
+                state.hasPrevPage = action.payload.pagination.hasPrevPage;
+                state.limit = action.payload.pagination.limit
             })
             .addCase(fetchFaculties.rejected, (state, action) => {
                 state.status = "failed";
-                state.error = action.payload;
+                state.error = action.payload.faculties;
+
+
             })
             .addCase(facultyUpdate.pending, (state) => {
                 state.status = "loading";

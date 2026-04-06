@@ -4,12 +4,20 @@ import axios from "axios";
 // fetch deans 
 export const getDeans = createAsyncThunk(
     "user/deans",
-    async (_, { rejectWithValue }) => {
+    async ({ page, limit } = {}, { rejectWithValue }) => {
         try {
             const response = await axios.get('http://localhost:8000/api/v1/users/deans',
-                { withCredentials: true }
+                {
+                    params: {
+                        page,
+                        limit,
+                        sortBy: "createdAt",
+                        sortType: "desc"
+                    },
+                    withCredentials: true
+                }
             );
-            // console.log(response);
+            console.log(response.data.data);
             // console.log(response.data.data.totalDeans);
             return response.data.data
         } catch (error) {
@@ -135,9 +143,9 @@ export const getAllChairmansInFaculty = createAsyncThunk(
                         limit,
                         sortBy: "createdAt",
                         sortType: "desc"
-                    }
-                },
-                { withCredentials: true }
+                    },
+                    withCredentials: true
+                }
             );
 
             // console.log(response.data.data);
@@ -158,6 +166,22 @@ export const getAllChairmansCountInFaculty = createAsyncThunk(
             // console.log(response.data.data);
 
             return response.data.data.totalChairmans
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
+// get all deans 
+export const getAlDeans = createAsyncThunk(
+    "user/getAllDeans",
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await axios.get("http://localhost:8000/api/v1/users/allDeans", { withCredentials: true });
+
+            // console.log(response.data.data)
+
+            return response.data.data
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -198,9 +222,27 @@ const userSlice = createSlice({
             .addCase(getDeans.fulfilled, (state, action) => {
                 state.status = 'succeeded',
                     state.deans = action.payload.deans,
-                    state.totalDeans = action.payload.totalDeans
+                    state.totalDeans = action.payload.totalDeans,
+                    // pagination data
+                    state.totalPages = action.payload.pagination.totalPages,
+                    state.currentPage = action.payload.pagination.currentPage,
+                    state.limit = action.payload.pagination.limit,
+                    state.hasNextPage = action.payload.pagination.hasNextPage,
+                    state.hasPrevPage = action.payload.pagination.hasPrevPage
             })
             .addCase(getDeans.rejected, (state, action) => {
+                state.status = 'Failed',
+                    state.error = action.payload
+            })
+            // get all deans without pagination
+              .addCase(getAlDeans.pending, (state) => {
+                state.status = 'loading'
+            })
+            .addCase(getAlDeans.fulfilled, (state, action) => {
+                state.status = 'succeeded',
+                    state.deans = action.payload.allDeans
+            })
+            .addCase(getAlDeans.rejected, (state, action) => {
                 state.status = 'Failed',
                     state.error = action.payload
             })

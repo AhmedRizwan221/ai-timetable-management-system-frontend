@@ -3,26 +3,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import Input from "../components/shrared/Input.jsx";
 import Button from "../components/shrared/Button.jsx";
-import { getDeans } from "../store/user/user.js";
-import { Plus, GraduationCap, Users } from "lucide-react";
+import { getAlDeans } from "../store/user/user.js";
+import { Plus, GraduationCap, Users, ArrowLeft } from "lucide-react";
 import { facultyUpdate } from "../store/faculty/facultySlice.js";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function EditFaculty() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { register, handleSubmit, reset } = useForm();
     const { facultyId } = useParams();
 
-    useEffect(() => {
-        dispatch(getDeans());
-    }, [dispatch])
-
     // redux level fetching 
     const { deans = [], error, status } = useSelector((state) => state.user);
-    // console.log(deans);
-
     const { error: facultyError } = useSelector((state) => state.faculty);
-    // send data to redux to create a faculty
+
+    useEffect(() => {
+        dispatch(getAlDeans());
+    }, [dispatch])
+
+
     const handleUpdateFaculty = async (data) => {
         try {
             await dispatch(facultyUpdate({
@@ -39,12 +39,20 @@ export default function EditFaculty() {
             return error
         }
     };
+
+
     return (
         <div className="min-h-screen bg-muted/30 py-10 px-4 sm:px-6 ">
             <div className="bg-white border border-gray-200 rounded-lg ">
                 <div className=" bg-card">
                     <div className="container mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8 border-b">
                         <div className="flex items-center gap-3">
+                            <button
+                                onClick={() => navigate('/dashboard/superadmin/manage-faculties')}
+                                className="hidden md:inline-flex p-1.5 rounded-full border border-gray-300 bg-[#1D293D] text-white hover:bg-[#162131] cursor-pointer"
+                            >
+                                <ArrowLeft className="h-8 w-8" />
+                            </button>
                             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
                                 <GraduationCap className="h-8 w-8 text-primary-foreground" />
                             </div>
