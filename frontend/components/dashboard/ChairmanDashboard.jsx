@@ -15,7 +15,7 @@ function ChairmanDashboard() {
 
     const { user } = useSelector((state) => state.auth);
     const { timeTableSlot = [], error, totalSlots } = useSelector((state) => state.timetabelSlot);
-    console.log(timeTableSlot);
+    // console.log(timeTableSlot);
     const { totalTeachers } = useSelector((state) => state.user);
     const { totalCourses, courses } = useSelector((state) => state.course);
     // console.log(user);
@@ -38,14 +38,14 @@ function ChairmanDashboard() {
 
         return timeTableSlot.filter((slot) => {
             // console.log(slot);
-            console.log(slot?.semester?.studyYear);
+            // console.log(slot?.semester?.studyYear);
             const matchBatch = slot.batch?.batchName?.toLowerCase().trim() ===
                 selectedBatch.toLowerCase().trim();
             const matchSemester = Number(slot?.semester?.semesterNumber) === Number(selectedSemester);
             const matchYear = Number(slot?.semester?.studyYear) === Number(selectedYear);
-              const matchSection = slot.section
-            ? slot.section.sectionName.toLowerCase().trim() === selectedSection?.toLowerCase().trim()
-            : true;
+            const matchSection = slot.section
+                ? slot.section.sectionName.toLowerCase().trim() === selectedSection?.toLowerCase().trim()
+                : true;
 
             // console.log("Batch compare:", slot.batch?.batchName, selectedBatch);
 
@@ -74,12 +74,43 @@ function ChairmanDashboard() {
         );
     }
 
-    // unique course
-    const uniqueCourses = Array.from(
-        new Map(timeTableSlot.map((item) => [item?.course?.courseName, item])).values()
-    );
+    // // unique course
+    // const uniqueCourses = Array.from(
+    //     new Map(
+    //         timeTableSlot.map((item) => [item?.teacher?.fullName, item])
+    //     ).values());
 
     // console.log(uniqueCourses);
+
+    const mergedCourses = Object.values(
+        filteredTimeTable.reduce((acc, item) => {
+            const courseName = item?.course?.courseName;
+
+            if (!acc[courseName]) {
+                acc[courseName] = {
+                    courseName,
+                    courseFacilitator: "",
+                    practicalFacilitator: "",
+                    creditHours: item?.course?.creditHours
+                };
+            }
+
+            // Theory teacher
+            if (item?.teacher?.fullName) {
+                acc[courseName].courseFacilitator = item.teacher.fullName;
+            }
+
+            // Practical teacher
+            if (item?.practicalFacilitator?.fullName) {
+                acc[courseName].practicalFacilitator =
+                    item.practicalFacilitator.fullName;
+            }
+
+            return acc;
+        }, {})
+    );
+
+    // console.log(mergedCourses);
     return (
         <div className="">
             <div className="bg-white border border-gray-200 rounded-lg">
@@ -215,15 +246,15 @@ function ChairmanDashboard() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {uniqueCourses.map((timetable, idx) => (
+                                    {mergedCourses.map((timetable, idx) => (
                                         <tr key={idx}>
                                             <td className="border border-black px-2 py-1 font-bold">{String(idx + 1).padStart(2, '0')}</td>
-                                            <td className="border border-black px-2 py-1 font-medium">{timetable?.course?.courseName}</td>
+                                            <td className="border border-black px-2 py-1 font-medium">{timetable?.courseName}</td>
                                             <td className="border border-black px-2 py-1">
-                                                {(timetable?.course?.creditHours?.theory ?? 0) + " + " + (timetable?.course?.creditHours?.practical ?? 0)}
+                                                {(timetable?.creditHours?.theory ?? 0) + " + " + (timetable?.creditHours?.practical ?? 0)}
                                             </td>
-                                            <td className="border border-black px-2 py-1">{timetable?.teacher?.fullName}</td>
-                                            <td className="border border-black px-2 py-1">{timetable?.practicalFacilitator?.fullName || ""}</td>
+                                            <td className="border border-black px-2 py-1">{timetable?.courseFacilitator}</td>
+                                            <td className="border border-black px-2 py-1">{timetable?.practicalFacilitator || ""}</td>
                                         </tr>
                                     ))}
                                 </tbody>

@@ -24,15 +24,21 @@ export const createTimeTableSlot = createAsyncThunk(
 // get all time table slots
 export const getAllTimeTableSlot = createAsyncThunk(
     "timetableSlot/getallSLots",
-    async (deptId, { rejectWithValue }) => {
-        // console.log(deptId);
+    async ({ deptId }, { rejectWithValue }) => {
+        console.log(deptId);
         try {
             // console.log(deptId);
             const response = await axios.get(`http://localhost:8000/api/v1/timetableSlots/${deptId}/timetables`, {
+                params: {
+                    page,
+                    limit,
+                    sortBy: "createdAt",
+                    sortType: "desc"
+                },
                 withCredentials: true
             });
 
-            // console.log(response.data.data);
+            console.log(response.data.data);
             return response.data.data
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
@@ -95,7 +101,14 @@ const initialState = {
     totalSlots: null,
     timeTables: [],
     error: null,
-    status: "idle"
+    status: "idle",
+
+    // pagination data 
+    totalPages: 0,
+    currentPage: 1,
+    limit: 10,
+    hasNextPage: false,
+    hasPrevPage: false
 }
 
 
@@ -137,6 +150,13 @@ const timeTableSLotSLice = createSlice({
                 state.timeTableSlot = action.payload.timetableSlot;
                 state.timeTables = action.payload.timetables;
                 state.totalSlots = action.payload.totaltimetableSlots;
+
+                // pagination
+                state.currentPage = action.payload.pagination.currentPage;
+                state.limit = action.payload.pagination.limit;
+                state.totalPages = action.payload.pagination.totalPages;
+                state.hasNextPage = action.payload.pagination.hasNextPage;
+                state.hasPrevPage = action.payload.pagination.hasPrevPage
             })
             .addCase(getAllTimeTableSlot.rejected, (state, action) => {
                 state.status = 'rejected',

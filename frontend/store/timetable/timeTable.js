@@ -22,14 +22,23 @@ export const createTimeTable = createAsyncThunk(
 // get departments All timetables 
 export const getDeptallTimeTables = createAsyncThunk(
     "timetable/all-timetables",
-    async (deptId, { rejectWithValue }) => {
+    async ({ deptId, page, limit }, { rejectWithValue }) => {
+        console.log(deptId, page, limit);
         try {
             const response = await axios.get(`http://localhost:8000/api/v1/timetables/${deptId}`, {
-                withCredentials: true
-            });
-            // console.log(response.data.data.timetables);
-            return response.data.data.timetables;
+                params: {
+                    page,
+                    limit,
+                    sortBy: "createdAt",
+                    sortType: "desc"
+                },
+                 withCredentials: true 
+            },
+            );
+            console.log(response.data.data);
+            return response.data.data;
         } catch (error) {
+            console.log(error.message);
             return rejectWithValue(error.response?.data || error.message);
         }
     }
@@ -74,7 +83,16 @@ export const deleteTimeTable = createAsyncThunk(
 const initialState = {
     timeTables: [],
     error: null,
-    status: "idle"
+    status: "idle",
+    totalTimeTables: 0,
+
+    // pagination data 
+    totalPages: 0,
+    currentPage: 1,
+    limit: 10,
+    hasNextPage: false,
+    hasPrevPage: false
+
 }
 
 const timetableSlice = createSlice({
@@ -111,8 +129,17 @@ const timetableSlice = createSlice({
                 state.status = 'Pending'
             })
             .addCase(getDeptallTimeTables.fulfilled, (state, action) => {
-                state.status = 'Succeeded',
-                    state.timeTables = action.payload
+                state.status = 'Succeeded';
+                state.timeTables = action.payload.timetables;
+                state.totalTimeTables = action.payload.totalTimeTables;
+
+                // pagination
+                state.currentPage = action.payload.pagination.currentPage;
+                state.limit = action.payload.pagination.limit;
+                state.totalPages = action.payload.pagination.totalPages;
+                state.hasNextPage = action.payload.pagination.hasNextPage;
+                state.hasPrevPage = action.payload.pagination.hasPrevPage
+
             })
             .addCase(getDeptallTimeTables.rejected, (state, action) => {
                 state.status = 'Failed',

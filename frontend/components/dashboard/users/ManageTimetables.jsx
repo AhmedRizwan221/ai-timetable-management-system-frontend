@@ -1,22 +1,33 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { Users, Search, User, CalendarDays, Pencil, Trash } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Search, ChevronRight, ChevronLeft, CalendarDays, Pencil, Trash } from "lucide-react";
 import { clearError } from "../../../store/timetable/timeTable";
 import { useNavigate } from "react-router-dom";
-import { deleteTimeTable } from "../../../store/timetable/timeTable";
-import { getAllTimeTableSlot } from "../../../store/timetableSlot/timetableSlot"
+import { deleteTimeTable, getDeptallTimeTables } from "../../../store/timetable/timeTable";
+import { getUser } from "../../../store/auth/authSlice.js";
+import Input from "../../shrared/Input.jsx";
 
 export default function ManageTimetable() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [page, setPage] = useState(1);
+    const [search, setSearch] = useState("");
 
-    const { timeTables = [], error: timetableError } = useSelector((state) => state.timetabelSlot);
+    const { timeTables = [], error: timetableError, limit, hasPrevPage, hasNextPage, totalPages, currentPage } = useSelector((state) => state.timetabelSlot);
     const { user } = useSelector((state) => state.auth);
+    // console.log(user);
 
     useEffect(() => {
         if (user) {
-            dispatch(getAllTimeTableSlot(user?.department?._id));
+            dispatch(getDeptallTimeTables({
+                deptId: user?.department?._id,
+                page:page,
+                limit: 5
+            }));
             dispatch(clearError());
+        }
+        if (!user) {
+            dispatch(getUser());
         }
     }, [dispatch]);
 
@@ -26,6 +37,12 @@ export default function ManageTimetable() {
             dispatch(deleteTimeTable(id))
         }
     }
+
+    // serahc functionality
+    const filterTimeTables = timeTables.filter((fact) =>
+        fact?.facultyName.toLowerCase().includes(search.trim().toLocaleLowerCase()) ||
+        fact?.dean?.fullName?.toLowerCase().includes(search.trim().toLowerCase())
+    )
 
 
     return (
@@ -41,6 +58,16 @@ export default function ManageTimetable() {
                                 <h1 className="text-2xl font-bold tracking-tight text-foreground">
                                     TimeTable Managment
                                 </h1>
+                            </div>
+                            <div className="relative w-full sm:w-72 sm:ml-auto">
+                                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                <Input
+                                    type="text"
+                                    className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm pl-10 focus:ring-2 focus:ring-ring"
+                                    placeholder="Search"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                />
                             </div>
                         </div>
                     </div>
@@ -121,6 +148,55 @@ export default function ManageTimetable() {
                                             )))}
                                 </tbody>
                             </table>
+                        </div>
+                        <div className="flex items-center justify-between border-t border-slate-200 bg-white px-4 py-3 sm:px-6 mt-4">
+                            <div className="flex flex-1 justify-between sm:hidden">
+                                {/* Mobile View: Simple Buttons */}
+                                <button
+                                    disabled={!hasPrevPage}
+                                    onClick={() => setPage(currentPage - 1)}
+                                    className="relative inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    Previous
+                                </button>
+                                <button
+                                    disabled={!hasNextPage}
+                                    onClick={() => setPage(currentPage + 1)}
+                                    className="relative ml-3 inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    Next
+                                </button>
+                            </div>
+
+                            <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+                                <div>
+                                    <p className="text-sm text-slate-700">
+                                        Showing Page <span className="font-semibold">{currentPage}</span> of{' '}
+                                        <span className="font-semibold">{totalPages}</span>
+                                    </p>
+                                </div>
+
+                                <div className="flex space-x-2">
+                                    {/* Desktop View: Icons with Text */}
+                                    <button
+                                        onClick={() => setPage(currentPage - 1)}
+                                        disabled={!hasPrevPage}
+                                        className="flex items-center px-4 py-2 text-sm font-medium text-slate-600 bg-[#1D293D] text-white rounded-lg hover:bg-[#162131] transition-colors duration-200 disabled:opacity-40 disabled:hover:bg-slate-100 disabled:hover:text-slate-600 cursor-pointer disabled:cursor-not-allowed"
+                                    >
+                                        <ChevronLeft className="w-4 h-4 mr-1" />
+                                        Previous
+                                    </button>
+
+                                    <button
+                                        onClick={() => setPage(currentPage + 1)}
+                                        disabled={!hasNextPage}
+                                        className="flex items-center px-4 py-2 text-sm font-medium text-slate-600 bg-[#1D293D] text-white rounded-lg hover:bg-[#162131] transition-colors duration-200 disabled:opacity-40 disabled:hover:bg-slate-100 disabled:hover:text-slate-600 cursor-pointer disabled:cursor-not-allowed"
+                                    >
+                                        Next
+                                        <ChevronRight className="w-4 h-4 ml-1" />
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
