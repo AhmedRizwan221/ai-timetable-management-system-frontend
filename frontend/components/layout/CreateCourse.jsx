@@ -7,7 +7,7 @@ import Button from "../shrared/Button";
 import { getSemesters } from "../../store/semester/semester";
 import { CalendarDays, Layers, Plus, BookOpen, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import {getTeachers} from "../../store/user/user";
+import { getTeachers } from "../../store/user/user";
 
 
 export default function CreateCourse() {
@@ -16,15 +16,12 @@ export default function CreateCourse() {
     const Navigate = useNavigate();
     const [err, setErr] = useState("")
 
-    const { user, error: userError, status } = useSelector((state) => state.auth);
-    // console.log(user);
-    const { semesters = [], error: semesterError } = useSelector((state) => state.semester);
-    // console.log(semesters);
-    const {teachers = []} = useSelector((state) => state.user);
-    console.log(teachers);
+    const { user } = useSelector((state) => state.auth);
+    const { semesters = [] } = useSelector((state) => state.semester);
+    const { teachers = [] } = useSelector((state) => state.user);
 
     useEffect(() => {
-        if(user) {
+        if (user) {
             dispatch(getSemesters(user?.department?._id));
             dispatch(getTeachers());
         }
@@ -108,7 +105,7 @@ export default function CreateCourse() {
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                                     {...register("semesterId", { required: true })}
                                 >
-                                    <option>Select Semester</option>
+                                    <option value="">Select Semester</option>
                                     {semesters.map((sem) => (
                                         <option key={sem._id} value={sem._id}>
                                             {"Semester" + sem.semesterNumber} , {"Year" + sem.studyYear}
@@ -116,7 +113,7 @@ export default function CreateCourse() {
                                     ))}
                                 </select>
                             </div>
-                             <div className="space-y-2">
+                            <div className="space-y-2">
                                 <label className="flex items-center gap-1.5">
                                     <User className="h-3.5 w-3.5 text-muted-foreground" /> Select Teacher
                                 </label>
@@ -124,10 +121,10 @@ export default function CreateCourse() {
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                                     {...register("teacherId", { required: true })}
                                 >
-                                    <option>Select Semester</option>
+                                    <option value="">Select Semester</option>
                                     {teachers.map((tech) => (
                                         <option key={tech._id} value={tech._id}>
-                                            { tech?.fullName} , {"Department" + tech.departmentTeacher?.deptName}
+                                            {tech?.fullName} , {"Department" + tech.departmentTeacher?.deptName}
                                         </option>
                                     ))}
                                 </select>

@@ -23,22 +23,22 @@ export const createTimeTable = createAsyncThunk(
 export const getDeptallTimeTables = createAsyncThunk(
     "timetable/all-timetables",
     async ({ deptId, page, limit }, { rejectWithValue }) => {
-        console.log(deptId, page, limit);
+        // console.log(deptId, page, limit);
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/timetables/${deptId}`, {
+            const response = await axios.get(`http://localhost:8000/api/v1/timetables/${deptId}/timetables`, {
                 params: {
                     page,
                     limit,
                     sortBy: "createdAt",
                     sortType: "desc"
                 },
-                 withCredentials: true 
+                withCredentials: true
             },
             );
-            console.log(response.data.data);
+            // console.log(response.data.data);
             return response.data.data;
         } catch (error) {
-            console.log(error.message);
+            // console.log(error.message);
             return rejectWithValue(error.response?.data || error.message);
         }
     }
@@ -78,6 +78,24 @@ export const deleteTimeTable = createAsyncThunk(
     }
 )
 
+// get all timetables without pagination
+export const allTimetabels = createAsyncThunk(
+    "timetable/allTimeTables",
+    async (deptId, { rejectWithValue }) => {
+        console.log(deptId);
+        try {
+            const response = await axios.get(`http://localhost:8000/api/v1/timetables/all/${deptId}`, {
+                withCredentials: true
+            },
+            );
+            console.log(response.data.data);
+            return response.data.data.timetables;
+        } catch (error) {
+            // console.log(error.message);
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
 
 
 const initialState = {
@@ -167,6 +185,17 @@ const timetableSlice = createSlice({
                 )
             })
             .addCase(updateTimeTable.rejected, (state, action) => {
+                state.status = 'Failed',
+                    state.error = action.payload
+            })
+            .addCase(allTimetabels.pending, (state) => {
+                state.status = 'Pending'
+            })
+            .addCase(allTimetabels.fulfilled, (state, action) => {
+                state.status = 'Succeeded';
+                state.timeTables = action.payload
+            })
+            .addCase(allTimetabels.rejected, (state, action) => {
                 state.status = 'Failed',
                     state.error = action.payload
             })

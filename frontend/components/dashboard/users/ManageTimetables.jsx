@@ -13,15 +13,14 @@ export default function ManageTimetable() {
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
 
-    const { timeTables = [], error: timetableError, limit, hasPrevPage, hasNextPage, totalPages, currentPage } = useSelector((state) => state.timetabelSlot);
+    const { timeTables = [], error: timetableError, hasPrevPage, hasNextPage, totalPages, currentPage } = useSelector((state) => state.timetable);
     const { user } = useSelector((state) => state.auth);
-    // console.log(user);
 
     useEffect(() => {
         if (user) {
             dispatch(getDeptallTimeTables({
                 deptId: user?.department?._id,
-                page:page,
+                page: page,
                 limit: 5
             }));
             dispatch(clearError());
@@ -29,7 +28,7 @@ export default function ManageTimetable() {
         if (!user) {
             dispatch(getUser());
         }
-    }, [dispatch]);
+    }, [dispatch, page, user]);
 
     const timetableDeleteHandler = (id) => {
         const deleteConfrim = window.confirm("Deleting this TimeTable will delete all slots of this timetable?");
@@ -40,9 +39,10 @@ export default function ManageTimetable() {
 
     // serahc functionality
     const filterTimeTables = timeTables.filter((fact) =>
-        fact?.facultyName.toLowerCase().includes(search.trim().toLocaleLowerCase()) ||
-        fact?.dean?.fullName?.toLowerCase().includes(search.trim().toLowerCase())
-    )
+        fact?.batch?.batchName?.toLowerCase().includes(search.trim().toLowerCase()) ||
+        fact?.semester?.semesterNumber?.toString().includes(search.trim()) ||
+        fact?.semester?.studyYear?.toString().includes(search.trim())
+    );
 
 
     return (
@@ -50,16 +50,16 @@ export default function ManageTimetable() {
             <div className="bg-white border border-gray-200 rounded-lg">
                 <div className="mx-auto max-w-5xl space-y-6">
                     <div className="bg-card">
-                        <div className="container mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8 border-b">
+                        <div className="block md:flex items-center container mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8 border-b">
                             <div className="flex items-center gap-3">
-                                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
+                                <div className="hidden md:flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
                                     <CalendarDays className="h-10 w-10 text-primary-foreground" />
                                 </div>
-                                <h1 className="text-2xl font-bold tracking-tight text-foreground">
+                                <h1 className="mb-2 md:m-0 text-2xl font-bold tracking-tight text-foreground">
                                     TimeTable Managment
                                 </h1>
                             </div>
-                            <div className="relative w-full sm:w-72 sm:ml-auto">
+                            <div className="relative w-full sm:w-72 md:ml-auto">
                                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                 <Input
                                     type="text"
@@ -77,11 +77,11 @@ export default function ManageTimetable() {
                     )}
 
                     {/* mobile screen */}
-                    <div className="grid grid-cols-1 gap-4 md:hidden">
-                        {timeTables.length === 0 ? (
+                    <div className="grid grid-cols-1 gap-4 md:hidden p-4">
+                        {filterTimeTables.length === 0 ? (
                             <div className="py-12 text-center text-muted-foreground bg-card rounded-xl border">No TimeTables found.</div>
                         ) : (
-                            timeTables.map((timetable, index) => (
+                            filterTimeTables.map((timetable, index) => (
                                 <div key={timetable._id} className="bg-card p-4 rounded-xl border border-border shadow-sm space-y-3">
                                     <div className="flex justify-between items-start">
                                         <div className="flex items-center gap-3">
@@ -120,14 +120,14 @@ export default function ManageTimetable() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {timeTables.length === 0 ?
+                                    {filterTimeTables.length === 0 ?
                                         (
                                             <tr>
                                                 <td colSpan="5" className="py-12 text-center text-muted-foreground bg-card">No TimeTables found.
                                                 </td>
                                             </tr>
                                         ) : (
-                                            timeTables.map((timetable, index) => (
+                                            filterTimeTables.map((timetable, index) => (
                                                 <tr key={timetable._id} className="border-t hover:bg-muted/40 transition-colors group">
                                                     <td className="px-6 py-4 text-sm">{index + 1}</td>
                                                     <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">

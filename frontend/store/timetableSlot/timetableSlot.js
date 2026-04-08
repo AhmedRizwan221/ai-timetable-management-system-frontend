@@ -24,10 +24,9 @@ export const createTimeTableSlot = createAsyncThunk(
 // get all time table slots
 export const getAllTimeTableSlot = createAsyncThunk(
     "timetableSlot/getallSLots",
-    async ({ deptId }, { rejectWithValue }) => {
-        console.log(deptId);
+    async ({ deptId, page, limit }, { rejectWithValue }) => {
+        // console.log(deptId, page, limit);
         try {
-            // console.log(deptId);
             const response = await axios.get(`http://localhost:8000/api/v1/timetableSlots/${deptId}/timetables`, {
                 params: {
                     page,
@@ -90,6 +89,23 @@ export const getFacultyAllTimeTableSlots = createAsyncThunk(
 
             console.log(response.data.data);
             return response.data.data
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
+// get all timeTable slots without pagination
+export const getAllSlots = createAsyncThunk(
+    "timetableSlot/all",
+    async (deptId, { rejectWithValue }) => {
+        try {
+            const response = await axios.get(`http://localhost:8000/api/v1/timetableSlots/allSlots/${deptId}`, {
+                withCredentials: true
+            });
+
+            console.log(response.data.data);
+            return response.data.data.timetableSlot
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -196,6 +212,17 @@ const timeTableSLotSLice = createSlice({
                 state.totalSlots = action.payload.totaltimetableSlots;
             })
             .addCase(getFacultyAllTimeTableSlots.rejected, (state, action) => {
+                state.status = 'rejected',
+                    state.error = action.payload
+            })
+             .addCase(getAllSlots.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(getAllSlots.fulfilled, (state, action) => {
+                state.status = 'succeeded'
+                state.timeTableSlot = action.payload;
+            })
+            .addCase(getAllSlots.rejected, (state, action) => {
                 state.status = 'rejected',
                     state.error = action.payload
             })

@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getDeptallTimeTables } from "../../store/timetable/timeTable";
 import Button from "../shrared/Button";
 import { useForm } from "react-hook-form";
-import { getSemesters } from "../../store/semester/semester";
+import { getAllSemesters } from "../../store/semester/semester";
 import { getBatches } from "../../store/batch/batch";
 import { getSections } from "../../store/section/section";
-import { createTimeTable, clearError } from "../../store/timetable/timeTable";
-import { useNavigate } from "react-router-dom";
-import { createTimeTableSlot, getAllTimeTableSlot } from "../../store/timetableSlot/timetableSlot";
+import { createTimeTable, clearError, allTimetabels } from "../../store/timetable/timeTable";
+import { createTimeTableSlot } from "../../store/timetableSlot/timetableSlot";
 import { getTeachers } from "../../store/user/user";
-import { getAllCoursesInDept } from "../../store/course/course";
+import { allCourses } from "../../store/course/course";
 import { CalendarDays, Users, BookOpen, Layers, Plus, CalendarClock, Clock } from "lucide-react";
 import TimeTableForm from "../shrared/TimeTable";
 
@@ -27,19 +25,19 @@ export default function CreateTimeTable() {
     const { sections = [] } = useSelector((state) => state.section);
     const { teachers = [] } = useSelector((state) => state.user);
     const { courses = [] } = useSelector((state) => state.course);
-    const { timeTables = [] } = useSelector((state) => state.timetabelSlot);
+    const { timeTables = [] } = useSelector((state) => state.timetable);
 
-    console.log(user);
+    console.log(timeTables);
 
     // now fetched all courses using deptId and render here 
     useEffect(() => {
         if (user) {
-            dispatch(getAllTimeTableSlot(user?.department?._id));
-            dispatch(getSemesters(user?.department?._id));
+            dispatch(allTimetabels(user?.department?._id));
+            dispatch(getAllSemesters(user?.department?._id));
             dispatch(getBatches(user?.department?._id));
             dispatch(getSections(user?.department?._id));
             dispatch(getTeachers());
-            dispatch(getAllCoursesInDept(user?.department?._id));
+            dispatch(allCourses(user?.department?._id));
             dispatch(clearError());
         }
     }, [dispatch, user]);
@@ -48,7 +46,6 @@ export default function CreateTimeTable() {
     // if course has practical then we show practicalFacilitator field 
     const selectedType = watch("type");
 
-    // console.log(selectedCourse);
 
     useEffect(() => {
         if (selectedType === 'theory') {
@@ -63,7 +60,6 @@ export default function CreateTimeTable() {
     const handleCreatTimeTable = async (data) => {
         setErr(" ");
         try {
-            console.log(data);
             await dispatch(createTimeTable({
                 semesterId: data.semesterId,
                 batchId: data.batchId,

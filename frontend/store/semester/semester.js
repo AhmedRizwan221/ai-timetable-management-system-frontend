@@ -21,13 +21,21 @@ export const createSemester = createAsyncThunk(
 // get semesters 
 export const getSemesters = createAsyncThunk(
     "semester/getSemesters",
-    async (deptId, { rejectWithValue }) => {
+    async ({ departmentId, page, limit }, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/semesters/getAllSemester/${deptId}`, { withCredentials: true });
+            const response = await axios.get(`http://localhost:8000/api/v1/semesters/getAllSemester/${departmentId}`, {
+                params: {
+                    page,
+                    limit,
+                    sortBy: "createdAt",
+                    sortType: "desc"
+                },
+                withCredentials: true
+            });
 
-            // console.log(response.data.data);
+            console.log(response.data.data);
 
-            return response.data.data.findAllSemesters
+            return response.data.data
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -66,10 +74,33 @@ export const deleteSemester = createAsyncThunk(
 
     }
 )
+
+// get semesters without pagination data
+export const getAllSemesters = createAsyncThunk(
+    "semester/getAll",
+    async (deptId, { rejectWithValue }) => {
+        try {
+            const response = await axios.get(`http://localhost:8000/api/v1/semesters/semesters/${deptId}`, { withCredentials: true });
+
+            // console.log(response.data.data);
+            return response.data.data.allSemesters
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
 const initialState = {
     semesters: [],
     error: null,
-    status: "idle"
+    status: "idle",
+    totalSemesters: 0,
+
+    // pagination data 
+    totalPages: 0,
+    currentPage: 1,
+    limit: 10,
+    hasNextPage: false,
+    hasPrevPage: false
 }
 
 const semesterSlice = createSlice({
@@ -104,7 +135,16 @@ const semesterSlice = createSlice({
             })
             .addCase(getSemesters.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.semesters = action.payload
+                state.semesters = action.payload.semestersInDept;
+                state.totalSemesters = action.payload.totalSemestersInDept;
+
+                // pagination
+                state.currentPage = action.payload.pagination.currentPage;
+                state.limit = action.payload.pagination.limit;
+                state.totalPages = action.payload.pagination.totalPages;
+                state.hasNextPage = action.payload.pagination.hasNextPage;
+                state.hasPrevPage = action.payload.pagination.hasPrevPage
+
             })
             .addCase(getSemesters.rejected, (state, action) => {
                 state.status = 'rejected';
@@ -131,6 +171,17 @@ const semesterSlice = createSlice({
                 state.semesters = state.semesters.filter((sem) => sem._id !== id)
             })
             .addCase(deleteSemester.rejected, (state, action) => {
+                state.status = 'rejected',
+                    state.error = action.payload
+            })
+            .addCase(getAllSemesters.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(getAllSemesters.fulfilled, (state, action) => {
+                state.status = 'succeeded'
+                state.semesters = action.payload
+            })
+            .addCase(getAllSemesters.rejected, (state, action) => {
                 state.status = 'rejected',
                     state.error = action.payload
             })
