@@ -21,13 +21,20 @@ export const createBatch = createAsyncThunk(
 // get batches in dept 
 export const getBatches = createAsyncThunk(
     "batch/getBatches",
-    async (deptId, { rejectWithValue }) => {
+    async ({ deptId, page, limit }, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/batches/allBatches/${deptId}`, { withCredentials: true });
+            const response = await axios.get(`http://localhost:8000/api/v1/batches/allBatches/${deptId}`, {
+                params: {
+                    page,
+                    limit,
+                    sortBy: "createdAt",
+                    sortType: "desc"
+                },
+                withCredentials: true
+            });
 
             // console.log(response.data.data);
-
-            return response.data.data.batches
+            return response.data.data
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -68,10 +75,35 @@ export const updateBatch = createAsyncThunk(
     }
 )
 
+export const allBatches = createAsyncThunk(
+     "batch/allBatches",
+     async(deptId, {rejectWithValue}) => {
+        // console.log(deptId);
+        try {
+            const response = await axios.get(`http://localhost:8000/api/v1/batches/${deptId}/batches`, {
+                withCredentials: true
+            });
+            // console.log(response.data.data);
+            return response.data.data.allBatches
+        } catch (error) {
+             return rejectWithValue(error.response?.data || error.message);
+        }
+     }
+)
+
+
 const initialState = {
     batches: [],
     error: null,
-    status: "idle"
+    status: "idle",
+    totalBatches: 0,
+
+    // pagination data 
+    totalPages: 0,
+    currentPage: 1,
+    limit: 10,
+    hasNextPage: false,
+    hasPrevPage: false
 }
 
 const batchSlice = createSlice({
@@ -100,7 +132,15 @@ const batchSlice = createSlice({
             })
             .addCase(getBatches.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.batches = action.payload
+                state.batches = action.payload.batchesInDept;
+                state.totalBatches = action.payload.totalBatchesInDept;
+
+                // pagination
+                state.currentPage = action.payload.pagination.currentPage;
+                state.limit = action.payload.pagination.limit;
+                state.totalPages = action.payload.pagination.totalPages;
+                state.hasNextPage = action.payload.pagination.hasNextPage;
+                state.hasPrevPage = action.payload.pagination.hasPrevPage
             })
             .addCase(getBatches.rejected, (state, action) => {
                 state.status = 'rejected';
@@ -128,6 +168,17 @@ const batchSlice = createSlice({
                 state.batches = state.batches.map((batch) => batch._id === updateBatch._id ? updateBatch : batch)
             })
             .addCase(updateBatch.rejected, (state, action) => {
+                state.status = 'rejected';
+                state.error = action.payload
+            })
+              .addCase(allBatches.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(allBatches.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.batches = action.payload
+            })
+            .addCase(allBatches.rejected, (state, action) => {
                 state.status = 'rejected';
                 state.error = action.payload
             })

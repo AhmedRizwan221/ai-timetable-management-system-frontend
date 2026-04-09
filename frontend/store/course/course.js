@@ -115,7 +115,7 @@ export const allCourses = createAsyncThunk(
         try {
             const response = await axios.get(`http://localhost:8000/api/v1/courses/all/${deptId}`, { withCredentials: true });
 
-            console.log(response.data.data);
+            // console.log(response.data.data);
             return response.data.data.allCourses;
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);

@@ -188,6 +188,33 @@ export const getAlDeans = createAsyncThunk(
     }
 )
 
+// get all teachers in dept with pagination
+export const allTeachersInDept = createAsyncThunk(
+    "user/allTeachers",
+    async ({ deptId, page, limit }, { rejectWithValue }) => {
+        // console.log(deptId, page, limit);
+        try {
+            // console.log(deptId);
+            const response = await axios.get(`http://localhost:8000/api/v1/users/department/${deptId}/teachers`,
+                {
+                    params: {
+                        page,
+                        limit,
+                        sortBy: "createdAt",
+                        sortType: "desc"
+                    },
+                    withCredentials: true
+                }
+            );
+
+            // console.log(response.data.data);
+            return response.data.data
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
 const initialState = {
     deans: [],
     chairmans: [],
@@ -235,7 +262,7 @@ const userSlice = createSlice({
                     state.error = action.payload
             })
             // get all deans without pagination
-              .addCase(getAlDeans.pending, (state) => {
+            .addCase(getAlDeans.pending, (state) => {
                 state.status = 'loading'
             })
             .addCase(getAlDeans.fulfilled, (state, action) => {
@@ -366,6 +393,25 @@ const userSlice = createSlice({
                     state.totalChairmans = action.payload
             })
             .addCase(getAllChairmansCountInFaculty.rejected, (state, action) => {
+                state.status = 'rejected',
+                    state.error = action.payload
+            })
+            .addCase(allTeachersInDept.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(allTeachersInDept.fulfilled, (state, action) => {
+                state.status = 'succeeded',
+                    state.teachers = action.payload.teachersInDept;
+                state.totalTeachers = action.payload.totalTeachersInDept;
+
+                // pagination
+                state.currentPage = action.payload.pagination.currentPage;
+                state.limit = action.payload.pagination.limit;
+                state.totalPages = action.payload.pagination.totalPages;
+                state.hasNextPage = action.payload.pagination.hasNextPage;
+                state.hasPrevPage = action.payload.pagination.hasPrevPage
+            })
+            .addCase(allTeachersInDept.rejected, (state, action) => {
                 state.status = 'rejected',
                     state.error = action.payload
             })

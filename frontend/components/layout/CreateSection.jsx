@@ -6,8 +6,8 @@ import { createSection } from "../../store/section/section";
 import Button from "../shrared/Button";
 import { Clock, CalendarDays, Layers, Plus, BookOpen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { getBatches } from "../../store/batch/batch";
-import { getSemesters } from "../../store/semester/semester"
+import { allBatches } from "../../store/batch/batch";
+import { getAllSemesters } from "../../store/semester/semester"
 
 
 export default function CreateSection() {
@@ -17,18 +17,13 @@ export default function CreateSection() {
     const [err, setErr] = useState("")
 
     const { user, error: userError, status } = useSelector((state) => state.auth);
-    // console.log(user);
-
     const { batches = [], error: batchError } = useSelector((state) => state.batch);
-    // console.log(batches);
-
     const { semesters = [] } = useSelector((state) => state.semester);
-    // console.log(semesters);
 
     useEffect(() => {
         if (user) {
-            dispatch(getBatches(user?.department?._id));
-            dispatch(getSemesters(user?.department?._id))
+            dispatch(allBatches(user?.department?._id));
+            dispatch(getAllSemesters(user?.department?._id))
         }
     }, [dispatch, user]);
 

@@ -68,10 +68,41 @@ export const updateSection = createAsyncThunk(
     }
 )
 
+// get sections with pagination
+export const getAllSections = createAsyncThunk(
+    "section/getAllSections",
+    async ({ deptId, page, limit }, { rejectWithValue }) => {
+        try {
+            const response = await axios.get(`http://localhost:8000/api/v1/sections/allSections/${deptId}`, {
+                params: {
+                    page,
+                    limit,
+                    sortBy: "createdAt",
+                    sortType: "desc"
+                },
+                withCredentials: true
+            });
+
+            // console.log(response.data.data);
+            return response.data.data
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
 const initialState = {
     sections: [],
     error: null,
-    status: "idle"
+    status: "idle",
+    totalSections: 0,
+
+    // pagination data 
+    totalPages: 0,
+    currentPage: 1,
+    limit: 10,
+    hasNextPage: false,
+    hasPrevPage: false
 }
 
 const sectionSlice = createSlice({
@@ -90,9 +121,9 @@ const sectionSlice = createSlice({
             .addCase(createSection.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 const index = state.sections.findIndex(t => t._id === action.payload);
-                if(index !== -1) {
+                if (index !== -1) {
                     state.sections[index] = action.payload
-                }else {
+                } else {
                     state.sections.push(action.payload)
                 }
             })
@@ -131,6 +162,25 @@ const sectionSlice = createSlice({
                 state.sections = state.sections.map((section) => section._id === updateData._id ? updateData : section);
             })
             .addCase(updateSection.rejected, (state, action) => {
+                state.status = 'rejected';
+                state.error = action.payload
+            })
+            .addCase(getAllSections.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(getAllSections.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.sections = action.payload.sectionsInDept;
+                state.totalSections = action.payload.totalSectionsInDept;
+
+                // pagination
+                state.currentPage = action.payload.pagination.currentPage;
+                state.limit = action.payload.pagination.limit;
+                state.totalPages = action.payload.pagination.totalPages;
+                state.hasNextPage = action.payload.pagination.hasNextPage;
+                state.hasPrevPage = action.payload.pagination.hasPrevPage
+            })
+            .addCase(getAllSections.rejected, (state, action) => {
                 state.status = 'rejected';
                 state.error = action.payload
             })

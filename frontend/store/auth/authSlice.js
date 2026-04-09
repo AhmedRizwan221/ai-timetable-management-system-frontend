@@ -31,7 +31,7 @@ export const getUser = createAsyncThunk(
             //     ...response.data.data,
             //     faculty: response.data.data.faculty
             // }
-            // console.log("Respons", response);
+            console.log("Respons", response.data.data);
 
             return response.data.data
         } catch (error) {

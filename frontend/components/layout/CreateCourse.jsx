@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { createCourse } from "../../store/course/course";
 import Button from "../shrared/Button";
-import { getSemesters } from "../../store/semester/semester";
+import { getAllSemesters } from "../../store/semester/semester";
 import { CalendarDays, Layers, Plus, BookOpen, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getTeachers } from "../../store/user/user";
@@ -22,7 +22,7 @@ export default function CreateCourse() {
 
     useEffect(() => {
         if (user) {
-            dispatch(getSemesters(user?.department?._id));
+            dispatch(getAllSemesters(user?.department?._id));
             dispatch(getTeachers());
         }
     }, [dispatch, user])

@@ -47,6 +47,7 @@ export default function EditDean() {
             register={register}
             handleSubmit={handleSubmit}
             onSubmit={handleUpdateDeanData}
+             redirectUrl='/dashboard/superadmin/manage-deans'
         />
 
 

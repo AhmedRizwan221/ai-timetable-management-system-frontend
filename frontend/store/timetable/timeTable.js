@@ -82,13 +82,13 @@ export const deleteTimeTable = createAsyncThunk(
 export const allTimetabels = createAsyncThunk(
     "timetable/allTimeTables",
     async (deptId, { rejectWithValue }) => {
-        console.log(deptId);
+        // console.log(deptId);
         try {
             const response = await axios.get(`http://localhost:8000/api/v1/timetables/all/${deptId}`, {
                 withCredentials: true
             },
             );
-            console.log(response.data.data);
+            // console.log(response.data.data);
             return response.data.data.timetables;
         } catch (error) {
             // console.log(error.message);

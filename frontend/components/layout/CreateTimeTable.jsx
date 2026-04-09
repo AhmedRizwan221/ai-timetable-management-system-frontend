@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from "../shrared/Button";
 import { useForm } from "react-hook-form";
 import { getAllSemesters } from "../../store/semester/semester";
-import { getBatches } from "../../store/batch/batch";
+import { allBatches } from "../../store/batch/batch";
 import { getSections } from "../../store/section/section";
 import { createTimeTable, clearError, allTimetabels } from "../../store/timetable/timeTable";
 import { createTimeTableSlot } from "../../store/timetableSlot/timetableSlot";
@@ -27,14 +27,14 @@ export default function CreateTimeTable() {
     const { courses = [] } = useSelector((state) => state.course);
     const { timeTables = [] } = useSelector((state) => state.timetable);
 
-    console.log(timeTables);
+    // console.log(timeTables);
 
     // now fetched all courses using deptId and render here 
     useEffect(() => {
         if (user) {
             dispatch(allTimetabels(user?.department?._id));
             dispatch(getAllSemesters(user?.department?._id));
-            dispatch(getBatches(user?.department?._id));
+            dispatch(allBatches(user?.department?._id));
             dispatch(getSections(user?.department?._id));
             dispatch(getTeachers());
             dispatch(allCourses(user?.department?._id));

@@ -1,6 +1,7 @@
+import { useNavigate } from "react-router-dom";
 import Input from "../shrared/Input";
 import Button from "./Button";
-import { Plus } from "lucide-react";
+import { Plus, ArrowLeft } from "lucide-react";
 
 export default function EditUser({
     title = "User",
@@ -10,9 +11,12 @@ export default function EditUser({
     handleSubmit,
     register,
     buttonText = "Update",
-    Icon
+    Icon,
+    redirectUrl=""
 }) {
-    console.log(err);
+    // console.log(err);
+    const navigate = useNavigate();
+
     return (
         <div className="min-h-screen bg-muted/30 py-10 px-4 sm:px-6 ">
             <div className="bg-white border border-gray-200 rounded-lg ">
@@ -21,8 +25,13 @@ export default function EditUser({
                 <div className="border-b">
                     <div className="container mx-auto max-w-4xl px-4 py-6">
                         <div className="flex items-center gap-3">
+                            <button
+                                onClick={() => navigate(redirectUrl)}
+                                className="hidden md:inline-flex p-1.5 rounded-full border border-gray-300 bg-[#1D293D] text-white hover:bg-[#162131] cursor-pointer"
+                            >
+                                <ArrowLeft className="h-8 w-8" />
+                            </button>
                             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
-                                {/* <icon className="h-6 w-6 text-white" /> */}
                                 {Icon && <Icon className="h-3.5 w-3.5 text-muted-foreground" />}
                             </div>
                             <h1 className="text-2xl font-bold">

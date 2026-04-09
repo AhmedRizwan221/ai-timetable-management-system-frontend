@@ -45,7 +45,7 @@ export default function ManageChairmans() {
             if (deleteConfrim) {
                 dispatch(deleteUser(id))
             }
-            
+
         } catch (error) {
             return error
         }
@@ -57,31 +57,26 @@ export default function ManageChairmans() {
             <div className="bg-white border border-gray-200 rounded-lg">
                 <div className="mx-auto max-w-5xl space-y-6">
                     <div className="bg-card">
-                        <div className="container mx-auto max-w-4xl px-4 py-4 sm:px-6 lg:px-8 border-b">
-
-                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 w-full">
-
-                                {/* Left Side */}
-                                <div className="flex items-center gap-3">
-                                    <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-lg bg-primary">
-                                        <Users className="h-5 w-5 sm:h-6 sm:w-6 text-primary-foreground" />
-                                    </div>
-                                    <h1 className="text-lg sm:text-xl font-bold tracking-tight text-foreground">
-                                        Chairmans Management
-                                    </h1>
+                        <div className="block md:flex items-center container mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8 border-b">
+                            <div className="flex items-center gap-3">
+                                <div className="hidden md:flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
+                                    <Users className="h-5 w-5 sm:h-6 sm:w-6 text-primary-foreground" />
                                 </div>
+                                <h1 className="mb-2 md:m-0 text-xl md:text-2xl font-bold tracking-tight text-foreground">
+                                    Chairmans Management
+                                </h1>
+                            </div>
 
-                                {/* Right Side */}
-                                <div className="relative w-full sm:w-72 sm:ml-auto">
-                                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                                    <Input
-                                        type="text"
-                                        className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm pl-10 focus:ring-2 focus:ring-ring"
-                                        placeholder="Search"
-                                        value={search}
-                                        onChange={(e) => setSearch(e.target.value)}
-                                    />
-                                </div>
+                            {/* Right Side */}
+                            <div className="relative w-full sm:w-72 sm:ml-auto">
+                                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                <Input
+                                    type="text"
+                                    className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm pl-10 focus:ring-2 focus:ring-ring"
+                                    placeholder="Search"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                />
                             </div>
                         </div>
                     </div>

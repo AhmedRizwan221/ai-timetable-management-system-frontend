@@ -35,7 +35,7 @@ export default function EditChairman() {
             }
         } catch (error) {
             //    console.log(error);
-               setErr(error);
+            setErr(error);
         }
     }
 
@@ -52,6 +52,7 @@ export default function EditChairman() {
             handleSubmit={handleSubmit}
             onSubmit={handleUpdateChairman}
             err={err}
+            redirectUrl='/dashboard/dean/manage-chairmans'
         />
     )
 }

@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import Input from "../components/shrared/Input";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { CalendarDays, Layers, Plus, BookOpen } from "lucide-react";
+import { CalendarDays, Layers, Plus, BookOpen, ArrowLeft } from "lucide-react";
 import { updateSemester } from "../store/semester/semester";
 import Button from "../components/shrared/Button";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 
 export default function EditSemesters() {
@@ -13,6 +13,7 @@ export default function EditSemesters() {
     const dispatch = useDispatch();
     const [err, setErr] = useState("");
     const { semesterId } = useParams();
+    const navigate = useNavigate();
 
     const { user } = useSelector((state) => state.auth);
     // console.log(user);
@@ -42,7 +43,13 @@ export default function EditSemesters() {
                 <div className=" bg-card">
                     <div className="container mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8 border-b">
                         <div className="flex items-center gap-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
+                            <button
+                                onClick={() => navigate('/dashboard/chairman/manage-semesters')}
+                                className="hidden md:inline-flex p-1.5 rounded-full border border-gray-300 bg-[#1D293D] text-white hover:bg-[#162131] cursor-pointer"
+                            >
+                                <ArrowLeft className="h-8 w-8" />
+                            </button>
+                            <div className="hidden md:flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
                                 <CalendarDays className="h-5 w-5 text-primary-foreground" />
                             </div>
                             <h1 className="text-2xl font-bold tracking-tight text-foreground">

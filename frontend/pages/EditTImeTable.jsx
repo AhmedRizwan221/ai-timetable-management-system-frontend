@@ -6,7 +6,7 @@ import { updateTimeTable } from "../store/timetable/timeTable";
 import { getSemesters } from "../store/semester/semester";
 import { getSections } from "../store/section/section";
 import { getBatches } from "../store/batch/batch";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 
 
@@ -14,7 +14,7 @@ export default function EditTimeTable() {
     const { register, handleSubmit, reset } = useForm();
     const dispatch = useDispatch();
     const [err, setErr] = useState("");
-    const {timetableId} = useParams();
+    const { timetableId } = useParams();
     // console.log("Time table id in component", timetableId);
 
     const { user } = useSelector((state) => state.auth);
@@ -37,7 +37,7 @@ export default function EditTimeTable() {
         setErr("");
 
         try {
-           await dispatch(updateTimeTable({
+            await dispatch(updateTimeTable({
                 timetableId,
                 data: {
                     semesterId: data.semesterId,
@@ -65,6 +65,7 @@ export default function EditTimeTable() {
             handleSubmit={handleSubmit}
             err={err}
             mode="update"
+            redirectUrl='/dashboard/chairman/manage-timetables'
         />
     )
 }

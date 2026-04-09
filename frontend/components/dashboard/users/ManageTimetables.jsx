@@ -55,7 +55,7 @@ export default function ManageTimetable() {
                                 <div className="hidden md:flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
                                     <CalendarDays className="h-10 w-10 text-primary-foreground" />
                                 </div>
-                                <h1 className="mb-2 md:m-0 text-2xl font-bold tracking-tight text-foreground">
+                                <h1 className="mb-2 md:m-0 text-xl md:text-2xl font-bold tracking-tight text-foreground">
                                     TimeTable Managment
                                 </h1>
                             </div>

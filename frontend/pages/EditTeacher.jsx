@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUserData } from "../store/user/user";
 import { useForm } from "react-hook-form";
@@ -9,6 +9,7 @@ export default function EditTeacher() {
     const { id } = useParams();
     const dispatch = useDispatch();
     const { register, handleSubmit, reset } = useForm();
+    const navigate = useNavigate();
 
     const { user } = useSelector((state) => state.auth);
 
@@ -39,13 +40,14 @@ export default function EditTeacher() {
             title="Teacher"
             buttonText="Update"
             fields={[
-                { name: "fullname", label: "Full Name", type: "text", icon: Users },
-                { name: "email", label: "Email", type: "email", icon: Mail },
-                { name: "password", label: "Password", type: "password", icon: Lock }
+                { name: "fullname", label: "Full Name", type: "text", icon: Users, placeholder: "Enter FullName" },
+                { name: "email", label: "Email", type: "email", icon: Mail, placeholder: "Enter Email" },
+                { name: "password", label: "Password", type: "password", icon: Lock, placeholder: "Enter Password" }
             ]}
             register={register}
             handleSubmit={handleSubmit}
             onSubmit={handleUpdateTeacherData}
+            redirectUrl='/dashboard/chairman/manage-teachers'
         />
 
         // <div className="min-h-screen bg-muted/30 py-10 px-4 sm:px-6 ">

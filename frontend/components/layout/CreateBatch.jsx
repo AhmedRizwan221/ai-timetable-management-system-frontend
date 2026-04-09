@@ -6,10 +6,8 @@ import { createBatch } from "../../store/batch/batch";
 import Button from "../shrared/Button";
 import { Clock, CalendarDays, Layers, Plus, BookOpen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { getUser } from "../../store/auth/authSlice";
-import {getSemesters} from "../../store/semester/semester";
+import {getAllSemesters} from "../../store/semester/semester";
 import { getSections } from "../../store/section/section";
-import { getBatches } from "../../store/batch/batch";
 
 export default function CreateBatch() {
     const { register, handleSubmit, reset } = useForm();
@@ -17,23 +15,14 @@ export default function CreateBatch() {
     const Navigate = useNavigate();
     const [err, setErr] = useState("")
 
-    const { user, error: userError, status } = useSelector((state) => state.auth);
-    // console.log(user);
-
+    const { user, error: userError } = useSelector((state) => state.auth);
     const { semesters = [] } = useSelector((state) => state.semester);
-    // console.log(semesters);
-
     const { sections = [], error: sectionError } = useSelector((state) => state.section);
-    // console.log(sections);
-
-    const {batches=[]} = useSelector((state) => state.batch);
-    // console.log(batches);
 
     useEffect(() => {
         if (user) {
-            dispatch(getSemesters(user?.department?._id))
-            dispatch(getSections(user?.department?._id))
-            dispatch(getBatches(user?.department?._id))
+            dispatch(getAllSemesters(user?.department?._id));
+            dispatch(getSections(user?.department?._id));
         }
     }, [dispatch, user]);
 

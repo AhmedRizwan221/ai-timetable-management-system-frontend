@@ -33,7 +33,7 @@ export const getSemesters = createAsyncThunk(
                 withCredentials: true
             });
 
-            console.log(response.data.data);
+            // console.log(response.data.data);
 
             return response.data.data
         } catch (error) {
@@ -89,6 +89,8 @@ export const getAllSemesters = createAsyncThunk(
         }
     }
 )
+
+
 const initialState = {
     semesters: [],
     error: null,

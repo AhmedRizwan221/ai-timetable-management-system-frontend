@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -13,8 +13,7 @@ export default function CreateTeacherChairman() {
     const { register, handleSubmit, reset } = useForm();
     const [error, setError] = useState("");
 
-    const user = useSelector((state) => state.auth.user);
-    // console.log(user);
+    const {user} = useSelector((state) => state.auth);
 
     const handleUser = async (data) => {
         setError("");
@@ -120,6 +119,20 @@ export default function CreateTeacherChairman() {
                                 />
 
                             </div>
+                            {user?.role === 'chairman' && (<div className="space-y-2">
+                                <label className="flex items-center gap-1.5">
+                                    <BookOpen className="h-3.5 w-3.5 text-muted-foreground" /> Faculty
+                                </label>
+                                <select
+                                    className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
+                                    {...register("facultyId", { required: true })}
+                                    value={user?.department?.faculty?._id} disabled
+                                >
+                                    <option value={user?.department?.faculty?._id}>
+                                        {user?.department?.faculty?.facultyName}
+                                    </option>
+                                </select>
+                            </div>)}
                             {user?.role === 'chairman' && (<div className="space-y-2">
                                 <label className="flex items-center gap-1.5">
                                     <BookOpen className="h-3.5 w-3.5 text-muted-foreground" /> Department

@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { getAllTimeTableSlot } from "../../store/timetableSlot/timetableSlot";
+import { getAllSlots } from "../../store/timetableSlot/timetableSlot";
 import { useDispatch, useSelector } from "react-redux";
 import { GraduationCap, Layers, CalendarDays, Users, FileDown } from "lucide-react";
 import { getAllTeachersInDept } from "../../store/user/user";
-import { getAllCoursesInDept } from "../../store/course/course";
+import { allCourses } from "../../store/course/course";
+import TimeTableView from "../shrared/TimeTableView";
 
 function ChairmanDashboard() {
 
@@ -15,19 +16,17 @@ function ChairmanDashboard() {
 
     const { user } = useSelector((state) => state.auth);
     const { timeTableSlot = [], error, totalSlots } = useSelector((state) => state.timetabelSlot);
-    // console.log(timeTableSlot);
     const { totalTeachers } = useSelector((state) => state.user);
-    const { totalCourses, courses } = useSelector((state) => state.course);
-    // console.log(user);
+    const { totalCourses } = useSelector((state) => state.course);
 
     const Days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 
     // console.log(totalCourses, courses);
     useEffect(() => {
         if (user) {
-            dispatch(getAllTimeTableSlot(user?.department?._id));
+            dispatch(getAllSlots(user?.department?._id));
             dispatch(getAllTeachersInDept(user?.department?._id));
-            dispatch(getAllCoursesInDept(user?.department?._id));
+            dispatch(allCourses(user?.department?._id));
         }
     }, [dispatch, user]);
 
@@ -73,14 +72,6 @@ function ChairmanDashboard() {
                 `${slot.startTime}-${slot.endTime}` === time
         );
     }
-
-    // // unique course
-    // const uniqueCourses = Array.from(
-    //     new Map(
-    //         timeTableSlot.map((item) => [item?.teacher?.fullName, item])
-    //     ).values());
-
-    // console.log(uniqueCourses);
 
     const mergedCourses = Object.values(
         filteredTimeTable.reduce((acc, item) => {
@@ -142,7 +133,7 @@ function ChairmanDashboard() {
                 </header>
                 <main className="p-4">
                     {/* filter time tables  */}
-                    <div className="flex items-center justify-between gap-2">
+                    <div className="block md:flex items-center justify-between gap-2">
                         <FilterSelect
                             label="Batch"
                             value={selectedBatch}
@@ -246,6 +237,7 @@ function ChairmanDashboard() {
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    
                                     {mergedCourses.map((timetable, idx) => (
                                         <tr key={idx}>
                                             <td className="border border-black px-2 py-1 font-bold">{String(idx + 1).padStart(2, '0')}</td>
@@ -265,6 +257,7 @@ function ChairmanDashboard() {
             </div>
         </div>
     )
+
 }
 
 
