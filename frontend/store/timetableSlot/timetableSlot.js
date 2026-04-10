@@ -112,6 +112,21 @@ export const getAllSlots = createAsyncThunk(
     }
 )
 
+// guest user slots 
+export const allSlotsInUni = createAsyncThunk(
+    "timetableSlot/allSlots",
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await axios.get('http://localhost:8000/api/v1/timetableSlots/guestUser/timetableSlots');
+
+            console.log(response.data.data);
+            return response.data.data.guestUserAllSlots
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
 const initialState = {
     timeTableSlot: [],
     totalSlots: null,
@@ -215,7 +230,7 @@ const timeTableSLotSLice = createSlice({
                 state.status = 'rejected',
                     state.error = action.payload
             })
-             .addCase(getAllSlots.pending, (state) => {
+            .addCase(getAllSlots.pending, (state) => {
                 state.status = 'pending'
             })
             .addCase(getAllSlots.fulfilled, (state, action) => {
@@ -223,6 +238,17 @@ const timeTableSLotSLice = createSlice({
                 state.timeTableSlot = action.payload;
             })
             .addCase(getAllSlots.rejected, (state, action) => {
+                state.status = 'rejected',
+                    state.error = action.payload
+            })
+            .addCase(allSlotsInUni.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(allSlotsInUni.fulfilled, (state, action) => {
+                state.status = 'succeeded'
+                state.timeTableSlot = action.payload;
+            })
+            .addCase(allSlotsInUni.rejected, (state, action) => {
                 state.status = 'rejected',
                     state.error = action.payload
             })

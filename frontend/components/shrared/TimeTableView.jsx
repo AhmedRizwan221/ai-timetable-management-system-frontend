@@ -10,7 +10,8 @@ function TimeTableView({
     totalTeachers,
     totalCourses,
     totalChairmans,
-    timeTableSlot = []
+    timeTableSlot = [],
+    departments = []
 }) {
 
 
@@ -37,7 +38,10 @@ function TimeTableView({
             const matchSection = slot.section
                 ? slot.section.sectionName.toLowerCase().trim() === selectedSection?.toLowerCase().trim()
                 : true;
-            const matchDepartment = slot?.department?.deptName === selectedDepartment;
+            const matchDepartment = selectedDepartment
+                ? slot?.department?.deptName?.toLowerCase().trim() ===
+                selectedDepartment?.toLowerCase().trim()
+                : true;
             // console.log("department compare:", slot?.department?.deptName);
 
             // console.log({
@@ -47,9 +51,16 @@ function TimeTableView({
             //     matchSection,
             //     matchDepartment
             // });
-            return matchBatch && matchSemester && matchYear && matchSection && matchDepartment && new Map(timeTableSlot.map((item) => [item?.course?.courseName, item])).values();
+            // return matchBatch && matchSemester && matchYear && matchSection && matchDepartment && new Map(timeTableSlot.map((item) => [item?.course?.courseName, item])).values();
+            return (
+                matchBatch &&
+                matchSemester &&
+                matchYear &&
+                matchSection &&
+                matchDepartment
+            );
         });
-        
+
     }, [timeTableSlot, selectedBatch, selectedSemester, selectedYear, selectedSection, selectedDepartment]);
     // console.log(filteredTimeTable);
 
@@ -70,20 +81,48 @@ function TimeTableView({
 
 
     const uniqueDepartment = Array.from(
-        new Map(timeTableSlot.map((timetable) => [timetable?.department?.deptName, timetable])).values()
+        new Map(departments.map((dept) => [dept?.deptName, dept])).values()
     )
     // console.log("Unique departments", uniqueDepartment)
 
     useEffect(() => {
         if (uniqueDepartment.length > 0 && !selectedDepartment) {
-            setSelectedDepartment(uniqueDepartment[0]?.department?.deptName);
+            setSelectedDepartment(uniqueDepartment[0]?.deptName);
         }
     }, [uniqueDepartment, selectedDepartment]);
+
+    const mergedCourses = Object.values(
+        filteredTimeTable.reduce((acc, item) => {
+            const courseName = item?.course?.courseName;
+
+            if (!acc[courseName]) {
+                acc[courseName] = {
+                    courseName,
+                    courseFacilitator: "",
+                    practicalFacilitator: "",
+                    creditHours: item?.course?.creditHours
+                };
+            }
+
+            // Theory teacher
+            if (item?.teacher?.fullName) {
+                acc[courseName].courseFacilitator = item.teacher.fullName;
+            }
+
+            // Practical teacher
+            if (item?.practicalFacilitator?.fullName) {
+                acc[courseName].practicalFacilitator =
+                    item.practicalFacilitator.fullName;
+            }
+
+            return acc;
+        }, {})
+    );
 
     return (
         <div className="bg-white border border-gray-200 rounded-lg">
             <header className="p-4 sm:p-6 border-b bg-white flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3 min-w-0">
+                {user && (<div className="flex items-center gap-3 min-w-0">
                     <div className="p-2 bg-blue-50 rounded-lg shrink-0">
                         <GraduationCap className="h-6 w-6 sm:h-8 sm:w-8 text-[#1D293D]" />
                     </div>
@@ -92,7 +131,7 @@ function TimeTableView({
                             {user?.fullName || "UserName"}
                         </h1>
                     </div>
-                </div>
+                </div>)}
                 <button
                     title="Download PDF"
                     className="flex items-center justify-center gap-2 bg-[#1D293D] text-white p-2.5 sm:px-5 sm:py-2.5 rounded-lg hover:bg-[#2a3a54] transition-all shadow-sm shrink-0"
@@ -132,46 +171,49 @@ function TimeTableView({
                         label="Department"
                         value={selectedDepartment}
                         onChange={(e) => setSelectedDepartment(e.target.value)}
-                        options={uniqueDepartment.map(s => ({ val: s.department?.deptName, lab: `Department ${s.department?.deptName}` }))}
+                        options={uniqueDepartment.map((dept) => ({
+                            val: dept?.deptName,
+                            lab: dept?.deptName
+                        }))}
                     />
                 </div>
+                {user && (
+                    < div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 mt-8">
+                        {user?.role === 'chairman' && (
+                            <div className="flex items-center gap-4 bg-[#1D293D] text-white hover:bg-[#162131] py-4 px-4 border border-gray-200 rounded-lg">
+                                <CalendarDays className="h-5 w-5 text-primary-foreground" />
+                                <div className="block">
+                                    <h2 className="text-xl font-bold text-foreground ">{slots}</h2>
+                                    <p className="text-xs text-muted-foreground">Total Slots</p>
+                                </div>
 
-                {/* information grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 mt-8">
-                    {user?.role === 'chairman' && (
-                        <div className="flex items-center gap-4 bg-[#1D293D] text-white hover:bg-[#162131] py-4 px-4 border border-gray-200 rounded-lg">
-                            <CalendarDays className="h-5 w-5 text-primary-foreground" />
-                            <div className="block">
-                                <h2 className="text-xl font-bold text-foreground ">{slots}</h2>
-                                <p className="text-xs text-muted-foreground">Total Slots</p>
                             </div>
-
-                        </div>
-                    )}
-                    {user?.role === 'dean' && (
+                        )}
+                        {user?.role === 'dean' && (
+                            <div className="flex items-center gap-4 bg-[#1D293D] text-white hover:bg-[#162131] py-4 px-4 border border-gray-200 rounded-lg">
+                                <Users className="h-5 w-5 text-primary-foreground" />
+                                <div className="block">
+                                    <h2 className="text-xl font-bold text-foreground ">{totalChairmans}</h2>
+                                    <p className="text-xs text-muted-foreground">Total Chairmans</p>
+                                </div>
+                            </div>
+                        )}
                         <div className="flex items-center gap-4 bg-[#1D293D] text-white hover:bg-[#162131] py-4 px-4 border border-gray-200 rounded-lg">
                             <Users className="h-5 w-5 text-primary-foreground" />
                             <div className="block">
-                                <h2 className="text-xl font-bold text-foreground ">{totalChairmans}</h2>
-                                <p className="text-xs text-muted-foreground">Total Chairmans</p>
+                                <h2 className="text-xl font-bold text-foreground ">{totalTeachers}</h2>
+                                <p className="text-xs text-muted-foreground">Total Teachers</p>
                             </div>
                         </div>
-                    )}
-                    <div className="flex items-center gap-4 bg-[#1D293D] text-white hover:bg-[#162131] py-4 px-4 border border-gray-200 rounded-lg">
-                        <Users className="h-5 w-5 text-primary-foreground" />
-                        <div className="block">
-                            <h2 className="text-xl font-bold text-foreground ">{totalTeachers}</h2>
-                            <p className="text-xs text-muted-foreground">Total Teachers</p>
+                        <div className="flex items-center gap-4 bg-[#1D293D] text-white hover:bg-[#162131] py-4 px-4 border border-gray-200 rounded-lg">
+                            <GraduationCap className="h-5 w-5 text-primary-foreground" />
+                            <div className="block">
+                                <h2 className="text-xl font-bold text-foreground ">{totalCourses}</h2>
+                                <p className="text-xs text-muted-foreground">Total Courses</p>
+                            </div>
                         </div>
-                    </div>
-                    <div className="flex items-center gap-4 bg-[#1D293D] text-white hover:bg-[#162131] py-4 px-4 border border-gray-200 rounded-lg">
-                        <GraduationCap className="h-5 w-5 text-primary-foreground" />
-                        <div className="block">
-                            <h2 className="text-xl font-bold text-foreground ">{totalCourses}</h2>
-                            <p className="text-xs text-muted-foreground">Total Courses</p>
-                        </div>
-                    </div>
-                </div>
+                    </div>)
+                }
 
                 <div className="w-full space-y-8 p-4 bg-white">
                     <div className="overflow-x-auto">
@@ -235,23 +277,23 @@ function TimeTableView({
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredTimeTable.map((timetable, idx) => (
+                                {mergedCourses.map((timetable, idx) => (
                                     <tr key={idx}>
                                         <td className="border border-black px-2 py-1 font-bold">{String(idx + 1).padStart(2, '0')}</td>
-                                        <td className="border border-black px-2 py-1 font-medium">{timetable?.course?.courseName}</td>
+                                        <td className="border border-black px-2 py-1 font-medium">{timetable?.courseName}</td>
                                         <td className="border border-black px-2 py-1">
-                                            {(timetable?.course?.creditHours?.theory ?? 0) + " + " + (timetable?.course?.creditHours?.practical ?? 0)}
+                                            {(timetable?.creditHours?.theory ?? 0) + " + " + (timetable?.creditHours?.practical ?? 0)}
                                         </td>
-                                        <td className="border border-black px-2 py-1">{timetable?.teacher?.fullName}</td>
-                                        <td className="border border-black px-2 py-1">{timetable?.practicalFacilitator?.fullName || ""}</td>
+                                        <td className="border border-black px-2 py-1">{timetable?.courseFacilitator}</td>
+                                        <td className="border border-black px-2 py-1">{timetable?.practicalFacilitator || ""}</td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     </div>
                 </div>
-            </main>
-        </div>
+            </main >
+        </div >
     );
 }
 
