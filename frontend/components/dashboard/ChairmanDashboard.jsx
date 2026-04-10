@@ -5,6 +5,7 @@ import { GraduationCap, Layers, CalendarDays, Users, FileDown } from "lucide-rea
 import { getAllTeachersInDept } from "../../store/user/user";
 import { allCourses } from "../../store/course/course";
 import TimeTableView from "../shrared/TimeTableView";
+import Chatbot from "../chatbot/chatbot";
 
 function ChairmanDashboard() {
 
@@ -103,7 +104,7 @@ function ChairmanDashboard() {
 
     // console.log(mergedCourses);
     return (
-        <div className="">
+        <div>
             <div className="bg-white border border-gray-200 rounded-lg">
                 <header className="p-4 sm:p-6 border-b bg-white flex items-center justify-between gap-4">
                     {/* Left Side: Profile Info */}
@@ -255,6 +256,7 @@ function ChairmanDashboard() {
                     </div>
                 </main>
             </div>
+            <Chatbot role={user?.role} />
         </div>
     )
 

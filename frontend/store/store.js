@@ -9,6 +9,7 @@ import batchReducer from "./batch/batch";
 import sectionReducer from "./section/section";
 import timetableSLotReducer from "./timetableSlot/timetableSlot";
 import courseReducer from "./course/course";
+import chatbotReducer from "./chatbot/chatbot";
 
 
 export const store = configureStore({
@@ -22,6 +23,7 @@ export const store = configureStore({
         batch: batchReducer,
         section: sectionReducer,
         timetabelSlot: timetableSLotReducer,
-        course: courseReducer
+        course: courseReducer,
+        chatbot: chatbotReducer
     }
 })
