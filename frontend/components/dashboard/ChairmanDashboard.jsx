@@ -1,13 +1,14 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { getAllSlots } from "../../store/timetableSlot/timetableSlot";
 import { useDispatch, useSelector } from "react-redux";
-import { GraduationCap, Layers, CalendarDays, Users, FileDown } from "lucide-react";
+import { GraduationCap, MessageCircle, X, CalendarDays, Users, FileDown, ChevronDown } from "lucide-react";
 import { getAllTeachersInDept } from "../../store/user/user";
 import { allCourses } from "../../store/course/course";
 import TimeTableView from "../shrared/TimeTableView";
 import Chatbot from "../chatbot/chatbot";
 
 function ChairmanDashboard() {
+    const [isOpen, setIsOpen] = useState(false);
 
     const dispatch = useDispatch();
     const [selectedBatch, setSelectedBatch] = useState("morning");
@@ -22,7 +23,8 @@ function ChairmanDashboard() {
 
     const Days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 
-    // console.log(totalCourses, courses);
+    // console.log(totalCourses);
+
     useEffect(() => {
         if (user) {
             dispatch(getAllSlots(user?.department?._id));
@@ -202,25 +204,36 @@ function ChairmanDashboard() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {Days.map((day) => (
-                                        <tr key={day}>
-                                            <td className="border border-black px-4 py-3 font-bold text-left">{day}</td>
-                                            {
-                                                timeSlots.map((time) => {
-                                                    const slot = getSLot(day, time);
-                                                    return (
-                                                        <td key={time} className="border border-black px-2 py-3 min-w-[120px]">
-                                                            {slot ? (
-                                                                <div className="whitespace-pre-line font-bold">
-                                                                    {slot.type === 'theory' ? slot.course?.courseName : slot.course?.courseName + "(Lab)"}
-                                                                </div>
-                                                            ) : null}
-                                                        </td>
-                                                    );
-                                                })
-                                            }
+                                    {timeSlots.length === 0 ? (
+                                        <tr>
+                                            <td
+                                                colSpan={timeSlots.length + 1 || 2}
+                                                className="text-center py-6 font-semibold text-red-500"
+                                            >
+                                                No slots found
+                                            </td>
                                         </tr>
-                                    ))}
+                                    ) : (
+                                            Days.map((day) => (
+                                                <tr key={day}>
+                                                    <td className="border border-black px-4 py-3 font-bold text-left">{day}</td>
+                                                    {
+                                                        timeSlots.map((time) => {
+                                                            const slot = getSLot(day, time);
+                                                            return (
+                                                                <td key={time} className="border border-black px-2 py-3 min-w-[120px]">
+                                                                    {slot ? (
+                                                                        <div className="whitespace-pre-line font-bold">
+                                                                            {slot.type === 'theory' ? slot.course?.courseName : slot.course?.courseName + "(Lab)"}
+                                                                        </div>
+                                                                    ) : null}
+                                                                </td>
+                                                            );
+                                                        })
+                                                    }
+                                                </tr>
+                                            ))
+                                    )}
                                 </tbody>
                             </table>
                         </div>
@@ -238,7 +251,6 @@ function ChairmanDashboard() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
                                     {mergedCourses.map((timetable, idx) => (
                                         <tr key={idx}>
                                             <td className="border border-black px-2 py-1 font-bold">{String(idx + 1).padStart(2, '0')}</td>

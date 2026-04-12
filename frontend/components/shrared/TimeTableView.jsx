@@ -22,9 +22,6 @@ function TimeTableView({
     const [selectedDepartment, setSelectedDepartment] = useState();
     // console.log(selectedDepartment);
 
-
-
-
     // filter functionality
     const filteredTimeTable = useMemo(() => {
         if (!timeTableSlot) return [];
@@ -45,12 +42,15 @@ function TimeTableView({
             // console.log("department compare:", slot?.department?.deptName);
 
             // console.log({
-            //     matchBatch,
+            //     // matchBatch,
             //     matchSemester,
             //     matchYear,
-            //     matchSection,
-            //     matchDepartment
+            //     // matchSection,
+            //     // matchDepartment
             // });
+            // console.log("slot year:", slot?.semester?.studyYear);
+            // console.log("selected year:", selectedYear);
+            // console.log("year match:", Number(slot?.semester?.studyYear) === Number(selectedYear));
             // return matchBatch && matchSemester && matchYear && matchSection && matchDepartment && new Map(timeTableSlot.map((item) => [item?.course?.courseName, item])).values();
             return (
                 matchBatch &&
@@ -120,7 +120,7 @@ function TimeTableView({
     );
 
     return (
-        <div className="bg-white border border-gray-200 rounded-lg">
+        <div className="bg-white border border-gray-200 rounded-lg w-full">
             <header className="p-4 sm:p-6 border-b bg-white flex items-center justify-between gap-4">
                 {user && (<div className="flex items-center gap-3 min-w-0">
                     <div className="p-2 bg-blue-50 rounded-lg shrink-0">
@@ -131,6 +131,10 @@ function TimeTableView({
                             {user?.fullName || "UserName"}
                         </h1>
                     </div>
+                </div>)}
+                {!user && (<div className="min-w-0 flex flex-col">
+                    <h1 className="text-lg sm:text-2xl font-bold text-gray-900 truncate">Time Table Management System</h1>
+                    <p className="text-s font-medium pb-2 pl-2">Select your Department and Batch to continue</p>
                 </div>)}
                 <button
                     title="Download PDF"
@@ -241,7 +245,6 @@ function TimeTableView({
                                         </td>
                                     </tr>
                                 ) : (
-
                                     Days.map((day) => (
                                         <tr key={day}>
                                             <td className="border border-black px-4 py-3 font-bold text-left">{day}</td>

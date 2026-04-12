@@ -116,7 +116,7 @@ export const allCourses = createAsyncThunk(
             const response = await axios.get(`http://localhost:8000/api/v1/courses/all/${deptId}`, { withCredentials: true });
 
             // console.log(response.data.data);
-            return response.data.data.allCourses;
+            return response.data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -231,7 +231,8 @@ const courseSlice = createSlice({
             })
             .addCase(allCourses.fulfilled, (state, action) => {
                 state.status = 'succeeded',
-                state.courses = action.payload
+                state.courses = action.payload.allCourses;
+                state.totalCourses = action.payload.totalCourses
             })
             .addCase(allCourses.rejected, (state, action) => {
                 state.status = 'rejected',

@@ -103,6 +103,22 @@ export const departmentDelete = createAsyncThunk(
     }
 )
 
+// fetch faculty departments without pagination
+export const getFacultyDepartments = createAsyncThunk(
+     "department/facultyDepartments",
+    async (facultyId, { rejectWithValue }) => {
+        try {
+            const response = await axios.get(`http://localhost:8000/api/v1/departments/facultyDepts/${facultyId}`, {
+                withCredentials: true
+            })
+            // console.log(response.data.data);
+            return response.data.data.facultyDepartments;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
 
 const initialState = {
     departments: [],
@@ -199,6 +215,17 @@ const departmentSlice = createSlice({
                 state.departments = state.departments.filter(dept => dept._id !== id);
             })
             .addCase(departmentDelete.rejected, (state, action) => {
+                state.status = 'rejected',
+                    state.error = action.payload
+            })
+            .addCase(getFacultyDepartments.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(getFacultyDepartments.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.departments = action.payload;
+            })
+            .addCase(getFacultyDepartments.rejected, (state, action) => {
                 state.status = 'rejected',
                     state.error = action.payload
             })

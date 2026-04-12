@@ -224,6 +224,7 @@ const initialState = {
     totalTeachers: null,
     status: "idle",
     error: null,
+    loading: false,
 
     // pagination data 
     totalPages: 0,
@@ -368,10 +369,12 @@ const userSlice = createSlice({
                     state.error = action.payload
             })
             .addCase(getAllChairmansInFaculty.pending, (state) => {
-                state.status = 'pending'
+                state.status = 'pending';
+                state.loading = true
             })
             .addCase(getAllChairmansInFaculty.fulfilled, (state, action) => {
                 state.status = 'succeeded',
+                    state.loading = false,
                     state.chairmans = action.payload.chairmansInFaculty,
                     state.totalChairmans = action.payload.TotalChairmansInFaculty,
                     // pagination data
@@ -383,6 +386,7 @@ const userSlice = createSlice({
             })
             .addCase(getAllChairmansInFaculty.rejected, (state, action) => {
                 state.status = 'rejected',
+                    state.loading = false,
                     state.error = action.payload
             })
             .addCase(getAllChairmansCountInFaculty.pending, (state) => {

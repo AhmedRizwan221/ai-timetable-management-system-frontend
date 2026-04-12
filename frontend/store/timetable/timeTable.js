@@ -5,6 +5,7 @@ import axios from "axios";
 export const createTimeTable = createAsyncThunk(
     "timetable/create",
     async ({ batchId, semesterId, sectionId = null, departmentId, facultyId }, { rejectWithValue }) => {
+        console.log(batchId, semesterId, sectionId, departmentId, facultyId);
         try {
             const response = await axios.post('http://localhost:8000/api/v1/timetables/create',
                 { batchId, semesterId, sectionId, departmentId, facultyId },

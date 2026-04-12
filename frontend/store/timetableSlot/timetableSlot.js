@@ -13,7 +13,7 @@ export const createTimeTableSlot = createAsyncThunk(
                 withCredentials: true
             });
 
-            // console.log(response.data.data);
+            console.log(response.data.data);
             return response.data.data.createdSlot
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
@@ -80,14 +80,14 @@ export const updateTimeTableSlot = createAsyncThunk(
 export const getFacultyAllTimeTableSlots = createAsyncThunk(
     "timetableSlot/getFacultySlots",
     async (facultyId, { rejectWithValue }) => {
-        // console.log(deptId);
+        // console.log(facultyId);
         try {
             // console.log(deptId);
             const response = await axios.get(`http://localhost:8000/api/v1/timetableSlots/${facultyId}/timetableSlots`, {
                 withCredentials: true
             });
 
-            console.log(response.data.data);
+            // console.log(response.data.data);
             return response.data.data
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
@@ -105,7 +105,7 @@ export const getAllSlots = createAsyncThunk(
             });
 
             // console.log(response.data.data);
-            return response.data.data.timetableSlot
+            return response.data.data
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -119,7 +119,7 @@ export const allSlotsInUni = createAsyncThunk(
         try {
             const response = await axios.get('http://localhost:8000/api/v1/timetableSlots/guestUser/timetableSlots');
 
-            console.log(response.data.data);
+            // console.log(response.data.data);
             return response.data.data.guestUserAllSlots
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
@@ -223,7 +223,6 @@ const timeTableSLotSLice = createSlice({
             .addCase(getFacultyAllTimeTableSlots.fulfilled, (state, action) => {
                 state.status = 'succeeded'
                 state.timeTableSlot = action.payload.timetableSlot;
-                state.timeTables = action.payload.timetablesSlots;
                 state.totalSlots = action.payload.totaltimetableSlots;
             })
             .addCase(getFacultyAllTimeTableSlots.rejected, (state, action) => {
@@ -235,7 +234,8 @@ const timeTableSLotSLice = createSlice({
             })
             .addCase(getAllSlots.fulfilled, (state, action) => {
                 state.status = 'succeeded'
-                state.timeTableSlot = action.payload;
+                state.timeTableSlot = action.payload.timetableSlot;
+                state.totalSlots = action.payload.totaltimetableSlots
             })
             .addCase(getAllSlots.rejected, (state, action) => {
                 state.status = 'rejected',

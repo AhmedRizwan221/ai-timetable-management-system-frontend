@@ -17,9 +17,9 @@ export const sendChatMessages = createAsyncThunk(
                 botMessage: response.data.data
             }
         } catch (error) {
-            // console.log(error);
+            console.log(error);
             return rejectWithValue(
-                error.response?.data || error.message
+                error.response?.data.content || error.message
             );
         }
     }
@@ -66,7 +66,8 @@ const chatbotSlice = createSlice({
             })
             .addCase(sendChatMessages.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload.message;
+                console.log(action.payload);
+                state.error = action.payload ;
             })
     }
 })

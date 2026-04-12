@@ -4,6 +4,7 @@ import { clearError, deleteUser, getAllChairmansInFaculty } from "../../../store
 import { useNavigate } from "react-router-dom";
 import { Users, Search, User, Pencil, Trash, ChevronLeft, ChevronRight } from "lucide-react";
 import Input from "../../shrared/Input.jsx";
+import Loader from "../../shrared/Loader.jsx";
 
 
 export default function ManageChairmans() {
@@ -16,7 +17,7 @@ export default function ManageChairmans() {
     const { user } = useSelector((state) => state.auth);
     // console.log(user, user?.role);
 
-    const { chairmans = [], error, totalPages, currentPage, limit, hasPrevPage, hasNextPage } = useSelector((state) => state.user);
+    const { chairmans = [], error, totalPages, currentPage, loading, hasPrevPage, hasNextPage } = useSelector((state) => state.user);
     // console.log(chairmans, totalPages, currentPage, limit, hasNextPage, hasPrevPage);
     // console.log(chairmans);
 
@@ -135,30 +136,38 @@ export default function ManageChairmans() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filterUsers.length === 0 ?
-                                    (
-                                        <tr>
-                                            <td colSpan="6" className="py-12 text-center text-muted-foreground bg-card">No Chairmans found.
-                                            </td>
-                                        </tr>
-                                    ) : (
-                                        filterUsers.map((chair, index) => (
-                                            <tr key={chair._id} className="border-t hover:bg-muted/40 transition-colors group">
-                                                <td className="px-6 py-4 text-sm">{index + 1}</td>
-                                                <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">
-                                                    <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0"><User className="h-4 w-4" /></div>
-                                                    {chair.fullName}
-                                                </td>
-                                                <td className="px-6 py-4 text-muted-foreground text-sm truncate max-w-[150px] lg:max-w-none">{chair.email}</td>
-                                                <td className="px-6 py-4 text-sm">{user.faculty?.facultyName || "Not Assigned"}</td>
-                                                <td className="px-6 py-4">
-                                                    <div className="flex justify-end gap-3">
-                                                        <button onClick={() => navigate(`/dashboard/dean/edit-chairmans/${chair._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
-                                                        <button onClick={() => deleteHandler(chair._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
-                                                    </div>
+                                {loading ? (
+                                    <tr>
+                                        <td colSpan="6" className="py-10">
+                                            <Loader loading={loading} />
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    filterUsers.length === 0 ?
+                                        (
+                                            <tr>
+                                                <td colSpan="6" className="py-12 text-center text-muted-foreground bg-card">No Chairmans found.
                                                 </td>
                                             </tr>
-                                        )))}
+                                        ) : (
+                                            filterUsers.map((chair, index) => (
+                                                <tr key={chair._id} className="border-t hover:bg-muted/40 transition-colors group">
+                                                    <td className="px-6 py-4 text-sm">{index + 1}</td>
+                                                    <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">
+                                                        <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0"><User className="h-4 w-4" /></div>
+                                                        {chair.fullName}
+                                                    </td>
+                                                    <td className="px-6 py-4 text-muted-foreground text-sm truncate max-w-[150px] lg:max-w-none">{chair.email}</td>
+                                                    <td className="px-6 py-4 text-sm">{user.faculty?.facultyName || "Not Assigned"}</td>
+                                                    <td className="px-6 py-4">
+                                                        <div className="flex justify-end gap-3">
+                                                            <button onClick={() => navigate(`/dashboard/dean/edit-chairmans/${chair._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
+                                                            <button onClick={() => deleteHandler(chair._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            )))
+                                )}
                             </tbody>
                         </table>
                     </div>
