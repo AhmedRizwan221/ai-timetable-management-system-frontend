@@ -123,6 +123,21 @@ export const allCourses = createAsyncThunk(
     }
 )
 
+// fetch all courses of univeristy 
+export const allCoursesOfUni = createAsyncThunk(
+    "course/AllInUni",
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await axios.get(`http://localhost:8000/api/v1/courses/allCourses`);
+
+            // console.log(response.data.data);
+            return response.data.data.allCoursesInUni;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
 const initialState = {
     courses: [],
     totalCourses: null,
@@ -231,10 +246,21 @@ const courseSlice = createSlice({
             })
             .addCase(allCourses.fulfilled, (state, action) => {
                 state.status = 'succeeded',
-                state.courses = action.payload.allCourses;
+                    state.courses = action.payload.allCourses;
                 state.totalCourses = action.payload.totalCourses
             })
             .addCase(allCourses.rejected, (state, action) => {
+                state.status = 'rejected',
+                    state.error = action.payload
+            })
+            .addCase(allCoursesOfUni.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(allCoursesOfUni.fulfilled, (state, action) => {
+                state.status = 'succeeded',
+                    state.totalCourses = action.payload;
+            })
+            .addCase(allCoursesOfUni.rejected, (state, action) => {
                 state.status = 'rejected',
                     state.error = action.payload
             })

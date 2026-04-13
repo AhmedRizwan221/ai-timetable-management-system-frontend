@@ -11,15 +11,16 @@ function TimeTableView({
     totalCourses,
     totalChairmans,
     timeTableSlot = [],
-    departments = []
+    departments = [],
+    totalDeans,
 }) {
 
 
-    const [selectedBatch, setSelectedBatch] = useState("morning");
-    const [selectedSemester, setSelectedSemester] = useState(1);
-    const [selectedYear, setSelectedYear] = useState(1);
-    const [selectedSection, setSelectedSection] = useState("A");
-    const [selectedDepartment, setSelectedDepartment] = useState();
+    const [selectedBatch, setSelectedBatch] = useState("");
+    const [selectedSemester, setSelectedSemester] = useState("");
+    const [selectedYear, setSelectedYear] = useState("");
+    const [selectedSection, setSelectedSection] = useState("");
+    const [selectedDepartment, setSelectedDepartment] = useState("");
     // console.log(selectedDepartment);
 
     // filter functionality
@@ -80,9 +81,12 @@ function TimeTableView({
     }
 
 
-    const uniqueDepartment = Array.from(
-        new Map(departments.map((dept) => [dept?.deptName, dept])).values()
-    )
+    const uniqueDepartment = useMemo(() => {
+        return Array.from(
+            new Map(departments.map((dept) => [dept?.deptName, dept])).values()
+        )
+    }, [departments]);
+
     // console.log("Unique departments", uniqueDepartment)
 
     useEffect(() => {
@@ -90,6 +94,7 @@ function TimeTableView({
             setSelectedDepartment(uniqueDepartment[0]?.deptName);
         }
     }, [uniqueDepartment, selectedDepartment]);
+
 
     const mergedCourses = Object.values(
         filteredTimeTable.reduce((acc, item) => {
@@ -134,7 +139,7 @@ function TimeTableView({
                 </div>)}
                 {!user && (<div className="min-w-0 flex flex-col">
                     <h1 className="text-lg sm:text-2xl font-bold text-gray-900 truncate">Time Table Management System</h1>
-                    <p className="text-s font-medium pb-2 pl-2">Select your Department and Batch to continue</p>
+                    <p className="text-s font-medium pb-2 pl-2">Select your Department, Batch, Year, Semester and Department to continue</p>
                 </div>)}
                 <button
                     title="Download PDF"
@@ -199,6 +204,15 @@ function TimeTableView({
                                 <div className="block">
                                     <h2 className="text-xl font-bold text-foreground ">{totalChairmans}</h2>
                                     <p className="text-xs text-muted-foreground">Total Chairmans</p>
+                                </div>
+                            </div>
+                        )}
+                        {user?.role === 'admin' && (
+                            <div className="flex items-center gap-4 bg-[#1D293D] text-white hover:bg-[#162131] py-4 px-4 border border-gray-200 rounded-lg">
+                                <Users className="h-5 w-5 text-primary-foreground" />
+                                <div className="block">
+                                    <h2 className="text-xl font-bold text-foreground ">{totalDeans}</h2>
+                                    <p className="text-xs text-muted-foreground">Total Deans</p>
                                 </div>
                             </div>
                         )}
@@ -308,6 +322,7 @@ const FilterSelect = ({ label, value, onChange, options }) => (
             value={value}
             onChange={onChange}
         >
+            <option value="">Select {label}</option>
             {options.map(opt => (
                 <option key={opt.val} value={opt.val}>{opt.lab}</option>
             ))}

@@ -77,6 +77,7 @@ const initialState = {
     faculties: [],
     status: 'idle',
     error: null,
+    loading: false,
 
     // pagination data 
     totalPages: 0,
@@ -110,9 +111,11 @@ const facultySlice = createSlice({
             })
             .addCase(fetchFaculties.pending, (state) => {
                 state.status = "loading";
+                state.loading = true
             })
             .addCase(fetchFaculties.fulfilled, (state, action) => {
                 state.status = "succeeded";
+                state.loading = false;
                 state.faculties = action.payload.faculties;  // store data here
 
                   // pagination data 
@@ -124,6 +127,7 @@ const facultySlice = createSlice({
             })
             .addCase(fetchFaculties.rejected, (state, action) => {
                 state.status = "failed";
+                state.loading = false;
                 state.error = action.payload.faculties;
 
 

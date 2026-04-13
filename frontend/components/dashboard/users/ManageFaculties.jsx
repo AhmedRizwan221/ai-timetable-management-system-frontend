@@ -4,6 +4,7 @@ import { Pencil, Trash, Book, ChevronRight, ChevronLeft, Search } from "lucide-r
 import { fetchFaculties, deleteFaculty, clearError } from "../../../store/faculty/facultySlice";
 import { useNavigate } from "react-router-dom";
 import Input from "../../shrared/Input";
+import Loader from "../../shrared/Loader";
 
 
 export default function ManageFaculties() {
@@ -12,7 +13,7 @@ export default function ManageFaculties() {
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
 
-    const { faculties = [], error, totalPages, currentPage, limit, hasPrevPage, hasNextPage } = useSelector((state) => state.faculty);
+    const { faculties = [], error, totalPages, currentPage, loading, hasPrevPage, hasNextPage } = useSelector((state) => state.faculty);
     const { user } = useSelector((state) => state.auth);
 
     useEffect(() => {
@@ -25,7 +26,7 @@ export default function ManageFaculties() {
         }
     }, [dispatch, user, page]);
 
-      const filterFaculties = faculties.filter((fact) =>
+    const filterFaculties = faculties.filter((fact) =>
         fact?.facultyName.toLowerCase().includes(search.trim().toLocaleLowerCase()) ||
         fact?.dean?.fullName?.toLowerCase().includes(search.trim().toLowerCase())
     )
@@ -70,30 +71,37 @@ export default function ManageFaculties() {
 
                 {/* mobile screen */}
                 <div className="grid grid-cols-1 gap-4 md:hidden">
-                    {filterFaculties.length === 0 ? (
-                        <div className="py-12 text-center text-muted-foreground bg-card rounded-xl border">No Faculties found.</div>
+                    {loading ? (
+                        <div>
+                            <Loader loading={loading} />
+                        </div>
                     ) : (
-                        filterFaculties.map((fact) => (
-                            <div key={fact._id} className="bg-card p-4 rounded-xl border border-border shadow-sm space-y-3">
-                                <div className="flex justify-between items-start">
-                                    <div className="flex items-center gap-3">
-                                        <p className="font-bold text-foreground"> {fact?.facultyName}</p>
-                                        <div className="flex items-center gap-1">
-                                            <p className="font-bold text-foreground"> {fact?.dean ? fact.dean?.fullName : "Not Assigned"}</p>
+                        filterFaculties.length === 0 ? (
+                            <div className="py-12 text-center text-muted-foreground bg-card rounded-xl border">No Faculties found.</div>
+                        ) : (
+                            filterFaculties.map((fact) => (
+                                <div key={fact._id} className="bg-card p-4 rounded-xl border border-border shadow-sm space-y-3">
+                                    <div className="flex justify-between items-start">
+                                        <div className="flex items-center gap-3">
+                                            <p className="font-bold text-foreground"> {fact?.facultyName}</p>
+                                            <div className="flex items-center gap-1">
+                                                <p className="font-bold text-foreground"> {fact?.dean ? fact.dean?.fullName : "Not Assigned"}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex justify-between items-center pt-2 border-t border-border/50">
+                                        <p className="text-sm font-medium"><span className="text-muted-foreground font-normal">Batch:</span> {fact?.batch?.batchName}</p>
+                                        <div className="flex gap-2">
+                                            <button onClick={() => navigate(`/dashboard/superadmin/edit-faculties/${fact._id}`)} className="p-2 bg-muted rounded-md"><Pencil className="h-4 w-4 text-primary" /></button>
+                                            <button onClick={() => facultyDeleteHandler(fact._id)} className="p-2 bg-muted rounded-md"><Trash className="h-4 w-4 text-red-500" /></button>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div className="flex justify-between items-center pt-2 border-t border-border/50">
-                                    <p className="text-sm font-medium"><span className="text-muted-foreground font-normal">Batch:</span> {fact?.batch?.batchName}</p>
-                                    <div className="flex gap-2">
-                                        <button onClick={() => navigate(`/dashboard/superadmin/edit-faculties/${fact._id}`)} className="p-2 bg-muted rounded-md"><Pencil className="h-4 w-4 text-primary" /></button>
-                                        <button onClick={() => facultyDeleteHandler(fact._id)} className="p-2 bg-muted rounded-md"><Trash className="h-4 w-4 text-red-500" /></button>
-                                    </div>
-                                </div>
-                            </div>
-                        ))
+                            ))
+                        )
                     )}
+
                 </div>
 
                 {/* desktop screen */}
@@ -109,27 +117,36 @@ export default function ManageFaculties() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filterFaculties.length === 0 ? (
+                                {loading ? (
                                     <tr>
-                                        <td colSpan="4" className="py-12 text-center text-muted-foreground bg-card">No Faculties found.
+                                        <td colSpan="6" className="py-10">
+                                            <Loader loading={loading} />
                                         </td>
                                     </tr>
                                 ) : (
-                                    filterFaculties.map((fact, index) => (
-                                        <tr key={fact._id} className="border-t hover:bg-muted/40 transition-colors group">
-                                            <td className="px-6 py-4 text-sm">{index + 1}</td>
-                                            <td className="px-6 py-4 text-sm">{fact?.facultyName}</td>
-                                            <td className="px-6 py-4 text-sm">
-                                                <div className="text-muted-foreground font-medium">{fact?.dean ? fact.dean?.fullName : "Not Assigned"}</div>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="flex justify-end gap-3">
-                                                    <button onClick={() => navigate(`/dashboard/superadmin/edit-faculties/${fact._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
-                                                    <button onClick={() => facultyDeleteHandler(fact._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
-                                                </div>
+                                    filterFaculties.length === 0 ? (
+                                        <tr>
+                                            <td colSpan="4" className="py-12 text-center text-muted-foreground bg-card">No Faculties found.
                                             </td>
                                         </tr>
-                                    )))}
+                                    ) : (
+                                        filterFaculties.map((fact, index) => (
+                                            <tr key={fact._id} className="border-t hover:bg-muted/40 transition-colors group">
+                                                <td className="px-6 py-4 text-sm">{index + 1}</td>
+                                                <td className="px-6 py-4 text-sm">{fact?.facultyName}</td>
+                                                <td className="px-6 py-4 text-sm">
+                                                    <div className="text-muted-foreground font-medium">{fact?.dean ? fact.dean?.fullName : "Not Assigned"}</div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="flex justify-end gap-3">
+                                                        <button onClick={() => navigate(`/dashboard/superadmin/edit-faculties/${fact._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
+                                                        <button onClick={() => facultyDeleteHandler(fact._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )))
+                                )}
+
                             </tbody>
                         </table>
                     </div>

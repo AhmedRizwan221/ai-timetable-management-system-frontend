@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { Input, Button } from "../index.js";
 import { useNavigate } from "react-router-dom";
 import { getDeans } from "../../store/user/user.js";
-import { Plus, GraduationCap, Users } from "lucide-react";
+import { Plus, GraduationCap, Users, Building } from "lucide-react";
 
 export default function CreateFaculty() {
     const dispatch = useDispatch();
@@ -70,7 +70,7 @@ export default function CreateFaculty() {
                             </div>
                             <div className="space-y-2">
                                 <label className="flex items-center gap-1.5">
-                                    <Users className="h-3.5 w-3.5 text-muted-foreground" /> Department
+                                    <Building className="h-3.5 w-3.5 text-muted-foreground" /> Department
                                 </label>
                                 <select
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"

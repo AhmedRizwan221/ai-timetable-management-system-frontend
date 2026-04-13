@@ -342,7 +342,7 @@ export default function Sidebar() {
   const dashboardRoutes = {
     admin: [
       { name: "Dashboard", icon: <Home size={18} />, path: "/dashboard/superadmin" },
-      { name: "Faculties", icon: <GraduationCap size={18} />, path: "/dashboard/facultyDashboard" },
+      // { name: "Faculties", icon: <GraduationCap size={18} />, path: "/dashboard/facultyDashboard" },
       {
         name: "Deans",
         icon: <Users size={18} />,

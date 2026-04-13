@@ -40,9 +40,9 @@ export default function EditDean() {
             title="Dean"
             buttonText="Update"
             fields={[
-                { name: "fullname", label: "Full Name", type: "text", icon: Users },
-                { name: "email", label: "Email", type: "email", icon: Mail },
-                { name: "password", label: "Password", type: "password", icon: Lock }
+                { name: "fullname", label: "Full Name", type: "text", icon: Users, placeholder: "Enter Full Name" },
+                { name: "email", label: "Email", type: "email", icon: Mail, placeholder: "Email" },
+                { name: "password", label: "Password", type: "password", icon: Lock, placeholder: "Password" }
             ]}
             register={register}
             handleSubmit={handleSubmit}

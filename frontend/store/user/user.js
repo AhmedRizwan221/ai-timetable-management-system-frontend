@@ -17,7 +17,7 @@ export const getDeans = createAsyncThunk(
                     withCredentials: true
                 }
             );
-            console.log(response.data.data);
+            // console.log(response.data.data);
             // console.log(response.data.data.totalDeans);
             return response.data.data
         } catch (error) {
@@ -245,10 +245,12 @@ const userSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getDeans.pending, (state) => {
-                state.status = 'loading'
+                state.status = 'loading',
+                state.loading = true
             })
             .addCase(getDeans.fulfilled, (state, action) => {
                 state.status = 'succeeded',
+                state.loading = false,
                     state.deans = action.payload.deans,
                     state.totalDeans = action.payload.totalDeans,
                     // pagination data
@@ -260,18 +262,23 @@ const userSlice = createSlice({
             })
             .addCase(getDeans.rejected, (state, action) => {
                 state.status = 'Failed',
+                state.loading = false,
                     state.error = action.payload
             })
             // get all deans without pagination
             .addCase(getAlDeans.pending, (state) => {
-                state.status = 'loading'
+                state.status = 'loading',
+                state.loading = true
             })
             .addCase(getAlDeans.fulfilled, (state, action) => {
                 state.status = 'succeeded',
-                    state.deans = action.payload.allDeans
+                state.loading = false,
+                    state.deans = action.payload.allDeans;
+                    state.totalDeans = action.payload.totalDeans
             })
             .addCase(getAlDeans.rejected, (state, action) => {
                 state.status = 'Failed',
+                state.loading = false,
                     state.error = action.payload
             })
             .addCase(getChairmans.pending, (state) => {

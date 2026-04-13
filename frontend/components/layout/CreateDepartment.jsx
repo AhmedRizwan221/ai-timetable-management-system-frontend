@@ -15,7 +15,6 @@ export default function CreateDepartment() {
     const navigate = useNavigate();
 
     const { chairmans = [], error: chairmanError } = useSelector((state) => state.user);
-    const { faculties = [], error: facultyError, status: facultyStatus } = useSelector((state) => state.faculty)
     const { error: deptError } = useSelector((state) => state.department);
     const { user } = useSelector((state) => state.auth);
 
@@ -23,7 +22,6 @@ export default function CreateDepartment() {
 
     useEffect(() => {
         if (user) {
-            dispatch(fetchFaculties());
             dispatch(getChairmans());
         }
     }, [dispatch, user])
@@ -68,7 +66,7 @@ export default function CreateDepartment() {
                         <p className="text-red-600 text-sm mb-2 text-center">{deptError.message}</p>
                     )}
                     {chairmanError && <p className="text-red-500 text-sm">Failed to load chairmans</p>}
-                    {facultyError && <p className="text-red-500 text-sm">Failed to load faculties</p>}
+                    {/* {facultyError && <p className="text-red-500 text-sm">Failed to load faculties</p>} */}
                     <form onSubmit={handleSubmit(handleCreateDept)}>
                         <div className="grid gap-5 sm:grid-cols-2">
                             <div className="space-y-2">

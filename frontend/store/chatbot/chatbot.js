@@ -17,9 +17,9 @@ export const sendChatMessages = createAsyncThunk(
                 botMessage: response.data.data
             }
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             return rejectWithValue(
-                error.response?.data.content || error.message
+                error.response?.data.message || error.message
             );
         }
     }

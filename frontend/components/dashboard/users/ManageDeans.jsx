@@ -4,6 +4,7 @@ import { deleteUser, getDeans, clearError } from "../../../store/user/user.js";
 import { useNavigate } from "react-router-dom";
 import { Users, Search, User, Pencil, Trash, ChevronLeft, ChevronRight } from "lucide-react";
 import Input from "../../shrared/Input.jsx";
+import Loader from "../../shrared/Loader.jsx";
 
 export default function ManageDeans() {
     const dispatch = useDispatch();
@@ -13,7 +14,7 @@ export default function ManageDeans() {
 
 
     const { user } = useSelector((state) => state.auth);
-    const { deans = [], error, totalDeans, totalPages, currentPage, limit, hasPrevPage, hasNextPage } = useSelector((state) => state.user);
+    const { deans = [], error, totalDeans, totalPages, currentPage, loading, hasPrevPage, hasNextPage } = useSelector((state) => state.user);
 
     useEffect(() => {
         if (user?.role === 'admin') {
@@ -48,22 +49,19 @@ export default function ManageDeans() {
                                 <div className="hidden md:flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
                                     <Users className="h-5 w-5 sm:h-6 sm:w-6 text-primary-foreground" />
                                 </div>
-                                    <h1 className="mb-2 md:m-0 text-xl md:text-2xl font-bold tracking-tight text-foreground">
-                                        Deans Management
-                                    </h1>
-
-                                {/* Right Side */}
-                                <div className="relative w-full sm:w-72 sm:ml-auto">
-                                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                                    <Input
-                                        type="text"
-                                        className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm pl-10 focus:ring-2 focus:ring-ring"
-                                        placeholder="Search"
-                                        value={search}
-                                        onChange={(e) => setSearch(e.target.value)}
-                                    />
-                                </div>
-
+                                <h1 className="mb-2 md:m-0 text-xl md:text-2xl font-bold tracking-tight text-foreground">
+                                    Deans Management
+                                </h1>
+                            </div>
+                            <div className="relative w-full sm:w-72 sm:ml-auto">
+                                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                <Input
+                                    type="text"
+                                    className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm pl-10 focus:ring-2 focus:ring-ring"
+                                    placeholder="Search"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                />
                             </div>
 
                         </div>
@@ -76,36 +74,42 @@ export default function ManageDeans() {
                 )}
 
                 {/* mobile screen */}
-                <div className="grid grid-cols-1 gap-4 md:hidden">
-                    {filterUsers.length === 0 ? (
-                        <div className="py-12 text-center text-muted-foreground bg-card rounded-xl border">No Deans found.</div>
+                <div className="grid grid-cols-1 gap-4 md:hidden p-4">
+                    {loading ? (
+                        <div>
+                            <Loader loading={loading} />
+                        </div>
                     ) : (
-                        filterUsers.map((dean, index) => (
-                            <div key={dean._id} className="bg-card p-4 rounded-xl border border-border shadow-sm space-y-3">
-                                <div className="flex justify-between items-start">
-                                    <div className="flex items-center gap-3">
-                                        <div className="h-10 w-10 flex items-center justify-center rounded-full bg-muted-foreground/10 text-muted-foreground">
-                                            <User className="h-5 w-5" />
+                        filterUsers.length === 0 ? (
+                            <div className="py-12 text-center text-muted-foreground bg-card rounded-xl border">No Deans found.</div>
+                        ) : (
+                            filterUsers.map((dean) => (
+                                <div key={dean._id} className="bg-card p-4 rounded-xl border border-border shadow-sm space-y-3">
+                                    <div className="flex justify-between items-start">
+                                        <div className="flex items-center gap-3">
+                                            <div className="h-10 w-10 flex items-center justify-center rounded-full bg-muted-foreground/10 text-muted-foreground">
+                                                <User className="h-5 w-5" />
+                                            </div>
+                                            <div>
+                                                <h3 className="font-bold text-foreground">{dean.fullName}</h3>
+                                                <p className="text-xs text-muted-foreground">{dean.email}</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <h3 className="font-bold text-foreground">{dean.fullName}</h3>
-                                            <p className="text-xs text-muted-foreground">{dean.email}</p>
-                                        </div>
+                                        <span className={`px-2 py-1 text-[10px] rounded-md font-bold uppercase ${dean.faculty ? "bg-[#1D293D] text-white hover:bg-[#162131]" : "bg-gray-100 text-gray-500"}`}>
+                                            {dean.faculty ? "Active " : "InActive"}
+                                        </span>
                                     </div>
-                                    <span className={`px-2 py-1 text-[10px] rounded-md font-bold uppercase ${dean.faculty ? "bg-[#1D293D] text-white hover:bg-[#162131]" : "bg-gray-100 text-gray-500"}`}>
-                                        {dean.faculty ? "Active " : "InActive"}
-                                    </span>
-                                </div>
 
-                                <div className="flex justify-between items-center pt-2 border-t border-border/50">
-                                    <p className="text-sm font-medium"><span className="text-muted-foreground font-normal">Faculty:</span> {dean.faculty?.facultyName || "Not Assigned"}</p>
-                                    <div className="flex gap-2">
-                                        <button onClick={() => navigate(`/dashboard/superadmin/edit-dean/${dean._id}`)} className="p-2 bg-muted rounded-md"><Pencil className="h-4 w-4 text-primary" /></button>
-                                        <button onClick={() => deleteHandler(dean._id)} className="p-2 bg-muted rounded-md"><Trash className="h-4 w-4 text-red-500" /></button>
+                                    <div className="flex justify-between items-center pt-2 border-t border-border/50">
+                                        <p className="text-sm font-medium"><span className="text-muted-foreground font-normal">Faculty:</span> {dean.faculty?.facultyName || "Not Assigned"}</p>
+                                        <div className="flex gap-2">
+                                            <button onClick={() => navigate(`/dashboard/superadmin/edit-dean/${dean._id}`)} className="p-2 bg-muted rounded-md"><Pencil className="h-4 w-4 text-primary" /></button>
+                                            <button onClick={() => deleteHandler(dean._id)} className="p-2 bg-muted rounded-md"><Trash className="h-4 w-4 text-red-500" /></button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))
+                            ))
+                        )
                     )}
                 </div>
 
@@ -124,34 +128,43 @@ export default function ManageDeans() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filterUsers.length === 0 ? (
+                                {loading ? (
                                     <tr>
-                                        <td colSpan="6" className="py-12 text-center text-muted-foreground bg-card">No Deans found.
+                                        <td colSpan="6" className="py-10">
+                                            <Loader loading={loading} />
                                         </td>
                                     </tr>
                                 ) : (
-                                    filterUsers.map((dean, index) => (
-                                        <tr key={dean._id} className="border-t hover:bg-muted/40 transition-colors group">
-                                            <td className="px-6 py-4 text-sm">{index + 1}</td>
-                                            <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">
-                                                <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0"><User className="h-4 w-4" /></div>
-                                                {dean.fullName}
-                                            </td>
-                                            <td className="px-6 py-4 text-muted-foreground text-sm truncate max-w-[150px] lg:max-w-none">{dean.email}</td>
-                                            <td className="px-6 py-4 text-sm">{dean.faculty?.facultyName || "Not Assigned"}</td>
-                                            <td className="px-6 py-4">
-                                                <span className={`px-2 py-1 text-xs rounded-md font-medium ${dean.faculty ? "bg-[#1D293D] text-white hover:bg-[#162131]" : "bg-gray-100 text-gray-500"}`}>
-                                                    {dean.faculty ? "Active" : "InActive"}
-                                                </span>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="flex justify-end gap-3">
-                                                    <button onClick={() => navigate(`/dashboard/superadmin/edit-dean/${dean._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
-                                                    <button onClick={() => deleteHandler(dean._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
-                                                </div>
+                                    filterUsers.length === 0 ? (
+                                        <tr>
+                                            <td colSpan="6" className="py-12 text-center text-muted-foreground bg-card">No Deans found.
                                             </td>
                                         </tr>
-                                    ))
+                                    ) : (
+                                        filterUsers.map((dean, index) => (
+                                            <tr key={dean._id} className="border-t hover:bg-muted/40 transition-colors group">
+                                                <td className="px-6 py-4 text-sm">{index + 1}</td>
+                                                <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">
+                                                    <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0"><User className="h-4 w-4" /></div>
+                                                    {dean.fullName}
+                                                </td>
+                                                <td className="px-6 py-4 text-muted-foreground text-sm truncate max-w-[150px] lg:max-w-none">{dean.email}</td>
+                                                <td className="px-6 py-4 text-sm">{dean.faculty?.facultyName || "Not Assigned"}</td>
+                                                <td className="px-6 py-4">
+                                                    <span className={`px-2 py-1 text-xs rounded-md font-medium ${dean.faculty ? "bg-[#1D293D] text-white hover:bg-[#162131]" : "bg-gray-100 text-gray-500"}`}>
+                                                        {dean.faculty ? "Active" : "InActive"}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="flex justify-end gap-3">
+                                                        <button onClick={() => navigate(`/dashboard/superadmin/edit-dean/${dean._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
+                                                        <button onClick={() => deleteHandler(dean._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )
+
                                 )}
                             </tbody>
                         </table>
