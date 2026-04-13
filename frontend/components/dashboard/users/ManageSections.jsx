@@ -4,6 +4,7 @@ import { getAllSections, deleteSection, clearError } from "../../../store/sectio
 import { useNavigate } from "react-router-dom";
 import { GraduationCap, Pencil, Trash, ChevronLeft, ChevronRight, Search } from "lucide-react";
 import Input from "../../shrared/Input.jsx";
+import Loader from "../../shrared/Loader.jsx";
 
 
 export default function ManageSections() {
@@ -14,7 +15,7 @@ export default function ManageSections() {
 
 
     const { user } = useSelector((state) => state.auth);
-    const { sections = [], error: sectionError, totalPages, currentPage, hasPrevPage, hasNextPage } = useSelector((state) => state.section);
+    const { sections = [], error: sectionError, totalPages, currentPage, hasPrevPage, hasNextPage, loading } = useSelector((state) => state.section);
 
 
     useEffect(() => {
@@ -76,33 +77,40 @@ export default function ManageSections() {
 
                 {/* --- MOBILE VIEW: Cards (Hidden on Medium+ screens) --- */}
                 <div className="grid grid-cols-1 gap-4 md:hidden">
-                    {filterSections.length === 0 ? (
-                        <div className="py-12 text-center text-muted-foreground bg-card rounded-xl border">No Sections found.</div>
+                    {loading ? (
+                        <div>
+                            <Loader loading={loading} />
+                        </div>
                     ) : (
-                        filterSections.map((sect) => (
-                            <div key={sect._id} className="bg-card p-4 rounded-xl border border-border shadow-sm space-y-3">
-                                <div className="flex justify-between items-start">
-                                    <div className="flex items-center gap-3">
-                                        <div className="h-10 w-10 flex items-center justify-center rounded-full bg-muted-foreground/10 text-muted-foreground">
-                                            <GraduationCap className="h-5 w-5" />
-                                        </div>
-                                        <div>
-                                            <h3 className="font-bold text-foreground">{sect.sectionName}</h3>
-                                            <p className="text-xs text-muted-foreground">{sect?.batch?.batchName}</p>
+                        filterSections.length === 0 ? (
+                            <div className="py-12 text-center text-muted-foreground bg-card rounded-xl border">No Sections found.</div>
+                        ) : (
+                            filterSections.map((sect) => (
+                                <div key={sect._id} className="bg-card p-4 rounded-xl border border-border shadow-sm space-y-3">
+                                    <div className="flex justify-between items-start">
+                                        <div className="flex items-center gap-3">
+                                            <div className="h-10 w-10 flex items-center justify-center rounded-full bg-muted-foreground/10 text-muted-foreground">
+                                                <GraduationCap className="h-5 w-5" />
+                                            </div>
+                                            <div>
+                                                <h3 className="font-bold text-foreground">{sect.sectionName}</h3>
+                                                <p className="text-xs text-muted-foreground">{sect?.batch?.batchName}</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div className="flex justify-between items-center pt-2 border-t border-border/50">
-                                    <p className="text-sm font-medium"><span className="text-muted-foreground font-normal">Department:</span> {sect?.department?.deptName || "Not Assigned"}</p>
-                                    <div className="flex gap-2">
-                                        <button onClick={() => navigate(`/dashboard/chairman/edit-sections/${sect._id}`)} className="p-2 bg-muted rounded-md"><Pencil className="h-4 w-4 text-primary" /></button>
-                                        <button onClick={() => handlerDeleteSection(sect._id)} className="p-2 bg-muted rounded-md"><Trash className="h-4 w-4 text-red-500" /></button>
+                                    <div className="flex justify-between items-center pt-2 border-t border-border/50">
+                                        <p className="text-sm font-medium"><span className="text-muted-foreground font-normal">Department:</span> {sect?.department?.deptName || "Not Assigned"}</p>
+                                        <div className="flex gap-2">
+                                            <button onClick={() => navigate(`/dashboard/chairman/edit-sections/${sect._id}`)} className="p-2 bg-muted rounded-md"><Pencil className="h-4 w-4 text-primary" /></button>
+                                            <button onClick={() => handlerDeleteSection(sect._id)} className="p-2 bg-muted rounded-md"><Trash className="h-4 w-4 text-red-500" /></button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))
+                            ))
+                        )
                     )}
+
                 </div>
 
                 {/* --- TABLE VIEW: Desktop (Hidden on Small screens) --- */}
@@ -119,29 +127,37 @@ export default function ManageSections() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filterSections.length === 0 ? (
+                                {loading ? (
                                     <tr>
-                                        <td colSpan="5" className="py-12 text-center text-muted-foreground bg-card">No Sections found.
+                                        <td colSpan="6" className="py-10">
+                                            <Loader loading={loading} />
                                         </td>
                                     </tr>
                                 ) : (
-                                    filterSections.map((sect, index) => (
-                                        <tr key={sect._id} className="border-t hover:bg-muted/40 transition-colors group">
-                                            <td className="px-6 py-4 text-sm">{index + 1}</td>
-                                            <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">
-                                                <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0"><GraduationCap className="h-4 w-4" /></div>
-                                                {sect.sectionName}
-                                            </td>
-                                            <td className="px-6 py-4 text-muted-foreground text-sm truncate max-w-[150px] lg:max-w-none">{sect?.batch?.batchName === 'morning' ? "Morning" : "Evening"}</td>
-                                            <td className="px-6 py-4 text-sm">{sect?.department?.deptName || "Not Assigned"}</td>
-                                            <td className="px-6 py-4">
-                                                <div className="flex justify-end gap-3">
-                                                    <button onClick={() => navigate(`/dashboard/chairman/edit-sections/${sect._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
-                                                    <button onClick={() => handlerDeleteSection(sect._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
-                                                </div>
+                                    filterSections.length === 0 ? (
+                                        <tr>
+                                            <td colSpan="5" className="py-12 text-center text-muted-foreground bg-card">No Sections found.
                                             </td>
                                         </tr>
-                                    )))}
+                                    ) : (
+                                        filterSections.map((sect, index) => (
+                                            <tr key={sect._id} className="border-t hover:bg-muted/40 transition-colors group">
+                                                <td className="px-6 py-4 text-sm">{index + 1}</td>
+                                                <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">
+                                                    <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0"><GraduationCap className="h-4 w-4" /></div>
+                                                    {sect.sectionName}
+                                                </td>
+                                                <td className="px-6 py-4 text-muted-foreground text-sm truncate max-w-[150px] lg:max-w-none">{sect?.batch?.batchName === 'morning' ? "Morning" : "Evening"}</td>
+                                                <td className="px-6 py-4 text-sm">{sect?.department?.deptName || "Not Assigned"}</td>
+                                                <td className="px-6 py-4">
+                                                    <div className="flex justify-end gap-3">
+                                                        <button onClick={() => navigate(`/dashboard/chairman/edit-sections/${sect._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
+                                                        <button onClick={() => handlerDeleteSection(sect._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )))
+                                )}
                             </tbody>
                         </table>
                     </div>

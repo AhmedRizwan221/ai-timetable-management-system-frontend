@@ -96,6 +96,7 @@ const initialState = {
     error: null,
     status: "idle",
     totalSemesters: 0,
+    loading: false,
 
     // pagination data 
     totalPages: 0,
@@ -133,10 +134,12 @@ const semesterSlice = createSlice({
                     state.error = action.payload
             })
             .addCase(getSemesters.pending, (state) => {
-                state.status = 'pending'
+                state.status = 'pending',
+                state.loading = true
             })
             .addCase(getSemesters.fulfilled, (state, action) => {
                 state.status = 'succeeded';
+                state.loading = false;
                 state.semesters = action.payload.semestersInDept;
                 state.totalSemesters = action.payload.totalSemestersInDept;
 
@@ -150,6 +153,7 @@ const semesterSlice = createSlice({
             })
             .addCase(getSemesters.rejected, (state, action) => {
                 state.status = 'rejected';
+                state.loading = false;
                 state.error = action.payload
             })
             .addCase(updateSemester.pending, (state) => {

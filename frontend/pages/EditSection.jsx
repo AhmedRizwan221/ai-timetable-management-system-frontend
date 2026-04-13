@@ -6,8 +6,8 @@ import { updateSection } from "../store/section/section";
 import Button from "../components/shrared/Button";
 import { CalendarDays, Layers, Plus, BookOpen, ArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getBatches } from "../store/batch/batch";
-import { getSemesters } from "../store/semester/semester"
+import { allBatches } from "../store/batch/batch";
+import { getAllSemesters } from "../store/semester/semester"
 
 
 export default function EditSection() {
@@ -24,8 +24,8 @@ export default function EditSection() {
 
     useEffect(() => {
         if (user) {
-            dispatch(getBatches(user?.department?._id));
-            dispatch(getSemesters(user?.department?._id))
+            dispatch(allBatches(user?.department?._id));
+            dispatch(getAllSemesters(user?.department?._id))
         }
     }, [dispatch, user]);
 

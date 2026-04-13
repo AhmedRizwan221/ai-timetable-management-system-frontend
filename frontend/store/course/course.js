@@ -143,6 +143,7 @@ const initialState = {
     totalCourses: null,
     error: null,
     status: "idle",
+    loading: false,
 
     // pagination data 
     totalPages: 0,
@@ -186,10 +187,12 @@ const courseSlice = createSlice({
                     state.error = action.payload
             })
             .addCase(getAllCoursesInDept.pending, (state) => {
-                state.status = 'pending'
+                state.status = 'pending',
+                state.loading = true
             })
             .addCase(getAllCoursesInDept.fulfilled, (state, action) => {
                 state.status = 'succeeded',
+                state.loading = false,
                     state.courses = action.payload.courses;
                 state.totalCourses = action.payload.totalCourses;
 
@@ -202,6 +205,7 @@ const courseSlice = createSlice({
             })
             .addCase(getAllCoursesInDept.rejected, (state, action) => {
                 state.status = 'rejected',
+                state.loading = false,
                     state.error = action.payload
             })
             .addCase(deleteCourse.pending, (state) => {
@@ -242,16 +246,21 @@ const courseSlice = createSlice({
                 state.error = action.payload;
             })
             .addCase(allCourses.pending, (state) => {
-                state.status = 'pending'
+                state.status = 'pending';
+                state.courses = [],
+                state.loading = true
             })
             .addCase(allCourses.fulfilled, (state, action) => {
                 state.status = 'succeeded',
+                state.loading = false,
                     state.courses = action.payload.allCourses;
                 state.totalCourses = action.payload.totalCourses
             })
             .addCase(allCourses.rejected, (state, action) => {
                 state.status = 'rejected',
-                    state.error = action.payload
+                state.loading = false,
+                    state.error = action.payload,
+                    state.courses = []
             })
             .addCase(allCoursesOfUni.pending, (state) => {
                 state.status = 'pending'

@@ -4,6 +4,7 @@ import { Pencil, Trash, Book, Search, ChevronLeft, ChevronRight } from "lucide-r
 import { getAllCoursesInDept, clearError, deleteCourse } from "../../../store/course/course";
 import { useNavigate } from "react-router-dom";
 import Input from "../../shrared/Input";
+import Loader from "../../shrared/Loader";
 
 
 export default function ManageCourses() {
@@ -12,7 +13,7 @@ export default function ManageCourses() {
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
 
-    const { courses = [], error, hasPrevPage, hasNextPage, totalPages, currentPage } = useSelector((state) => state.course);
+    const { courses = [], error, hasPrevPage, hasNextPage, totalPages, currentPage, loading } = useSelector((state) => state.course);
     const { user } = useSelector((state) => state.auth);
 
     useEffect(() => {
@@ -24,7 +25,7 @@ export default function ManageCourses() {
             }));
             dispatch(clearError());
         }
-    }, [dispatch]);
+    }, [dispatch, page]);
 
     const courseDeleteHandler = (id) => {
         const deleteConfrim = window.confirm("Are you sure to delete Course?");
@@ -71,31 +72,37 @@ export default function ManageCourses() {
 
                 {/* mobile screen */}
                 <div className="grid grid-cols-1 gap-4 md:hidden p-4">
-                    {filterCourses.length === 0 ? (
-                        <div className="py-12 text-center text-muted-foreground bg-card rounded-xl border">No Courses found.</div>
+                    {loading ? (
+                        <div>
+                            <Loader loading={loading} />
+                        </div>
                     ) : (
-                        filterCourses.map((course) => (
-                            <div key={course._id} className="bg-card p-4 rounded-xl border border-border shadow-sm space-y-3">
-                                <div className="flex justify-between items-start">
-                                    <div className="flex items-center gap-3">
-                                        {/* <div className="h-10 w-10 flex items-center justify-center rounded-full bg-muted-foreground/10 text-muted-foreground">
+                        filterCourses.length === 0 ? (
+                            <div className="py-12 text-center text-muted-foreground bg-card rounded-xl border">No Courses found.</div>
+                        ) : (
+                            filterCourses.map((course) => (
+                                <div key={course._id} className="bg-card p-4 rounded-xl border border-border shadow-sm space-y-3">
+                                    <div className="flex justify-between items-start">
+                                        <div className="flex items-center gap-3">
+                                            {/* <div className="h-10 w-10 flex items-center justify-center rounded-full bg-muted-foreground/10 text-muted-foreground">
                                         </div> */}
-                                        <p className="font-bold text-foreground">Semester {course?.semester?.semesterNumber}</p>
-                                        <div className="flex items-center gap-1">
-                                            <p className="font-bold text-foreground">Year {course?.studyYear}</p>
+                                            <p className="font-bold text-foreground">Semester {course?.semester?.semesterNumber}</p>
+                                            <div className="flex items-center gap-1">
+                                                <p className="font-bold text-foreground">Year {course?.studyYear}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex justify-between items-center pt-2 border-t border-border/50">
+                                        <p className="text-sm font-medium"><span className="text-muted-foreground font-normal">Batch:</span> {course?.batch?.batchName}</p>
+                                        <div className="flex gap-2">
+                                            <button onClick={() => navigate(`/dashboard/chairman/edit-courses/${course._id}`)} className="p-2 bg-muted rounded-md"><Pencil className="h-4 w-4 text-primary" /></button>
+                                            <button onClick={() => courseDeleteHandler(sem._id)} className="p-2 bg-muted rounded-md"><Trash className="h-4 w-4 text-red-500" /></button>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div className="flex justify-between items-center pt-2 border-t border-border/50">
-                                    <p className="text-sm font-medium"><span className="text-muted-foreground font-normal">Batch:</span> {course?.batch?.batchName}</p>
-                                    <div className="flex gap-2">
-                                        <button onClick={() => navigate(`/dashboard/chairman/edit-courses/${course._id}`)} className="p-2 bg-muted rounded-md"><Pencil className="h-4 w-4 text-primary" /></button>
-                                        <button onClick={() => courseDeleteHandler(sem._id)} className="p-2 bg-muted rounded-md"><Trash className="h-4 w-4 text-red-500" /></button>
-                                    </div>
-                                </div>
-                            </div>
-                        ))
+                            ))
+                        )
                     )}
                 </div>
 
@@ -113,31 +120,39 @@ export default function ManageCourses() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filterCourses.length === 0 ?
-                                    (
-                                        <tr>
-                                            <td colSpan="6" className="py-12 text-center text-muted-foreground bg-card">No Courses found.
-                                            </td>
-                                        </tr>
-                                    ) : (
-                                        filterCourses.map((course, index) => (
-                                            <tr key={course._id} className="border-t hover:bg-muted/40 transition-colors group">
-                                                <td className="px-6 py-4 text-sm">{index + 1}</td>
-                                                <td className="px-6 py-4 text-sm">{course?.courseName}</td>
-                                                <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">
-                                                    <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0">{course?.semester?.semesterNumber}</div>
-                                                </td>
-                                                <td className="px-6 py-4 text-sm">
-                                                    <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0">{course.semester?.studyYear}
-                                                    </div></td>
-                                                <td className="px-6 py-4">
-                                                    <div className="flex justify-end gap-3">
-                                                        <button onClick={() => navigate(`/dashboard/chairman/edit-courses/${course._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
-                                                        <button onClick={() => courseDeleteHandler(course._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
-                                                    </div>
+                                {loading ? (
+                                    <tr>
+                                        <td colSpan="6" className="py-10">
+                                            <Loader loading={loading} />
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    filterCourses.length === 0 ?
+                                        (
+                                            <tr>
+                                                <td colSpan="6" className="py-12 text-center text-muted-foreground bg-card">No Courses found.
                                                 </td>
                                             </tr>
-                                        )))}
+                                        ) : (
+                                            filterCourses.map((course, index) => (
+                                                <tr key={course._id} className="border-t hover:bg-muted/40 transition-colors group">
+                                                    <td className="px-6 py-4 text-sm">{index + 1}</td>
+                                                    <td className="px-6 py-4 text-sm">{course?.courseName}</td>
+                                                    <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">
+                                                        <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0">{course?.semester?.semesterNumber}</div>
+                                                    </td>
+                                                    <td className="px-6 py-4 text-sm">
+                                                        <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0">{course.semester?.studyYear}
+                                                        </div></td>
+                                                    <td className="px-6 py-4">
+                                                        <div className="flex justify-end gap-3">
+                                                            <button onClick={() => navigate(`/dashboard/chairman/edit-courses/${course._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
+                                                            <button onClick={() => courseDeleteHandler(course._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            )))
+                                )}
                             </tbody>
                         </table>
                     </div>

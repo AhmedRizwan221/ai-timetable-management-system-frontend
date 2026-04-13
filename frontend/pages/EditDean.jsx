@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUserData } from "../store/user/user";
 import { useForm } from "react-hook-form";
-import {  Users, Lock, Mail } from "lucide-react";
+import { Users, Lock, Mail, User } from "lucide-react";
 import EditUser from "../components/shrared/EditUser";
 
 export default function EditDean() {
@@ -47,7 +47,8 @@ export default function EditDean() {
             register={register}
             handleSubmit={handleSubmit}
             onSubmit={handleUpdateDeanData}
-             redirectUrl='/dashboard/superadmin/manage-deans'
+            redirectUrl='/dashboard/superadmin/manage-deans'
+            Icon={User}
         />
 
 

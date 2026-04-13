@@ -6,8 +6,8 @@ import { getSections, updateSection } from "../store/section/section";
 import Button from "../components/shrared/Button";
 import { CalendarDays, Layers, Plus, BookOpen, ArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getBatches, updateBatch } from "../store/batch/batch";
-import { getSemesters } from "../store/semester/semester"
+import { allBatches, updateBatch } from "../store/batch/batch";
+import { getAllSemesters } from "../store/semester/semester"
 
 
 export default function EditBatch() {
@@ -25,8 +25,8 @@ export default function EditBatch() {
 
     useEffect(() => {
         if (user) {
-            dispatch(getBatches(user?.department?._id));
-            dispatch(getSemesters(user?.department?._id));
+            dispatch(allBatches(user?.department?._id));
+            dispatch(getAllSemesters(user?.department?._id));
             dispatch(getSections(user?.department?._id))
         }
     }, [dispatch, user]);
@@ -64,7 +64,7 @@ export default function EditBatch() {
                     <div className="container mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8 border-b">
                         <div className="flex items-center gap-3">
                             <button
-                                onClick={() => navigate('/dashboard/superadmin/manage-faculties')}
+                                onClick={() => navigate('/dashboard/chairman/manage-batches')}
                                 className="hidden md:inline-flex p-1.5 rounded-full border border-gray-300 bg-[#1D293D] text-white hover:bg-[#162131] cursor-pointer"
                             >
                                 <ArrowLeft className="h-8 w-8" />

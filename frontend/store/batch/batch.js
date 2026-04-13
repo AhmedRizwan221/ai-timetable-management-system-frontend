@@ -97,6 +97,7 @@ const initialState = {
     error: null,
     status: "idle",
     totalBatches: 0,
+    loading: false,
 
     // pagination data 
     totalPages: 0,
@@ -128,10 +129,12 @@ const batchSlice = createSlice({
                 state.error = action.payload
             })
             .addCase(getBatches.pending, (state) => {
-                state.status = 'pending'
+                state.status = 'pending',
+                state.loading = true
             })
             .addCase(getBatches.fulfilled, (state, action) => {
                 state.status = 'succeeded';
+                state.loading = false;
                 state.batches = action.payload.batchesInDept;
                 state.totalBatches = action.payload.totalBatchesInDept;
 
@@ -144,6 +147,7 @@ const batchSlice = createSlice({
             })
             .addCase(getBatches.rejected, (state, action) => {
                 state.status = 'rejected';
+                state.loading = false;
                 state.error = action.payload
             })
             .addCase(deleteBatch.pending, (state) => {

@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { getDepartment } from "../store/dept/departmentSlice";
-import { getAllCoursesInDept } from "../store/course/course";
+import { allCourses } from "../store/course/course";
 import { getAllTeachersInDept } from "../store/user/user";
-import { ArrowLeft, Users, Badge, Mail, Calendar, BookOpen, Loader2, AlertCircle } from "lucide-react";
+import { ArrowLeft, Users, CalendarDays, Mail, Calendar, BookOpen, Loader2, AlertCircle } from "lucide-react";
+import Loader from "../components/shrared/Loader";
 
 
 function DepartmentDetails() {
@@ -14,43 +15,17 @@ function DepartmentDetails() {
     // console.log(deptId);
 
     const { department = null, departments = [], error: detailLoading } = useSelector((state) => state.department);
-    // console.log(departments);
-
-    const { courses = [] } = useSelector((state) => state.course);
-    // console.log(courses);
-
+    const { courses = [], loading } = useSelector((state) => state.course);
     const { teachers = [], error: TeacherError, totalTeachers } = useSelector((state) => state.user);
     // console.log(teachers, totalTeachers);
 
     useEffect(() => {
+        dispatch(getDepartment(deptId));
         if (deptId) {
-            dispatch(getDepartment(deptId));
-            dispatch(getAllCoursesInDept(deptId));
+            dispatch(allCourses(deptId));
             dispatch(getAllTeachersInDept(deptId))
         }
     }, [deptId, dispatch]);
-
-    // if (detailLoading || TeacherError) {
-    //     return (
-    //         <div className="flex min-h-screen items-center justify-center bg-background">
-    //             <Loader2 className="h-8 w-8 animate-spin text-primary" />
-    //         </div>
-    //     );
-    // }
-
-    // if (detailLoading || !department) {
-    //     return (
-    //         <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background">
-    //             <div className="flex items-center gap-2 text-destructive">
-    //                 <AlertCircle className="h-5 w-5" />
-    //                 <span>{detailLoading || "Department not found"}</span>
-    //             </div>
-    //             <button variant="outline" onClick={() => navigate("/")}>
-    //                 <ArrowLeft className="mr-2 h-4 w-4" /> Back to Departments
-    //             </button>
-    //         </div>
-    //     );
-    // }
 
     return (
         <div className="min-h-screen bg-muted/30 py-10 px-4 sm:px-6">
@@ -59,16 +34,19 @@ function DepartmentDetails() {
                     <div className="bg-card">
                         <div className="container mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8 border-b">
                             <div className="flex items-center gap-3">
-                                <div className="flex items-center justify-center rounded-lg bg-primary">
-                                    <button
-                                        onClick={() => navigate(`/dashboard/deptDashboard`)}
-                                        className="mb-4 flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-                                    >
-                                        <ArrowLeft className="h-4 w-4" /> Back to Departments
-                                    </button>
+                                <button
+                                    onClick={() => navigate(`/dashboard/deptDashboard`)}
+                                    className="hidden md:inline-flex p-1.5 rounded-full border border-gray-300 bg-[#1D293D] text-white hover:bg-[#162131] cursor-pointer"
+                                >
+                                    <ArrowLeft className="h-8 w-8" />
+                                </button>
+                                <div className="hidden md:flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
+                                    <CalendarDays className="h-8 w-8 text-primary-foreground" />
                                 </div>
+                                <h1 className="text-2xl font-bold tracking-tight text-foreground">
+                                    {department?.deptName}
+                                </h1>
                             </div>
-                            <h1 className="text-2xl font-bold tracking-tight text-foreground">{department?.deptName}</h1>
                         </div>
                     </div>
                 </header>
@@ -95,14 +73,23 @@ function DepartmentDetails() {
                             <BookOpen className="h-5 w-5 text-department-accent" /> Courses Offered
                         </h2>
                         <div className="flex flex-wrap gap-2">
-                            {courses.map((course) => (
-                                <span
-                                    key={course._id}
-                                    className="px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-800"
-                                >
-                                    {course.courseName}
-                                </span>
-                            ))}
+                            {loading ? (
+                                <Loader loading={loading} />
+                            ) : (
+                                courses.length > 0 ? (
+                                    courses.map((course) => (
+                                        <span
+                                            key={course._id}
+                                            className="px-3 py-2 text-sm rounded-full text-white bg-[#1D293D]"
+                                        >
+                                            {course.courseName}
+                                        </span>
+                                    ))
+                                ) : (
+                                    <h1>No Courses found</h1>
+                                )
+                            )}
+
                         </div>
                     </div>
                 </main>

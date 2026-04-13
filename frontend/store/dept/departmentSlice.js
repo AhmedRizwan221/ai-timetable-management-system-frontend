@@ -128,6 +128,7 @@ const initialState = {
     courses: [],
     status: 'idle',
     error: null,
+    loading : false,
 
     // pagination data 
     totalPages: 0,
@@ -149,6 +150,7 @@ const departmentSlice = createSlice({
         builder
             .addCase(fetchDepartments.pending, (state) => {
                 state.status = "loading";
+                state.loading = true
             })
             .addCase(fetchAllDepartments.fulfilled, (state, action) => {
                 state.status = "succeeded";
@@ -156,6 +158,7 @@ const departmentSlice = createSlice({
             })
             .addCase(fetchDepartments.fulfilled, (state, action) => {
                 state.status = "succeeded";
+                state.loading = false;
                 state.departments = action.payload.facultyALlDepartments;
                 state.totalDepartments = action.payload.totalDepartmentsInFaculty;
                 // pagination data 
@@ -168,6 +171,7 @@ const departmentSlice = createSlice({
             })
             .addCase(fetchDepartments.rejected, (state, action) => {
                 state.status = "failed";
+                state.loading = false;
                 state.error = action.payload;
             })
             .addCase(departmentCreate.pending, (state) => {

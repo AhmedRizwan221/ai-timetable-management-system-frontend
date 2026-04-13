@@ -99,11 +99,14 @@ export const allTimetabels = createAsyncThunk(
 )
 
 
+
+
 const initialState = {
     timeTables: [],
     error: null,
     status: "idle",
     totalTimeTables: 0,
+    loading: false,
 
     // pagination data 
     totalPages: 0,
@@ -145,10 +148,12 @@ const timetableSlice = createSlice({
                     state.error = action.payload
             })
             .addCase(getDeptallTimeTables.pending, (state) => {
-                state.status = 'Pending'
+                state.status = 'Pending',
+                state.loading = true
             })
             .addCase(getDeptallTimeTables.fulfilled, (state, action) => {
                 state.status = 'Succeeded';
+                state.loading = false;
                 state.timeTables = action.payload.timetables;
                 state.totalTimeTables = action.payload.totalTimeTables;
 
@@ -162,6 +167,7 @@ const timetableSlice = createSlice({
             })
             .addCase(getDeptallTimeTables.rejected, (state, action) => {
                 state.status = 'Failed',
+                state.loading = false,
                     state.error = action.payload
             })
             .addCase(deleteTimeTable.pending, (state) => {

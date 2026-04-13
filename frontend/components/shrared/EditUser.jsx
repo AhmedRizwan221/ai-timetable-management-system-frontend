@@ -32,7 +32,7 @@ export default function EditUser({
                                 <ArrowLeft className="h-8 w-8" />
                             </button>
                             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
-                                {Icon && <Icon className="h-3.5 w-3.5 text-muted-foreground" />}
+                                {Icon && <Icon className="h-8 w-8 text-muted-foreground" />}
                             </div>
                             <h1 className="text-2xl font-bold">
                                 Edit {title} Details

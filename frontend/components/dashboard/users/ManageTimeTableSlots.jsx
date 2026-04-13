@@ -4,6 +4,7 @@ import { Clock, Pencil, Trash, ChevronLeft, ChevronRight, Search } from "lucide-
 import { getAllTimeTableSlot, clearError, deleteTimeTableSlot } from "../../../store/timetableSlot/timetableSlot";
 import { useNavigate } from "react-router-dom";
 import Input from "../../shrared/Input";
+import Loader from "../../shrared/Loader";
 
 export default function ManageTimeTableSlots() {
     const dispatch = useDispatch();
@@ -11,7 +12,7 @@ export default function ManageTimeTableSlots() {
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
 
-    const { timeTableSlot = [], error: timetableSlotError, hasPrevPage, hasNextPage, totalPages, currentPage } = useSelector((state) => state.timetabelSlot);
+    const { timeTableSlot = [], error: timetableSlotError, hasPrevPage, hasNextPage, totalPages, currentPage, loading } = useSelector((state) => state.timetabelSlot);
     const { user } = useSelector((state) => state.auth);
 
     useEffect(() => {
@@ -71,28 +72,34 @@ export default function ManageTimeTableSlots() {
 
                 {/* mobile screen */}
                 <div className="grid grid-cols-1 gap-4 md:hidden p-4">
-                    {filterTimeTables.length === 0 ? (
-                        <div className="py-12 text-center text-muted-foreground bg-card rounded-xl border">No TimeTables Slots found.</div>
+                    {loading ? (
+                        <div>
+                            <Loader loading={loading} />
+                        </div>
                     ) : (
-                        filterTimeTables.map((timetableSlot) => (
-                            <div key={timetableSlot._id} className="bg-card p-4 rounded-xl border border-border shadow-sm space-y-3">
-                                <div className="flex justify-between items-start">
-                                    <div className="flex items-center gap-3">
-                                        <div className="flex items-center gap-1">
-                                            <p className="font-bold text-foreground"> {timetableSlot?.course?.courseName}</p>
+                        filterTimeTables.length === 0 ? (
+                            <div className="py-12 text-center text-muted-foreground bg-card rounded-xl border">No TimeTables Slots found.</div>
+                        ) : (
+                            filterTimeTables.map((timetableSlot) => (
+                                <div key={timetableSlot._id} className="bg-card p-4 rounded-xl border border-border shadow-sm space-y-3">
+                                    <div className="flex justify-between items-start">
+                                        <div className="flex items-center gap-3">
+                                            <div className="flex items-center gap-1">
+                                                <p className="font-bold text-foreground"> {timetableSlot?.course?.courseName}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex justify-between items-center pt-2 border-t border-border/50">
+                                        <p className="text-sm font-medium"><span className="text-muted-foreground font-normal">Batch:</span> {timetableSlot?.batch?.batchName}</p>
+                                        <div className="flex gap-2">
+                                            <button onClick={() => navigate(`/dashboard/chairman/edit-timetableSlots/${timetableSlot._id}`)} className="p-2 bg-muted rounded-md"><Pencil className="h-4 w-4 text-primary" /></button>
+                                            <button onClick={() => timetableSlotDeleteHandler(timetableSlot._id)} className="p-2 bg-muted rounded-md"><Trash className="h-4 w-4 text-red-500" /></button>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div className="flex justify-between items-center pt-2 border-t border-border/50">
-                                    <p className="text-sm font-medium"><span className="text-muted-foreground font-normal">Batch:</span> {timetableSlot?.batch?.batchName}</p>
-                                    <div className="flex gap-2">
-                                        <button onClick={() => navigate(`/dashboard/chairman/edit-timetableSlots/${timetableSlot._id}`)} className="p-2 bg-muted rounded-md"><Pencil className="h-4 w-4 text-primary" /></button>
-                                        <button onClick={() => timetableSlotDeleteHandler(timetableSlot._id)} className="p-2 bg-muted rounded-md"><Trash className="h-4 w-4 text-red-500" /></button>
-                                    </div>
-                                </div>
-                            </div>
-                        ))
+                            ))
+                        )
                     )}
                 </div>
 
@@ -106,36 +113,48 @@ export default function ManageTimeTableSlots() {
                                     <th className="px-6 py-3 font-semibold text-sm">Course Name</th>
                                     <th className="px-6 py-3 font-semibold text-sm">Day</th>
                                     <th className="px-6 py-3 font-semibold text-sm">Batch</th>
+                                    <th className="px-6 py-3 font-semibold text-sm">Semester</th>
+                                    <th className="px-6 py-3 font-semibold text-sm">Year</th>
                                     <th className="px-6 py-3 text-right font-semibold text-sm">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {filterTimeTables.length === 0 ? (
+                                {loading ? (
                                     <tr>
-                                        <td colSpan="5" className="text-center py-10 text-muted-foreground">
-                                            No TimeTable Slots found.
+                                        <td colSpan="6" className="py-10">
+                                            <Loader loading={loading} />
                                         </td>
                                     </tr>
                                 ) : (
-                                    filterTimeTables.map((slot, index) => (
-                                        <tr key={slot._id} className="border-t hover:bg-muted/40 transition-colors group">
-                                            <td className="px-6 py-4 text-sm">{index + 1}</td>
-                                            <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">
-                                                <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0">{slot?.course?.courseName}</div>
-
-                                            </td>
-                                            <td className="px-6 py-4 text-sm">{slot?.day}</td>
-                                            <td className="px-6 py-4">
-                                                {slot?.batch?.batchName === 'morning' ? "Morning" : "Evening"}
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="flex justify-end gap-3">
-                                                    <button onClick={() => navigate(`/dashboard/chairman/edit-timetableSlots/${slot._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
-                                                    <button onClick={() => timetableSlotDeleteHandler(slot._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
-                                                </div>
+                                    filterTimeTables.length === 0 ? (
+                                        <tr>
+                                            <td colSpan="5" className="text-center py-10 text-muted-foreground">
+                                                No TimeTable Slots found.
                                             </td>
                                         </tr>
-                                    )))}
+                                    ) : (
+                                        filterTimeTables.map((slot, index) => (
+                                            <tr key={slot._id} className="border-t hover:bg-muted/40 transition-colors group">
+                                                <td className="px-6 py-4 text-sm">{index + 1}</td>
+                                                <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">
+                                                    <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0">{slot?.course?.courseName}</div>
+
+                                                </td>
+                                                <td className="px-6 py-4 text-sm">{slot?.day}</td>
+                                                <td className="px-6 py-4">
+                                                    {slot?.batch?.batchName === 'morning' ? "Morning" : "Evening"}
+                                                </td>
+                                                 <td className="px-6 py-4 text-sm">{slot?.semester?.semesterNumber}</td>
+                                                <td className="px-6 py-4">{slot?.semester?.studyYear}</td>
+                                                <td className="px-6 py-4">
+                                                    <div className="flex justify-end gap-3">
+                                                        <button onClick={() => navigate(`/dashboard/chairman/edit-timetableSlots/${slot._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
+                                                        <button onClick={() => timetableSlotDeleteHandler(slot._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )))
+                                )}
                             </tbody>
                         </table>
                     </div>

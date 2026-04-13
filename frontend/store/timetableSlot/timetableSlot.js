@@ -133,6 +133,7 @@ const initialState = {
     timeTables: [],
     error: null,
     status: "idle",
+    loading: false,
 
     // pagination data 
     totalPages: 0,
@@ -174,11 +175,13 @@ const timeTableSLotSLice = createSlice({
                     state.error = action.payload
             })
             .addCase(getAllTimeTableSlot.pending, (state) => {
-                state.status = 'pending'
+                state.status = 'pending',
+                    state.loading = true
             })
             .addCase(getAllTimeTableSlot.fulfilled, (state, action) => {
-                state.status = 'succeeded'
-                state.timeTableSlot = action.payload.timetableSlot;
+                state.status = 'succeeded',
+                    state.loading = false,
+                    state.timeTableSlot = action.payload.timetableSlot;
                 state.timeTables = action.payload.timetables;
                 state.totalSlots = action.payload.totaltimetableSlots;
 
@@ -191,6 +194,7 @@ const timeTableSLotSLice = createSlice({
             })
             .addCase(getAllTimeTableSlot.rejected, (state, action) => {
                 state.status = 'rejected',
+                    state.loading = false,
                     state.error = action.payload
             })
             .addCase(deleteTimeTableSlot.pending, (state) => {

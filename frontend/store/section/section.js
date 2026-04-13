@@ -96,6 +96,7 @@ const initialState = {
     error: null,
     status: "idle",
     totalSections: 0,
+    loading: false,
 
     // pagination data 
     totalPages: 0,
@@ -166,10 +167,12 @@ const sectionSlice = createSlice({
                 state.error = action.payload
             })
             .addCase(getAllSections.pending, (state) => {
-                state.status = 'pending'
+                state.status = 'pending',
+                state.loading = true
             })
             .addCase(getAllSections.fulfilled, (state, action) => {
                 state.status = 'succeeded';
+                state.loading = false,
                 state.sections = action.payload.sectionsInDept;
                 state.totalSections = action.payload.totalSectionsInDept;
 
@@ -182,6 +185,7 @@ const sectionSlice = createSlice({
             })
             .addCase(getAllSections.rejected, (state, action) => {
                 state.status = 'rejected';
+                state.loading = false
                 state.error = action.payload
             })
 

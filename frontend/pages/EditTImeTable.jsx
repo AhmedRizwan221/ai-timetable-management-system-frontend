@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import TimeTableForm from "../components/shrared/TimeTable";
 import { useForm } from "react-hook-form";
 import { updateTimeTable } from "../store/timetable/timeTable";
-import { getSemesters } from "../store/semester/semester";
+import { getAllSemesters } from "../store/semester/semester";
 import { getSections } from "../store/section/section";
-import { getBatches } from "../store/batch/batch";
+import { allBatches } from "../store/batch/batch";
 import { useNavigate, useParams } from "react-router-dom";
 
 
@@ -27,8 +27,8 @@ export default function EditTimeTable() {
 
     useEffect(() => {
         if (user) {
-            dispatch(getSemesters(user?.department?._id));
-            dispatch(getBatches(user?.department?._id));
+            dispatch(getAllSemesters(user?.department?._id));
+            dispatch(allBatches(user?.department?._id));
             dispatch(getSections(user?.department?._id));
         }
     }, [dispatch, user]);

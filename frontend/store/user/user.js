@@ -246,11 +246,11 @@ const userSlice = createSlice({
         builder
             .addCase(getDeans.pending, (state) => {
                 state.status = 'loading',
-                state.loading = true
+                    state.loading = true
             })
             .addCase(getDeans.fulfilled, (state, action) => {
                 state.status = 'succeeded',
-                state.loading = false,
+                    state.loading = false,
                     state.deans = action.payload.deans,
                     state.totalDeans = action.payload.totalDeans,
                     // pagination data
@@ -262,23 +262,23 @@ const userSlice = createSlice({
             })
             .addCase(getDeans.rejected, (state, action) => {
                 state.status = 'Failed',
-                state.loading = false,
+                    state.loading = false,
                     state.error = action.payload
             })
             // get all deans without pagination
             .addCase(getAlDeans.pending, (state) => {
                 state.status = 'loading',
-                state.loading = true
+                    state.loading = true
             })
             .addCase(getAlDeans.fulfilled, (state, action) => {
                 state.status = 'succeeded',
-                state.loading = false,
+                    state.loading = false,
                     state.deans = action.payload.allDeans;
-                    state.totalDeans = action.payload.totalDeans
+                state.totalDeans = action.payload.totalDeans
             })
             .addCase(getAlDeans.rejected, (state, action) => {
                 state.status = 'Failed',
-                state.loading = false,
+                    state.loading = false,
                     state.error = action.payload
             })
             .addCase(getChairmans.pending, (state) => {
@@ -408,10 +408,12 @@ const userSlice = createSlice({
                     state.error = action.payload
             })
             .addCase(allTeachersInDept.pending, (state) => {
-                state.status = 'pending'
+                state.status = 'pending',
+                    state.loading = true
             })
             .addCase(allTeachersInDept.fulfilled, (state, action) => {
                 state.status = 'succeeded',
+                    state.loading = false,
                     state.teachers = action.payload.teachersInDept;
                 state.totalTeachers = action.payload.totalTeachersInDept;
 
@@ -424,6 +426,7 @@ const userSlice = createSlice({
             })
             .addCase(allTeachersInDept.rejected, (state, action) => {
                 state.status = 'rejected',
+                    state.loading = false,
                     state.error = action.payload
             })
 

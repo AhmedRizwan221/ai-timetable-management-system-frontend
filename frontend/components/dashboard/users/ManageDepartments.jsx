@@ -4,6 +4,7 @@ import { Pencil, Trash, Book, ChevronRight, ChevronLeft, Search } from "lucide-r
 import { fetchDepartments, clearError, departmentDelete } from "../../../store/dept/departmentSlice";
 import { useNavigate } from "react-router-dom";
 import Input from "../../shrared/Input";
+import Loader from "../../shrared/Loader";
 
 
 export default function ManageDepartments() {
@@ -14,7 +15,7 @@ export default function ManageDepartments() {
 
     const { user } = useSelector((state) => state.auth);
     // console.log(user);
-    const { departments = [], error, totalPages, currentPage, limit, hasPrevPage, hasNextPage } = useSelector((state) => state.department);
+    const { departments = [], error, totalPages, currentPage, loading, hasPrevPage, hasNextPage } = useSelector((state) => state.department);
     // console.log(departments);
 
     useEffect(() => {
@@ -79,29 +80,35 @@ export default function ManageDepartments() {
 
                 {/* mobile screen */}
                 <div className="grid grid-cols-1 gap-4 md:hidden">
-                    {filterDepartments.length === 0 ? (
-                        <div className="py-12 text-center text-muted-foreground bg-card rounded-xl border">No Departments found.</div>
+                    {loading ? (
+                        <div>
+                            <Loader loading={loading} />
+                        </div>
                     ) : (
-                        filterDepartments.map((dept) => (
-                            <div key={dept._id} className="bg-card p-4 rounded-xl border border-border shadow-sm space-y-3">
-                                <div className="flex justify-between items-start">
-                                    <div className="flex items-center gap-3">
-                                        <p className="font-bold text-foreground"> {dept?.deptName}</p>
-                                        <div className="flex items-center gap-1">
-                                            <p className="font-bold text-foreground"> {dept?.chairman ? dept.chairman?.fullName : "Not Assigned"}</p>
+                        filterDepartments.length === 0 ? (
+                            <div className="py-12 text-center text-muted-foreground bg-card rounded-xl border">No Departments found.</div>
+                        ) : (
+                            filterDepartments.map((dept) => (
+                                <div key={dept._id} className="bg-card p-4 rounded-xl border border-border shadow-sm space-y-3">
+                                    <div className="flex justify-between items-start">
+                                        <div className="flex items-center gap-3">
+                                            <p className="font-bold text-foreground"> {dept?.deptName}</p>
+                                            <div className="flex items-center gap-1">
+                                                <p className="font-bold text-foreground"> {dept?.chairman ? dept.chairman?.fullName : "Not Assigned"}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex justify-between items-center pt-2 border-t border-border/50">
+                                        <p className="text-sm font-medium"><span className="text-muted-foreground font-normal">faculty:</span> {dept?.faculty?.facultyName}</p>
+                                        <div className="flex gap-2">
+                                            <button onClick={() => navigate(`/dashboard/dean/edit-department/${dept._id}`)} className="p-2 bg-muted rounded-md"><Pencil className="h-4 w-4 text-primary" /></button>
+                                            <button onClick={() => handlerDeleteDept(dept._id)} className="p-2 bg-muted rounded-md"><Trash className="h-4 w-4 text-red-500" /></button>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div className="flex justify-between items-center pt-2 border-t border-border/50">
-                                    <p className="text-sm font-medium"><span className="text-muted-foreground font-normal">faculty:</span> {dept?.faculty?.facultyName}</p>
-                                    <div className="flex gap-2">
-                                        <button onClick={() => navigate(`/dashboard/dean/edit-department/${dept._id}`)} className="p-2 bg-muted rounded-md"><Pencil className="h-4 w-4 text-primary" /></button>
-                                        <button onClick={() => handlerDeleteDept(dept._id)} className="p-2 bg-muted rounded-md"><Trash className="h-4 w-4 text-red-500" /></button>
-                                    </div>
-                                </div>
-                            </div>
-                        ))
+                            ))
+                        )
                     )}
                 </div>
 
@@ -119,33 +126,41 @@ export default function ManageDepartments() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filterDepartments.length === 0 ?
-                                    (
-                                        <tr>
-                                            <td colSpan="5" className="py-12 text-center text-muted-foreground bg-card">No Departments found.
-                                            </td>
-                                        </tr>
-                                    ) : (
-
-                                        filterDepartments.map((dept, index) => (
-                                            <tr key={dept._id} className="border-t hover:bg-muted/40 transition-colors group">
-                                                <td className="px-6 py-4 text-sm">{index + 1}</td>
-                                                <td className="px-6 py-4 text-sm font-medium">{dept?.deptName}</td>
-                                                <td className="px-6 py-4 text-sm">
-                                                    <div className="text-muted-foreground font-medium">{dept?.chairman ? dept.chairman?.fullName : "Not Assigned"}</div>
-                                                </td>
-                                                <td className="px-6 py-4 text-sm">
-                                                    <p className="text-sm font-medium"><span className="text-muted-foreground font-normal"></span> {dept?.faculty?.facultyName}</p>
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    <div className="flex justify-end gap-3">
-                                                        <button onClick={() => navigate(`/dashboard/dean/edit-department/${dept._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
-                                                        <button onClick={() => handlerDeleteDept(dept._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
-                                                    </div>
+                                {loading ? (
+                                    <tr>
+                                        <td colSpan="6" className="py-10">
+                                            <Loader loading={loading} />
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    filterDepartments.length === 0 ?
+                                        (
+                                            <tr>
+                                                <td colSpan="5" className="py-12 text-center text-muted-foreground bg-card">No Departments found.
                                                 </td>
                                             </tr>
-                                        ))
-                                    )}
+                                        ) : (
+
+                                            filterDepartments.map((dept, index) => (
+                                                <tr key={dept._id} className="border-t hover:bg-muted/40 transition-colors group">
+                                                    <td className="px-6 py-4 text-sm">{index + 1}</td>
+                                                    <td className="px-6 py-4 text-sm font-medium">{dept?.deptName}</td>
+                                                    <td className="px-6 py-4 text-sm">
+                                                        <div className="text-muted-foreground font-medium">{dept?.chairman ? dept.chairman?.fullName : "Not Assigned"}</div>
+                                                    </td>
+                                                    <td className="px-6 py-4 text-sm">
+                                                        <p className="text-sm font-medium"><span className="text-muted-foreground font-normal"></span> {dept?.faculty?.facultyName}</p>
+                                                    </td>
+                                                    <td className="px-6 py-4">
+                                                        <div className="flex justify-end gap-3">
+                                                            <button onClick={() => navigate(`/dashboard/dean/edit-department/${dept._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
+                                                            <button onClick={() => handlerDeleteDept(dept._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        )
+                                )}
                             </tbody>
                         </table>
                     </div>

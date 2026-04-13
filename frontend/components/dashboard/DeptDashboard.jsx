@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchDepartments } from "../../store/dept/departmentSlice";
+import { getFacultyDepartments } from "../../store/dept/departmentSlice";
 import DepartmentCard from "../layout/DepartmentCard";
 
 export default function DeptDashboard() {
@@ -14,7 +14,7 @@ export default function DeptDashboard() {
 
   useEffect(() => {
     if(user) {
-      dispatch(fetchDepartments(user.faculty?._id));
+      dispatch(getFacultyDepartments(user.faculty?._id));
     }
   }, [dispatch, user]);
 
