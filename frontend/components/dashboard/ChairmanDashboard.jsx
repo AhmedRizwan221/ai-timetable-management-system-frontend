@@ -6,6 +6,7 @@ import { getAllTeachersInDept } from "../../store/user/user";
 import { allCourses } from "../../store/course/course";
 import TimeTableView from "../shrared/TimeTableView";
 import Chatbot from "../chatbot/chatbot";
+import DownloadTimeTablePDF from "../shrared/DownloadTimeTablePdf";
 
 function ChairmanDashboard() {
     const [isOpen, setIsOpen] = useState(false);
@@ -60,7 +61,7 @@ function ChairmanDashboard() {
             return matchBatch && matchSemester && matchYear && matchSection;
         });
     }, [timeTableSlot, selectedBatch, selectedSemester, selectedYear, selectedSection]);
-    // console.log(filteredTimeTable);
+    console.log(filteredTimeTable);
 
     // get times of particular slot 
     const timeSlots = [... new Set(
@@ -75,6 +76,7 @@ function ChairmanDashboard() {
                 `${slot.startTime}-${slot.endTime}` === time
         );
     }
+    // console.log(getSLot);
 
     const mergedCourses = Object.values(
         filteredTimeTable.reduce((acc, item) => {
@@ -126,6 +128,12 @@ function ChairmanDashboard() {
 
                     {/* Right Side: Action Button */}
                     <button
+                        onClick={() => DownloadTimeTablePDF({
+                            Days,
+                            timeSlots,
+                            filteredTimeTable,
+                            getSLot
+                        })}
                         title="Download PDF"
                         className="flex items-center justify-center gap-2 bg-[#1D293D] text-white p-2.5 sm:px-5 sm:py-2.5 rounded-lg hover:bg-[#2a3a54] transition-all shadow-sm shrink-0"
                     >
@@ -214,25 +222,25 @@ function ChairmanDashboard() {
                                             </td>
                                         </tr>
                                     ) : (
-                                            Days.map((day) => (
-                                                <tr key={day}>
-                                                    <td className="border border-black px-4 py-3 font-bold text-left">{day}</td>
-                                                    {
-                                                        timeSlots.map((time) => {
-                                                            const slot = getSLot(day, time);
-                                                            return (
-                                                                <td key={time} className="border border-black px-2 py-3 min-w-[120px]">
-                                                                    {slot ? (
-                                                                        <div className="whitespace-pre-line font-bold">
-                                                                            {slot.type === 'theory' ? slot.course?.courseName : slot.course?.courseName + "(Lab)"}
-                                                                        </div>
-                                                                    ) : null}
-                                                                </td>
-                                                            );
-                                                        })
-                                                    }
-                                                </tr>
-                                            ))
+                                        Days.map((day) => (
+                                            <tr key={day}>
+                                                <td className="border border-black px-4 py-3 font-bold text-left">{day}</td>
+                                                {
+                                                    timeSlots.map((time) => {
+                                                        const slot = getSLot(day, time);
+                                                        return (
+                                                            <td key={time} className="border border-black px-2 py-3 min-w-[120px]">
+                                                                {slot ? (
+                                                                    <div className="whitespace-pre-line font-bold">
+                                                                        {slot.type === 'theory' ? slot.course?.courseName : slot.course?.courseName + "(Lab)"}
+                                                                    </div>
+                                                                ) : null}
+                                                            </td>
+                                                        );
+                                                    })
+                                                }
+                                            </tr>
+                                        ))
                                     )}
                                 </tbody>
                             </table>

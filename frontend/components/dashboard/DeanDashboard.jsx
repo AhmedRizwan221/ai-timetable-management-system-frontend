@@ -6,6 +6,7 @@ import TimeTableView from "../shrared/TimeTableView";
 import { getAllCoursesInFaculty } from "../../store/course/course";
 import { getFacultyDepartments } from "../../store/dept/departmentSlice";
 import ChatBot from "../chatbot/chatbot";
+import DownloadTimeTablePDF from "../shrared/DownloadTimeTablePdf";
 
 function DeanDashboard() {
     const dispatch = useDispatch();

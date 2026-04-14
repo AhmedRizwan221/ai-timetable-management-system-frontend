@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { GraduationCap, FileDown, Users, CalendarDays } from "lucide-react"
+import DownloadTimeTablePDF from "./DownloadTimeTablePdf";
 // import Button from "../shrared/Button";
 
 const Days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
@@ -142,6 +143,12 @@ function TimeTableView({
                     <p className="text-s font-medium pb-2 pl-2">Select your Department, Batch, Year, Semester and Department to continue</p>
                 </div>)}
                 <button
+                    onClick={() => DownloadTimeTablePDF({
+                        Days,
+                        timeSlots,
+                        filteredTimeTable,
+                        getSLot
+                    })}
                     title="Download PDF"
                     className="flex items-center justify-center gap-2 bg-[#1D293D] text-white p-2.5 sm:px-5 sm:py-2.5 rounded-lg hover:bg-[#2a3a54] transition-all shadow-sm shrink-0"
                 >
