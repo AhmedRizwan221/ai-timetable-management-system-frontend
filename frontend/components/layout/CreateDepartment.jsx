@@ -38,9 +38,6 @@ export default function CreateDepartment() {
             })).unwrap();
             reset();
             alert("Department created successfully!");
-            if (user?.role === 'dean') {
-                navigate('/dashboard/dean');
-            }
         } catch (error) {
             //    console.log(error);
             return error

@@ -12,7 +12,7 @@ export default function EditUser({
     register,
     buttonText = "Update",
     Icon,
-    redirectUrl=""
+    redirectUrl = ""
 }) {
     // console.log(err);
     const navigate = useNavigate();
@@ -53,10 +53,9 @@ export default function EditUser({
                         <div className="grid gap-5 sm:grid-cols-2">
 
                             {fields.map((field) => (
-                                <div className="space-y-2">
+                                <div className="space-y-2 " key={field.name}>
                                     <Input
                                         className="flex h-10 w-full items-center rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                                        key={field.name}
                                         label={field.label}
                                         type={field.type}
                                         icon={field.icon}

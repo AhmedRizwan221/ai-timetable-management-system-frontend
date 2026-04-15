@@ -30,9 +30,6 @@ export default function EditChairman() {
             })).unwrap();
             reset();
             alert("Chairman updated successfully!");
-            if (user?.role === 'dean') {
-                navigate('/dashboard/dean');
-            }
         } catch (error) {
             //    console.log(error);
             setErr(error);

@@ -17,7 +17,6 @@ export default function CreateTeacherChairman() {
 
     const handleUser = async (data) => {
         setError("");
-        console.log(data);
         try {
             const response = await axios.post('http://localhost:8000/api/v1/users/register', data, {
                 withCredentials: true
