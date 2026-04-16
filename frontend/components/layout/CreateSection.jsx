@@ -39,10 +39,6 @@ export default function CreateSection() {
             })).unwrap();
             reset();
             alert("Section created successfully");
-
-            if (user.role === 'chairman') {
-                Navigate('/dashboard/chairman')
-            }
         } catch (error) {
             // console.log(error);
             setErr(error)
@@ -105,7 +101,7 @@ export default function CreateSection() {
                                     <option value="">Select Batch</option>
                                     {batches.map((batch) => (
                                         <option key={batch._id} value={batch._id}>
-                                            {batch?.batchName}
+                                            {batch?.batchName === 'morning' ? "Morning" : 'Evening'}
                                         </option>
                                     ))}
                                 </select>

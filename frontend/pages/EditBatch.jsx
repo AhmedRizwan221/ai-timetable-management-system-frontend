@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import Input from "../components/shrared/Input";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { getSections, updateSection } from "../store/section/section";
 import Button from "../components/shrared/Button";
 import { CalendarDays, Layers, Plus, BookOpen, ArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { allBatches, updateBatch } from "../store/batch/batch";
-import { getAllSemesters } from "../store/semester/semester"
 
 
 export default function EditBatch() {
@@ -20,37 +18,27 @@ export default function EditBatch() {
 
     const { user } = useSelector((state) => state.auth);
     const { batches = [] } = useSelector((state) => state.batch);
-    const { semesters = [] } = useSelector((state) => state.semester);
-    const {sections = []} = useSelector((state) => state.section);
 
     useEffect(() => {
         if (user) {
             dispatch(allBatches(user?.department?._id));
-            dispatch(getAllSemesters(user?.department?._id));
-            dispatch(getSections(user?.department?._id))
         }
     }, [dispatch, user]);
 
     const handlerUpdateBatch = async (data) => {
         setErr("");
-        console.log(data);
         try {
             await dispatch(updateBatch({
                 batchId,
                 data: {
                     batchName: data.batchName,
-                    departmentId: user?.department?._id,
-                    semesterId: data.semesterId || null,
-                    sectionId: data.sectionId || null
+                    departmentId: user?.department?._id
                 }
 
             })).unwrap();
             reset();
             alert("Batch Updated successfully");
 
-            if (user.role === 'chairman') {
-                Navigate('/dashboard/chairman')
-            }
         } catch (error) {
             // console.log(error);
             setErr(error)
@@ -106,38 +94,6 @@ export default function EditBatch() {
                                     <option value={user?.department?._id}>
                                         {user?.department?.deptName}
                                     </option>
-                                </select>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="flex items-center gap-1.5">
-                                    <Layers className="h-3.5 w-3.5 text-muted-foreground" /> Select Semester
-                                </label>
-                                <select
-                                    className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                                    {...register("semesterId")}
-                                >
-                                    <option value="">Select Semester</option>
-                                    {semesters.map((sem) => (
-                                        <option key={sem._id} value={sem._id}>
-                                            {"semester " + sem?.semesterNumber + " " + "Year" + sem?.studyYear}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="flex items-center gap-1.5">
-                                    <Layers className="h-3.5 w-3.5 text-muted-foreground" /> Select Section
-                                </label>
-                                <select
-                                    className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                                    {...register("sectionId")}
-                                >
-                                    <option value="">Select Section</option>
-                                    {sections.map((sect) => (
-                                        <option key={sect._id} value={sect._id}>
-                                            {sect?.sectionName}
-                                        </option>
-                                    ))}
                                 </select>
                             </div>
                         </div>

@@ -6,8 +6,6 @@ import { createBatch } from "../../store/batch/batch";
 import Button from "../shrared/Button";
 import { Clock, CalendarDays, Layers, Plus, BookOpen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import {getAllSemesters} from "../../store/semester/semester";
-import { getSections } from "../../store/section/section";
 
 export default function CreateBatch() {
     const { register, handleSubmit, reset } = useForm();
@@ -16,15 +14,7 @@ export default function CreateBatch() {
     const [err, setErr] = useState("")
 
     const { user, error: userError } = useSelector((state) => state.auth);
-    const { semesters = [] } = useSelector((state) => state.semester);
-    const { sections = [], error: sectionError } = useSelector((state) => state.section);
 
-    useEffect(() => {
-        if (user) {
-            dispatch(getAllSemesters(user?.department?._id));
-            dispatch(getSections(user?.department?._id));
-        }
-    }, [dispatch, user]);
 
     const handleCreateBatch = async (data) => {
         setErr("");
@@ -32,16 +22,11 @@ export default function CreateBatch() {
         try {
             await dispatch(createBatch({
                 batchName: data.batchName,
-                departmentId: user?.department?._id,
-                semesterId: data.semesterId,
-                sectionId: data.sectionId
+                departmentId: user?.department?._id
             })).unwrap();
             reset();
             alert("Batch created successfully");
 
-            if (user.role === 'chairman') {
-                Navigate('/dashboard/chairman')
-            }
         } catch (error) {
             // console.log(error);
             setErr(error)
@@ -91,38 +76,6 @@ export default function CreateBatch() {
                                     <option value={user?.department?._id}>
                                         {user?.department?.deptName}
                                     </option>
-                                </select>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="flex items-center gap-1.5">
-                                    <Layers className="h-3.5 w-3.5 text-muted-foreground" /> Select Semester
-                                </label>
-                                <select
-                                    className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                                    {...register("semesterId", { required: true })}
-                                >
-                                    <option value="">Select Semester</option>
-                                    {semesters.map((sem) => (
-                                        <option key={sem._id} value={sem._id}>
-                                            {"semester " + sem?.semesterNumber + " " + "Year" + sem?.studyYear}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="flex items-center gap-1.5">
-                                    <Layers className="h-3.5 w-3.5 text-muted-foreground" /> Select Section
-                                </label>
-                                <select
-                                    className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                                    {...register("sectionId")}
-                                >
-                                    <option value="">Select Section</option>
-                                    {sections.map((sect) => (
-                                        <option key={sect._id} value={sect._id}>
-                                            {sect?.sectionName}
-                                        </option>
-                                    ))}
                                 </select>
                             </div>
                         </div>

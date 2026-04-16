@@ -66,7 +66,7 @@ export const updateBatch = createAsyncThunk(
                 withCredentials: true
             });
 
-            console.log(response.data.data);
+            // console.log(response.data.data);
 
             return response.data.data.updatedBatch
         } catch (error) {

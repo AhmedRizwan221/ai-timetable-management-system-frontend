@@ -12,10 +12,10 @@ function ChairmanDashboard() {
     const [isOpen, setIsOpen] = useState(false);
 
     const dispatch = useDispatch();
-    const [selectedBatch, setSelectedBatch] = useState("morning");
-    const [selectedSemester, setSelectedSemester] = useState(1);
-    const [selectedYear, setSelectedYear] = useState(1);
-    const [selectedSection, setSelectedSection] = useState("A");
+    const [selectedBatch, setSelectedBatch] = useState("");
+    const [selectedSemester, setSelectedSemester] = useState("");
+    const [selectedYear, setSelectedYear] = useState("");
+    const [selectedSection, setSelectedSection] = useState("");
 
     const { user } = useSelector((state) => state.auth);
     const { timeTableSlot = [], error, totalSlots } = useSelector((state) => state.timetabelSlot);
@@ -61,7 +61,7 @@ function ChairmanDashboard() {
             return matchBatch && matchSemester && matchYear && matchSection;
         });
     }, [timeTableSlot, selectedBatch, selectedSemester, selectedYear, selectedSection]);
-    console.log(filteredTimeTable);
+    // console.log(filteredTimeTable);
 
     // get times of particular slot 
     const timeSlots = [... new Set(
@@ -291,6 +291,7 @@ const FilterSelect = ({ label, value, onChange, options }) => (
             value={value}
             onChange={onChange}
         >
+            <option value="">Select {label}</option>
             {options.map(opt => (
                 <option key={opt.val} value={opt.val}>{opt.lab}</option>
             ))}

@@ -6,11 +6,9 @@ export const createSection = createAsyncThunk(
     "section/create",
     async (data, { rejectWithValue }) => {
         try {
-            console.log(data);
             const response = await axios.post('http://localhost:8000/api/v1/sections/create', data, { withCredentials: true });
 
             // console.log(response.data.data);
-
             return response.data.data.createdSection
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);

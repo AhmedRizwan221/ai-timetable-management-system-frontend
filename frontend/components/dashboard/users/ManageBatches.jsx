@@ -121,7 +121,6 @@ export default function ManageBatches() {
                                 <tr className="bg-[#1D293D] text-white">
                                     <th className="px-6 py-3 font-semibold text-sm">S.No</th>
                                     <th className="px-6 py-3 font-semibold text-sm">Name</th>
-                                    <th className="px-6 py-3 font-semibold text-sm">Semester & Year</th>
                                     <th className="px-6 py-3 font-semibold text-sm">Department</th>
                                     <th className="px-6 py-3 text-right font-semibold text-sm">Actions</th>
                                 </tr>
@@ -148,7 +147,6 @@ export default function ManageBatches() {
                                                         <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0"><GraduationCap className="h-4 w-4" /></div>
                                                         {batch.batchName === 'morning' ? "Morning" : "Evening"}
                                                     </td>
-                                                    <td className="px-6 py-4 text-muted-foreground text-sm truncate max-w-[150px] lg:max-w-none">{"Semester" + " " + batch?.semester?.semesterNumber + " " + "Year" + " " + batch?.semester?.studyYear}</td>
                                                     <td className="px-6 py-4 text-sm">{batch?.department?.deptName || "Not Assigned"}</td>
                                                     <td className="px-6 py-4">
                                                         <div className="flex justify-end gap-3">

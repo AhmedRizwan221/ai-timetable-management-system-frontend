@@ -5,7 +5,7 @@ import axios from "axios";
 export const createTimeTable = createAsyncThunk(
     "timetable/create",
     async ({ batchId, semesterId, sectionId = null, departmentId, facultyId }, { rejectWithValue }) => {
-        console.log(batchId, semesterId, sectionId, departmentId, facultyId);
+        // console.log(batchId, semesterId, sectionId, departmentId, facultyId);
         try {
             const response = await axios.post('http://localhost:8000/api/v1/timetables/create',
                 { batchId, semesterId, sectionId, departmentId, facultyId },
@@ -55,7 +55,7 @@ export const updateTimeTable = createAsyncThunk(
                 withCredentials: true
             });
 
-            console.log(response.data.data);
+            // console.log(response.data.data);
             return response.data.data.updatedTimeTable
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);

@@ -27,16 +27,12 @@ export default function CreateTeacherChairman() {
 
             if (user?.role === 'admin') {
                 alert("Dean Created Succefully");
-                navigate('/dashboard/superadmin');
             } else if (user?.role === 'dean') {
                 alert("Chairman Creaetd Succegully");
-                navigate("/dashboard/dean");
             } else if (user?.role === 'chairman') {
                 alert("Teacher created successfully")
-                navigate("/dashboard/chairman")
             } else {
                 dispatch(login(user));
-                navigate("/");
             }
 
             reset();

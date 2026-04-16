@@ -31,7 +31,6 @@ export default function EditSection() {
 
     const handlerUpdateSection = async (data) => {
         setErr("");
-        console.log(data);
         try {
             await dispatch(updateSection({
                 sectionId,
@@ -45,10 +44,6 @@ export default function EditSection() {
             })).unwrap();
             reset();
             alert("Section Updated successfully");
-
-            if (user.role === 'chairman') {
-                Navigate('/dashboard/chairman')
-            }
         } catch (error) {
             // console.log(error);
             setErr(error)
@@ -117,7 +112,7 @@ export default function EditSection() {
                                     <option value="">Select Batch</option>
                                     {batches.map((batch) => (
                                         <option key={batch._id} value={batch._id}>
-                                            {batch?.batchName}
+                                            {batch?.batchName === 'morning' ? "Morning" : "Evening"}
                                         </option>
                                     ))}
                                 </select>

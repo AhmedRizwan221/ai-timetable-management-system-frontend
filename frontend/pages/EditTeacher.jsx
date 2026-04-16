@@ -26,9 +26,6 @@ export default function EditTeacher() {
             })).unwrap();
             reset();
             alert("Teacher updated successfully!");
-            if (user?.role === 'chairman') {
-                navigate('/dashboard/chairman');
-            }
         } catch (error) {
             //    console.log(error);
             return error
