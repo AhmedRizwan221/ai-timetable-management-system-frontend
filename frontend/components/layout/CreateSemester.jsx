@@ -17,7 +17,7 @@ export default function CreateSemester() {
 
     const handlerCreateSemester = async (data) => {
         setErr("");
-        console.log(data);
+        // console.log(data);
         try {
             await dispatch(createSemester({
                 semesterNumber: data.semesterNumber,

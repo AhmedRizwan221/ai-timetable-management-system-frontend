@@ -26,12 +26,12 @@ export default function TimeTableForm(
             <div className="bg-card">
                 <div className="container mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8 border-b">
                     <div className="flex items-center gap-3">
-                            <button
+                            {/* <button
                                 onClick={() => navigate(redirectUrl)}
                                 className="hidden md:inline-flex p-1.5 rounded-full border border-gray-300 bg-[#1D293D] text-white hover:bg-[#162131] cursor-pointer"
                             >
                                 <ArrowLeft className="h-8 w-8" />
-                            </button>
+                            </button> */}
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
                             <CalendarDays className="h-8 w-8 text-primary-foreground" />
                         </div>

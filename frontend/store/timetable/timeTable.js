@@ -4,11 +4,11 @@ import axios from "axios";
 // create time table 
 export const createTimeTable = createAsyncThunk(
     "timetable/create",
-    async ({ batchId, semesterId, sectionId = null, departmentId, facultyId }, { rejectWithValue }) => {
+    async ({ batchId, semesterId, sectionId = null, departmentId, facultyId, createdBy, status }, { rejectWithValue }) => {
         // console.log(batchId, semesterId, sectionId, departmentId, facultyId);
         try {
             const response = await axios.post('http://localhost:8000/api/v1/timetables/create',
-                { batchId, semesterId, sectionId, departmentId, facultyId },
+                { batchId, semesterId, sectionId, departmentId, facultyId, createdBy, status },
                 { withCredentials: true }
             );
             // console.log(response.data.data.createdTimeTable);
@@ -149,7 +149,7 @@ const timetableSlice = createSlice({
             })
             .addCase(getDeptallTimeTables.pending, (state) => {
                 state.status = 'Pending',
-                state.loading = true
+                    state.loading = true
             })
             .addCase(getDeptallTimeTables.fulfilled, (state, action) => {
                 state.status = 'Succeeded';
@@ -167,7 +167,7 @@ const timetableSlice = createSlice({
             })
             .addCase(getDeptallTimeTables.rejected, (state, action) => {
                 state.status = 'Failed',
-                state.loading = false,
+                    state.loading = false,
                     state.error = action.payload
             })
             .addCase(deleteTimeTable.pending, (state) => {

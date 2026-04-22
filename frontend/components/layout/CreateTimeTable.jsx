@@ -27,7 +27,7 @@ export default function CreateTimeTable() {
     const { courses = [] } = useSelector((state) => state.course);
     const { timeTables = [] } = useSelector((state) => state.timetable);
 
-    // console.log(timeTables);
+    // console.log(user);
 
     // now fetched all courses using deptId and render here 
     useEffect(() => {
@@ -65,7 +65,9 @@ export default function CreateTimeTable() {
                 batchId: data.batchId,
                 departmentId: data.departmentId,
                 sectionId: data.sectionId || null,
-                facultyId: data.facultyId
+                facultyId: data.facultyId,
+                createdBy: user?._id,
+                status: 'pending'
             })).unwrap();
             resetTimetable();
             alert("TimeTable created successfully");

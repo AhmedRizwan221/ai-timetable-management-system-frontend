@@ -23,7 +23,7 @@ export const getSections = createAsyncThunk(
         try {
             const response = await axios.get(`http://localhost:8000/api/v1/sections/get-all-sections/${deptId}`, { withCredentials: true });
 
-            // console.log(response.data.data);
+            console.log(response.data.data);
 
             return response.data.data.departments
         } catch (error) {

@@ -17,7 +17,6 @@ export default function ManageSections() {
     const { user } = useSelector((state) => state.auth);
     const { sections = [], error: sectionError, totalPages, currentPage, hasPrevPage, hasNextPage, loading } = useSelector((state) => state.section);
 
-
     useEffect(() => {
         if (user?.role === 'chairman') {
             dispatch(getAllSections({

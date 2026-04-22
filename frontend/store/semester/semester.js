@@ -6,10 +6,10 @@ export const createSemester = createAsyncThunk(
     "semester/create",
     async (data, { rejectWithValue }) => {
         try {
-            console.log(data);
+            // console.log(data);
             const response = await axios.post(`http://localhost:8000/api/v1/semesters/create`, data, { withCredentials: true });
 
-            console.log(response.data.data);
+            // console.log(response.data.data);
 
             return response.data.data.createdSemester
         } catch (error) {
