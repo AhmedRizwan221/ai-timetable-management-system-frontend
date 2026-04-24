@@ -481,7 +481,7 @@ const router = createBrowserRouter([
         )
       },
       {
-        path: '/dashboard/chairman/edit-timetableSlots/:timetableSlot',
+        path: '/dashboard/chairman/edit-timetableSlots/:timetableSlotId',
         element: (
           <AuthLayout authentication={true}>
             <DashboardLayout>

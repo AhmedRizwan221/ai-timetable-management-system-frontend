@@ -14,10 +14,10 @@ export default function EditTimeTableSlot() {
     const { register, handleSubmit, reset, watch, unregister } = useForm();
     const dispatch = useDispatch();
     const [err, setErr] = useState("");
-    const { timetableSlot } = useParams();
+    const { timetableSlotId } = useParams();
     const navigate = useNavigate();
     const { user } = useSelector((state) => state.auth);
-    // console.log(user);
+    // console.log(timetableSlotId);
     // const { timeTables = [] } = useSelector((state) => state.timetable);
     const { timeTables = [] } = useSelector((state) => state.timetabelSlot);
     const { courses = [] } = useSelector((state) => state.course);
@@ -49,7 +49,7 @@ export default function EditTimeTableSlot() {
         setErr("");
         try {
             await dispatch(updateTimeTableSlot({
-                timetableSlot,
+                timetableSlotId,
                 data: {
                     timetableId: data.timetableId,
                     day: data.day,

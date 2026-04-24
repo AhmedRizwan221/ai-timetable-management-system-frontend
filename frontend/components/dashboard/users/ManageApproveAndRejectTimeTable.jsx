@@ -47,6 +47,7 @@ export default function ManageApproveAndRejectTimeTable() {
         }
     };
 
+
     return (
         <div className="min-h-screen bg-muted/30 py-10 px-4 sm:px-6">
             <div className="bg-white border border-gray-200 rounded-lg">
@@ -104,8 +105,8 @@ export default function ManageApproveAndRejectTimeTable() {
                                         <div className="flex justify-between items-center pt-2 border-t border-border/50">
                                             <p className="text-sm font-medium"><span className="text-muted-foreground font-normal">Batch:</span> {timetable?.batch?.batchName}</p>
                                             <div className="flex gap-2">
-                                                <button onClick={() => navigate(`/dashboard/chairman/edit-timetable/${timetable._id}`)} className="p-2 bg-muted rounded-md"><Pencil className="h-4 w-4 text-primary" /></button>
-                                                <button onClick={() => timetableDeleteHandler(timetable._id)} className="p-2 bg-muted rounded-md"><Trash className="h-4 w-4 text-red-500" /></button>
+                                                <button onClick={() => navigate(`/dashboard/dean/approve-timetable/${timetable._id}`)} className="p-2 bg-muted rounded-md"><Pencil className="h-4 w-4 text-primary" /></button>
+
                                             </div>
                                         </div>
                                     </div>
@@ -166,8 +167,7 @@ export default function ManageApproveAndRejectTimeTable() {
                                                         </td>
                                                         <td className="px-6 py-4">
                                                             <div className="flex justify-end gap-3">
-                                                                <button onClick={() => navigate(`/dashboard/dean/approve-timetable/${timetable._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><CheckCircle className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
-                                                                <button onClick={() => navigate(`/dashboard/dean/reject-timetable/${timetable._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><XCircle className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
+                                                                <button onClick={() => navigate(`/dashboard/dean/approve-timetable/${timetable._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
                                                             </div>
                                                         </td>
                                                     </tr>

@@ -24,7 +24,6 @@ export default function EditTimeTable() {
     const { batches = [], error: batchError } = useSelector((state) => state.batch);
     const { sections = [], error: sectionError } = useSelector((state) => state.section);
 
-
     useEffect(() => {
         if (user) {
             dispatch(getAllSemesters(user?.department?._id));
@@ -35,7 +34,7 @@ export default function EditTimeTable() {
 
     const handlerUpdateTimeTable = async (data) => {
         setErr("");
-
+        console.log(data);
         try {
             await dispatch(updateTimeTable({
                 timetableId,

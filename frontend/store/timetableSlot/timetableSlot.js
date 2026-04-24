@@ -65,7 +65,7 @@ export const updateTimeTableSlot = createAsyncThunk(
     "timetableSlot/updateSlot",
     async ({ timetableSlotId, data }, { rejectWithValue }) => {
         try {
-            const response = await axios.patch(`http://localhost:8000/api/v1/timetableSlots/update${timetableSlotId}`, data, { withCredentials: true });
+            const response = await axios.patch(`http://localhost:8000/api/v1/timetableSlots/update/${timetableSlotId}`, data, { withCredentials: true });
 
             console.log(response.data.data);
 

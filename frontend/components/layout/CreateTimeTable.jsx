@@ -27,7 +27,7 @@ export default function CreateTimeTable() {
     const { courses = [] } = useSelector((state) => state.course);
     const { timeTables = [] } = useSelector((state) => state.timetable);
 
-    // console.log(user);
+    // console.log(courses);
 
     // now fetched all courses using deptId and render here 
     useEffect(() => {
@@ -263,7 +263,7 @@ export default function CreateTimeTable() {
                                     <option value="">Select Course</option>
                                     {courses.map((cour) => (
                                         <option key={cour._id} value={cour._id}>
-                                            {cour.courseName} { }
+                                            {cour.courseName + " " + "|" + " " + cour?.teacher?.fullName } 
                                         </option>
                                     ))}
                                 </select>

@@ -126,12 +126,13 @@ export const getAllApproveAndUnapprovTimetablesOfFaculty = createAsyncThunk(
 // approve timetable 
 export const approveTimetable = createAsyncThunk(
     "timetable/approve",
-    async (timetableId, { rejectWithValue }) => {
+    async ({ timetableId, data }, { rejectWithValue }) => {
+
         try {
-            const response = await axios.patch(`http://localhost:8000/api/v1/timetables/${timetableId}/approve`, {
-                withCredentials: true
-            });
-            console.log(response.data.data);
+            const response = await axios.patch(`http://localhost:8000/api/v1/timetables/${timetableId}/approve`, data,
+                { withCredentials: true }
+            );
+            // console.log(response.data.data);
             return response.data.data.timetable
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
@@ -143,12 +144,26 @@ export const approveTimetable = createAsyncThunk(
 // reject time table 
 export const rejectTimetable = createAsyncThunk(
     "timetable/reject",
-    async (timetableId, { rejectWithValue }) => {
+    async ({ timetableId, data }, { rejectWithValue }) => {
         try {
-            const response = await axios.patch(`http://localhost:8000/api/v1/timetables/${timetableId}/reject`, {
+            const response = await axios.patch(`http://localhost:8000/api/v1/timetables/${timetableId}/reject`, data, {
                 withCredentials: true
             });
-            console.log(response.data.data);
+            // console.log(response.data.data);
+            return response.data.data.timetable
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
+// get single timetable 
+export const getTimeTableById = createAsyncThunk(
+    "timetabel/getTimetable",
+    async (timetableId, { rejectWithValue }) => {
+        try {
+            const response = await axios.get(`http://localhost:8000/api/v1/timetables/${timetableId}`);
+            // console.log(response.data.data);
             return response.data.data.timetable
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
@@ -290,7 +305,9 @@ const timetableSlice = createSlice({
             })
             .addCase(approveTimetable.fulfilled, (state, action) => {
                 state.status = 'Succeeded';
-                state.timeTables = action.payload
+                state.timeTables = state.timeTables.map((timetable) =>
+                    timetable._id === action.payload._id ? action.payload : timetable
+                )
             })
             .addCase(approveTimetable.rejected, (state, action) => {
                 state.status = 'Failed',
@@ -301,9 +318,22 @@ const timetableSlice = createSlice({
             })
             .addCase(rejectTimetable.fulfilled, (state, action) => {
                 state.status = 'Succeeded';
-                state.timeTables = action.payload
+                state.timeTables = state.timeTables.map((timetable) =>
+                    timetable._id === action.payload._id ? action.payload : timetable
+                )
             })
             .addCase(rejectTimetable.rejected, (state, action) => {
+                state.status = 'Failed',
+                    state.error = action.payload
+            })
+            .addCase(getTimeTableById.pending, (state) => {
+                state.status = 'Pending'
+            })
+            .addCase(getTimeTableById.fulfilled, (state, action) => {
+                state.status = 'Succeeded';
+                state.timeTables = action.payload
+            })
+            .addCase(getTimeTableById.rejected, (state, action) => {
                 state.status = 'Failed',
                     state.error = action.payload
             })
