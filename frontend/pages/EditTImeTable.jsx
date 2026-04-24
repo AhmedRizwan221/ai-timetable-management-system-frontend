@@ -43,7 +43,9 @@ export default function EditTimeTable() {
                     semesterId: data.semesterId,
                     batchId: data.batchId,
                     departmentId: data.departmentId,
-                    sectionId: data.sectionId || null
+                    sectionId: data.sectionId || null,
+                    status: 'pending',
+                    approvedBy: null
                 }
             })).unwrap();
             reset();

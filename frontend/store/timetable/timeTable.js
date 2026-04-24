@@ -79,7 +79,7 @@ export const deleteTimeTable = createAsyncThunk(
     }
 )
 
-// get all timetables without pagination
+// get all timetables without pagination in department 
 export const allTimetabels = createAsyncThunk(
     "timetable/allTimeTables",
     async (deptId, { rejectWithValue }) => {
@@ -98,6 +98,63 @@ export const allTimetabels = createAsyncThunk(
     }
 )
 
+// get all timetables of faculty
+export const getAllApproveAndUnapprovTimetablesOfFaculty = createAsyncThunk(
+    "timetable/getAllTimeTablesOfFaculty",
+    async ({ facultyId, page, limit }, { rejectWithValue }) => {
+        // console.log(facultyId, page, limit);
+        try {
+            const response = await axios.get(`http://localhost:8000/api/v1/timetables/faculty/${facultyId}/timetables`, {
+                params: {
+                    page,
+                    limit,
+                    sortBy: "createdAt",
+                    sortType: "desc"
+                },
+                withCredentials: true
+            },
+            );
+            // console.log(response.data.data);
+            return response.data.data;
+        } catch (error) {
+            console.log(error.message);
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
+// approve timetable 
+export const approveTimetable = createAsyncThunk(
+    "timetable/approve",
+    async (timetableId, { rejectWithValue }) => {
+        try {
+            const response = await axios.patch(`http://localhost:8000/api/v1/timetables/${timetableId}/approve`, {
+                withCredentials: true
+            });
+            console.log(response.data.data);
+            return response.data.data.timetable
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
+
+// reject time table 
+export const rejectTimetable = createAsyncThunk(
+    "timetable/reject",
+    async (timetableId, { rejectWithValue }) => {
+        try {
+            const response = await axios.patch(`http://localhost:8000/api/v1/timetables/${timetableId}/reject`, {
+                withCredentials: true
+            });
+            console.log(response.data.data);
+            return response.data.data.timetable
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
 
 
 
@@ -203,6 +260,50 @@ const timetableSlice = createSlice({
                 state.timeTables = action.payload
             })
             .addCase(allTimetabels.rejected, (state, action) => {
+                state.status = 'Failed',
+                    state.error = action.payload
+            })
+            .addCase(getAllApproveAndUnapprovTimetablesOfFaculty.pending, (state) => {
+                state.status = 'Pending',
+                    state.loading = true
+            })
+            .addCase(getAllApproveAndUnapprovTimetablesOfFaculty.fulfilled, (state, action) => {
+                state.status = 'Succeeded';
+                state.loading = false;
+                state.timeTables = action.payload.allTimeTables;
+                state.totalTimeTables = action.payload.totalTimeTables;
+
+                // pagination
+                state.currentPage = action.payload.pagination.currentPage;
+                state.limit = action.payload.pagination.limit;
+                state.totalPages = action.payload.pagination.totalPages;
+                state.hasNextPage = action.payload.pagination.hasNextPage;
+                state.hasPrevPage = action.payload.pagination.hasPrevPage
+            })
+            .addCase(getAllApproveAndUnapprovTimetablesOfFaculty.rejected, (state, action) => {
+                state.status = 'Failed',
+                    state.loading = false,
+                    state.error = action.payload
+            })
+            .addCase(approveTimetable.pending, (state) => {
+                state.status = 'Pending'
+            })
+            .addCase(approveTimetable.fulfilled, (state, action) => {
+                state.status = 'Succeeded';
+                state.timeTables = action.payload
+            })
+            .addCase(approveTimetable.rejected, (state, action) => {
+                state.status = 'Failed',
+                    state.error = action.payload
+            })
+            .addCase(rejectTimetable.pending, (state) => {
+                state.status = 'Pending'
+            })
+            .addCase(rejectTimetable.fulfilled, (state, action) => {
+                state.status = 'Succeeded';
+                state.timeTables = action.payload
+            })
+            .addCase(rejectTimetable.rejected, (state, action) => {
                 state.status = 'Failed',
                     state.error = action.payload
             })

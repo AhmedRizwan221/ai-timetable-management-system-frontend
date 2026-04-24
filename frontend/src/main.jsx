@@ -29,9 +29,12 @@ import {
   CreateDepartment,
   ManageChairmans,
   ManageDepartments,
-  EditDepartment
+  EditDepartment,
+  ApproveTimeTable,
+  RejectTimeTable
 } from '../components/index';
 import Department from "../pages/Department";
+import ManageApproveAndRejectTimeTable from '../components/dashboard/users/ManageApproveAndRejectTimeTable.jsx';
 
 const router = createBrowserRouter([
   {
@@ -193,7 +196,7 @@ const router = createBrowserRouter([
           </AuthLayout>
         )
       },
-       {
+      {
         path: '/dashboard/dean/manage-departments',
         element: (
           <AuthLayout authentication={true}>
@@ -203,7 +206,7 @@ const router = createBrowserRouter([
           </AuthLayout>
         )
       },
-         {
+      {
         path: '/dashboard/dean/edit-department/:departmentId',
         element: (
           <AuthLayout authentication={true}>
@@ -233,12 +236,42 @@ const router = createBrowserRouter([
           </AuthLayout>
         )
       },
-        {
+      {
         path: '/dashboard/dean/edit-chairmans/:id',
         element: (
           <AuthLayout authentication={true}>
             <DashboardLayout>
               <EditChairman />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+      {
+        path: '/dashboard/dean/manage-timetables',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <ManageApproveAndRejectTimeTable />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+      {
+         path: '/dashboard/dean/approve-timetable/:timetableId',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <ApproveTimeTable />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+      {
+           path: '/dashboard/dean/reject-timetable/:timetableId',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <RejectTimeTable />
             </DashboardLayout>
           </AuthLayout>
         )

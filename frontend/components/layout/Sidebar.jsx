@@ -319,6 +319,7 @@ import {
   ChevronUp,
   BookOpen,
   Calendar,
+  CalendarDays,
 } from "lucide-react";
 import { useSelector } from "react-redux";
 
@@ -381,6 +382,11 @@ export default function Sidebar() {
           { name: "Departments", path: "/dashboard/dean/departments" },
         ]
       },
+      {
+        name: "TimeTables",
+        icon: <CalendarDays size={24} />,
+        path: "/dashboard/dean/manage-timetables"
+      }
     ],
     chairman: [
       { name: "Dashboard", icon: <Home size={18} />, path: "/dashboard/chairman" },

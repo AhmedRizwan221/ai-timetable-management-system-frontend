@@ -1,14 +1,14 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { Search, ChevronRight, ChevronLeft, CalendarDays, Pencil, Trash } from "lucide-react";
-import { clearError } from "../../../store/timetable/timeTable";
+import { Search, ChevronRight, ChevronLeft, CalendarDays, Pencil, Trash, CheckCircle, XCircle } from "lucide-react";
+import { clearError } from "../../../store/timetable/timeTable.js";
 import { useNavigate } from "react-router-dom";
-import { deleteTimeTable, getDeptallTimeTables } from "../../../store/timetable/timeTable";
+import { getAllApproveAndUnapprovTimetablesOfFaculty, approveTimetable, rejectTimetable } from "../../../store/timetable/timeTable.js";
 import { getUser } from "../../../store/auth/authSlice.js";
 import Input from "../../shrared/Input.jsx";
 import Loader from "../../shrared/Loader.jsx";
 
-export default function ManageTimetable() {
+export default function ManageApproveAndRejectTimeTable() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
@@ -17,30 +17,22 @@ export default function ManageTimetable() {
     const { timeTables = [], error: timetableError, hasPrevPage, hasNextPage, totalPages, currentPage, loading } = useSelector((state) => state.timetable);
     const { user } = useSelector((state) => state.auth);
 
+    const filterTimeTables = timeTables.filter((fact) =>
+        fact?.batch?.batchName?.toLowerCase().includes(search.trim().toLowerCase()) ||
+        fact?.semester?.semesterNumber?.toString().includes(search.trim()) ||
+        fact?.semester?.studyYear?.toString().includes(search.trim())
+    );
+
     useEffect(() => {
         if (user) {
-            dispatch(getDeptallTimeTables({
-                deptId: user?.department?._id,
+            dispatch(getAllApproveAndUnapprovTimetablesOfFaculty({
+                facultyId: user?.faculty?._id,
                 page: page,
                 limit: 5
             }));
             dispatch(clearError());
         }
     }, [dispatch, page, user]);
-
-    const timetableDeleteHandler = (id) => {
-        const deleteConfrim = window.confirm("Deleting this TimeTable will delete all slots of this timetable?");
-        if (deleteConfrim) {
-            dispatch(deleteTimeTable(id))
-        }
-    }
-
-    // serahc functionality
-    const filterTimeTables = timeTables.filter((fact) =>
-        fact?.batch?.batchName?.toLowerCase().includes(search.trim().toLowerCase()) ||
-        fact?.semester?.semesterNumber?.toString().includes(search.trim()) ||
-        fact?.semester?.studyYear?.toString().includes(search.trim())
-    );
 
     const getStatusStyle = (status) => {
         switch (status) {
@@ -101,7 +93,7 @@ export default function ManageTimetable() {
                                         <div className="flex justify-between items-start">
                                             <div className="flex items-center gap-3">
                                                 {/* <div className="h-10 w-10 flex items-center justify-center rounded-full bg-muted-foreground/10 text-muted-foreground">
-                                        </div> */}
+                                               </div> */}
                                                 <div className="flex items-center gap-1">
                                                     <p className="font-bold text-foreground">Year {timetable?.semester?.studyYear}</p>
                                                     <p className="font-bold text-foreground">Semester {timetable?.semester?.semesterNumber}</p>
@@ -174,8 +166,8 @@ export default function ManageTimetable() {
                                                         </td>
                                                         <td className="px-6 py-4">
                                                             <div className="flex justify-end gap-3">
-                                                                <button onClick={() => navigate(`/dashboard/chairman/edit-timetable/${timetable._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Pencil className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
-                                                                <button onClick={() => timetableDeleteHandler(timetable._id)} className="p-2 hover:bg-muted rounded-md transition-all cursor-pointer"><Trash className="h-5 w-5 text-muted-foreground hover:text-red-600" /></button>
+                                                                <button onClick={() => navigate(`/dashboard/dean/approve-timetable/${timetable._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><CheckCircle className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
+                                                                <button onClick={() => navigate(`/dashboard/dean/reject-timetable/${timetable._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><XCircle className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
                                                             </div>
                                                         </td>
                                                     </tr>

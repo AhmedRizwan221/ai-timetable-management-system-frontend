@@ -38,6 +38,7 @@ import ManageSemesters from "./dashboard/users/ManageSemesters.jsx";
 import ManageFaculties from "./dashboard/users/ManageFaculties.jsx";
 import ManageChairmans from "./dashboard/users/ManageChairmans.jsx";
 import ManageDepartments from "./dashboard/users/ManageDepartments.jsx";
+import ManageApproveTimeTable from "./dashboard/users/ManageApproveAndRejectTimeTable.jsx";
 import EditSection from "../pages/EditSection.jsx";
 import EditBatch from "../pages/EditBatch.jsx";
 import EditTimeTableSlot from "../pages/EditTimeTableSlot.jsx";
@@ -45,6 +46,8 @@ import EditSemesters from "../pages/EditSemesters.jsx";
 import EditCourse from "../pages/EditCourse.jsx";
 import EditFaculty from "../pages/EditFaculty.jsx";
 import EditDepartment from "../pages/EditDepartment.jsx";
+import ApproveTimeTable from "../pages/ApproveTimeTable.jsx";
+import RejectTimeTable from "../pages/RejectTimeTable.jsx";
 
 
 export {
@@ -88,11 +91,14 @@ export {
     ManageFaculties,
     ManageChairmans,
     ManageDepartments,
+    ManageApproveTimeTable,
     EditSection,
     EditBatch,
     EditTimeTableSlot,
     EditSemesters,
     EditCourse,
     EditFaculty,
-    EditDepartment
+    EditDepartment,
+    ApproveTimeTable,
+    RejectTimeTable
 }
