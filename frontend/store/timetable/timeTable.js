@@ -163,7 +163,7 @@ export const getTimeTableById = createAsyncThunk(
     async (timetableId, { rejectWithValue }) => {
         try {
             const response = await axios.get(`http://localhost:8000/api/v1/timetables/${timetableId}`);
-            // console.log(response.data.data);
+            console.log(response.data.data);
             return response.data.data.timetable
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
@@ -331,7 +331,9 @@ const timetableSlice = createSlice({
             })
             .addCase(getTimeTableById.fulfilled, (state, action) => {
                 state.status = 'Succeeded';
-                state.timeTables = action.payload
+                console.log(action.payload);
+                state.timeTables = action.payload;
+                console.log(state.timeTables);
             })
             .addCase(getTimeTableById.rejected, (state, action) => {
                 state.status = 'Failed',

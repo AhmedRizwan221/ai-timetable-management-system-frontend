@@ -19,7 +19,7 @@ export default function EditUser({
 
     return (
         <div className="min-h-screen bg-muted/30 py-10 px-4 sm:px-6 ">
-            <div className="bg-white border border-gray-200 rounded-lg ">
+            <div className="bg-white border border-gray-200 rounded-lg">
 
                 {/* Header */}
                 <div className="border-b">

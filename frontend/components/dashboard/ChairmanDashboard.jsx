@@ -70,6 +70,7 @@ function ChairmanDashboard() {
 
 
     const getSLot = (day, time) => {
+        console.log(filteredTimeTable)
         return filteredTimeTable.find(
             slot =>
                 slot.day === day &&

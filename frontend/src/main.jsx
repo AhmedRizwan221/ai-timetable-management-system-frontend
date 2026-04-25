@@ -31,7 +31,7 @@ import {
   ManageDepartments,
   EditDepartment,
   ApproveTimeTable,
-  RejectTimeTable
+  ViewTimeTable
 } from '../components/index';
 import Department from "../pages/Department";
 import ManageApproveAndRejectTimeTable from '../components/dashboard/users/ManageApproveAndRejectTimeTable.jsx';
@@ -257,21 +257,11 @@ const router = createBrowserRouter([
         )
       },
       {
-         path: '/dashboard/dean/approve-timetable/:timetableId',
+        path: '/dashboard/dean/approve-timetable/:timetableId',
         element: (
           <AuthLayout authentication={true}>
             <DashboardLayout>
               <ApproveTimeTable />
-            </DashboardLayout>
-          </AuthLayout>
-        )
-      },
-      {
-           path: '/dashboard/dean/reject-timetable/:timetableId',
-        element: (
-          <AuthLayout authentication={true}>
-            <DashboardLayout>
-              <RejectTimeTable />
             </DashboardLayout>
           </AuthLayout>
         )
@@ -288,8 +278,16 @@ const router = createBrowserRouter([
           </AuthLayout>
         )
       },
-
-
+      {
+        path: '/dashboard/chairman/view-timetable/:timetableId',
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <ViewTimeTable />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
       {
         path: '/dashboard/deptDashboard',
         element: (

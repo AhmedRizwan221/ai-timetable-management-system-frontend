@@ -47,7 +47,7 @@ import EditCourse from "../pages/EditCourse.jsx";
 import EditFaculty from "../pages/EditFaculty.jsx";
 import EditDepartment from "../pages/EditDepartment.jsx";
 import ApproveTimeTable from "../pages/ApproveTimeTable.jsx";
-import RejectTimeTable from "../pages/RejectTimeTable.jsx";
+import ViewTimeTable from "../pages/ViewTimeTable.jsx";
 
 
 export {
@@ -100,5 +100,5 @@ export {
     EditFaculty,
     EditDepartment,
     ApproveTimeTable,
-    RejectTimeTable
+    ViewTimeTable
 }

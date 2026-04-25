@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { Search, ChevronRight, ChevronLeft, CalendarDays, Pencil, Trash } from "lucide-react";
+import { Search, ChevronRight, ChevronLeft, CalendarDays, Pencil, Trash, Eye } from "lucide-react";
 import { clearError } from "../../../store/timetable/timeTable";
 import { useNavigate } from "react-router-dom";
 import { deleteTimeTable, getDeptallTimeTables } from "../../../store/timetable/timeTable";
@@ -134,6 +134,7 @@ export default function ManageTimetable() {
                                         <th className="px-6 py-3 font-semibold text-sm">Semester</th>
                                         <th className="px-6 py-3 font-semibold text-sm">Batch</th>
                                         <th className="px-6 py-3 font-semibold text-sm">Status</th>
+                                        <th className="px-6 py-3 font-semibold text-sm">View</th>
                                         <th className="px-6 py-3 text-right font-semibold text-sm">Actions</th>
                                     </tr>
                                 </thead>
@@ -171,6 +172,9 @@ export default function ManageTimetable() {
                                                             >
                                                                 {timetable?.status}
                                                             </span>
+                                                        </td>
+                                                        <td className="px-6 py-4">
+                                                            <button onClick={() => navigate(`/dashboard/chairman/view-timetable/${timetable._id}`)} className="p-2 hover:bg-muted rounded-md  cursor-pointertransition-all cursor-pointer"><Eye className="h-4 w-4 text-muted-foreground hover:text-primary " /></button>
                                                         </td>
                                                         <td className="px-6 py-4">
                                                             <div className="flex justify-end gap-3">
