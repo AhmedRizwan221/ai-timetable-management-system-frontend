@@ -44,7 +44,7 @@ export default function ManageDeans() {
             <div className="bg-white border border-gray-200 rounded-lg">
                 <div className="mx-auto max-w-5xl space-y-6">
                     <div className="bg-card">
-                        <div className="block md:flex items-center container mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8 border-b">
+                        <div className="block md:flex items-center container mx-auto px-4 py-6 sm:px-6 lg:px-8 border-b">
                             <div className="flex items-center gap-3">
                                 <div className="hidden md:flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
                                     <Users className="h-5 w-5 sm:h-6 sm:w-6 text-primary-foreground" />
@@ -114,7 +114,7 @@ export default function ManageDeans() {
                 </div>
 
                 {/* desktop screen */}
-                <div className="container mx-auto max-w-4xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
+                <div className="container mx-auto space-y-8 px-4 py-8 sm:px-6 lg:px-8">
                     <div className="hidden md:block rounded-xl border border-border bg-card shadow-sm overflow-hidden">
                         <table className="min-w-full text-left">
                             <thead>
