@@ -140,7 +140,7 @@ function TimeTableView({
                 </div>)}
                 {!user && (<div className="min-w-0 flex flex-col">
                     <h1 className="text-lg sm:text-2xl font-bold text-gray-900 truncate">Time Table Management System</h1>
-                    <p className="text-s font-medium pb-2 pl-2">Select your Department, Batch, Year, Semester and Department to continue</p>
+                    <p className="hidden md:flex text-s font-medium pb-2 pl-2">Select your Department, Batch, Year, Semester and Department to continue</p>
                 </div>)}
                 <button
                     onClick={() => DownloadTimeTablePDF({
@@ -157,7 +157,7 @@ function TimeTableView({
                     <span className="hidden sm:inline font-medium">Download PDF</span>
                 </button>
             </header>
-            <main className="p-4">
+            <main className="p-2 md:p-4">
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
                     <FilterSelect
                         label="Batch"
@@ -240,7 +240,7 @@ function TimeTableView({
                     </div>)
                 }
 
-                <div className="w-full space-y-8 p-4 bg-white">
+                <div className="w-full space-y-8 md:p-4 bg-white mt-4">
                     <div className="overflow-x-auto">
                         {/* <h1>Department {dept} Semester {selectedSemester} Year {selectedYear}</h1> */}
                         <table className="min-w-full border-collapse border border-black text-center text-sm">
@@ -293,8 +293,8 @@ function TimeTableView({
                         <table className="min-w-full border-collapse border border-black text-left text-xs">
                             <thead>
                                 <tr className="bg-gray-50">
-                                    <th className="border border-black px-2 py-1 w-12">S.No.</th>
-                                    <th className="border border-black px-2 py-1">Course Name</th>
+                                    <th className="border border-black px-2 py-1 w-12 sm:text-sm">S.No.</th>
+                                    <th className="sm:text-sm text-[10] border border-black px-2 py-1">Course Name</th>
                                     <th className="border border-black px-2 py-1 w-24">Credit Hours</th>
                                     <th className="border border-black px-2 py-1">Course Facilitator</th>
                                     <th className="border border-black px-2 py-1">Practical Facilitator</th>

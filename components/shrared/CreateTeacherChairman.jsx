@@ -23,7 +23,7 @@ export default function CreateTeacherChairman() {
             })
             // console.log(response);
             const createdUser = response.data.data;
-            // console.log(createdUser);
+            console.log(createdUser);
 
             if (user?.role === 'admin') {
                 alert("Dean Created Succefully");

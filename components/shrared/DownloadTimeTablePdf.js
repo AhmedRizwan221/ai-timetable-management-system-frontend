@@ -6,12 +6,12 @@ const downloadTimeTablePDF = ({
     timeSlots,
     filteredTimeTable,
     getSLot
-    
+
 }) => {
-    console.log( Days,
-    timeSlots,
-    filteredTimeTable
-    );
+    // console.log( Days,
+    // timeSlots,
+    // filteredTimeTable
+    // );
     const firstSlot = filteredTimeTable?.[0];
     const doc = new jsPDF("landscape");
 
@@ -77,6 +77,7 @@ const downloadTimeTablePDF = ({
 
     autoTable(doc, {
         startY: 40,
+        theme: "grid", // avoids striped row backgrounds
         head,
         body,
         styles: {
@@ -84,14 +85,22 @@ const downloadTimeTablePDF = ({
             valign: "middle",
             fontSize: 10,
             lineColor: [0, 0, 0],
-            lineWidth: 0.2
+            lineWidth: 0.2,
+            fillColor: [255, 255, 255],
+            textColor: [0, 0, 0]
         },
         headStyles: {
-            fontStyle: "bold"
+            fontStyle: "bold",
+            fillColor: [255, 255, 255],
+            textColor: [0, 0, 0]
+        },
+        alternateRowStyles: {
+            fillColor: [255, 255, 255]
         },
         columnStyles: {
             0: {
-                fontStyle: "bold"
+                fontStyle: "bold",
+                fillColor: [255, 255, 255]
             }
         }
     });

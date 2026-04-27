@@ -137,7 +137,7 @@ export default function ManageTimeTableSlots() {
                                             <tr key={slot._id} className="border-t hover:bg-muted/40 transition-colors group">
                                                 <td className="px-6 py-4 text-sm">{index + 1}</td>
                                                 <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">
-                                                    <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0">{slot?.course?.courseName}</div>
+                                                    <div className="h-8 w-35 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0">{slot?.course?.courseName}</div>
 
                                                 </td>
                                                 <td className="px-6 py-4 text-sm">{slot?.day}</td>

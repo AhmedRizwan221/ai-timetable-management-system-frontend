@@ -15,7 +15,7 @@ export default function Home() {
     const { timeTableSlot = [] } = useSelector((state) => state.timetabelSlot);
     const { departments = [] } = useSelector((state) => state.department);
     console.log(timeTableSlot);
-    
+
     //fetch depts from redux 
     useEffect(() => {
         dispatch(allSlotsInUni());
@@ -31,11 +31,9 @@ export default function Home() {
 
     return (
         <div className="w-full">
-            <div className="mb-5">
-                <Navbar />
-            </div>
-            <div className="bg-white-700">
-                <div className="flex justify-center items-center flex-col px-10">
+            <Navbar />
+            <div className="bg-white-700 mt-3">
+                <div className="flex justify-center items-center flex-col px-2 md:px-10">
                     <TimeTableView
                         timeTableSlot={timeTableSlot}
                         departments={departments}

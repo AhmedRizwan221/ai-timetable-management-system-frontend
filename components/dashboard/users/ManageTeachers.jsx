@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteUser, allTeachersInDept } from "../../../store/user/user.js";
+import { deleteUser, allTeachersInDept, clearError } from "../../../store/user/user.js";
 import { useNavigate } from "react-router-dom";
 import { Users, Search, User, Pencil, Trash, ChevronRight, ChevronLeft } from "lucide-react";
 import Input from "../../shrared/Input.jsx";
@@ -25,6 +25,7 @@ export default function ManageTeachers() {
                 page: page,
                 limit: 5
             }));
+            dispatch(clearError())
         }
     }, [dispatch, user, page]);
 
