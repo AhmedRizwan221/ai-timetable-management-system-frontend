@@ -67,7 +67,9 @@ export default function CreateTimeTable() {
                 sectionId: data.sectionId || null,
                 facultyId: data.facultyId,
                 createdBy: user?._id,
-                status: 'pending'
+                status: 'pending',
+                breakStartTime: data.breakStartTime,
+                breakEndTime: data.breakEndTime
             })).unwrap();
             resetTimetable();
             alert("TimeTable created successfully");

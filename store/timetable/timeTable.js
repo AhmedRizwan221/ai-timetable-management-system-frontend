@@ -4,11 +4,11 @@ import axios from "axios";
 // create time table 
 export const createTimeTable = createAsyncThunk(
     "timetable/create",
-    async ({ batchId, semesterId, sectionId = null, departmentId, facultyId, createdBy, status }, { rejectWithValue }) => {
+    async ({ batchId, semesterId, sectionId = null, departmentId, facultyId, createdBy, status, breakStartTime, breakEndTime }, { rejectWithValue }) => {
         // console.log(batchId, semesterId, sectionId, departmentId, facultyId);
         try {
             const response = await axios.post('http://localhost:8000/api/v1/timetables/create',
-                { batchId, semesterId, sectionId, departmentId, facultyId, createdBy, status },
+                { batchId, semesterId, sectionId, departmentId, facultyId, createdBy, status, breakStartTime, breakEndTime },
                 { withCredentials: true }
             );
             // console.log(response.data.data.createdTimeTable);

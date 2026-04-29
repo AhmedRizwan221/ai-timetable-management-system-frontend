@@ -34,7 +34,7 @@ export default function EditTimeTable() {
 
     const handlerUpdateTimeTable = async (data) => {
         setErr("");
-        console.log(data);
+        // console.log(data);
         try {
             await dispatch(updateTimeTable({
                 timetableId,
@@ -44,7 +44,9 @@ export default function EditTimeTable() {
                     departmentId: data.departmentId,
                     sectionId: data.sectionId || null,
                     status: 'pending',
-                    approvedBy: null
+                    approvedBy: null,
+                    breakStartTime: data.breakStartTime,
+                    breakEndTime: data.breakEndTime
                 }
             })).unwrap();
             reset();

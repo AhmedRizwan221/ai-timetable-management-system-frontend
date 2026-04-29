@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { GraduationCap, FileDown, Users, CalendarDays } from "lucide-react"
 import DownloadTimeTablePDF from "./DownloadTimeTablePdf";
+import { td } from "framer-motion/client";
 // import Button from "../shrared/Button";
 
 const Days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
@@ -246,13 +247,21 @@ function TimeTableView({
                         <table className="min-w-full border-collapse border border-black text-center text-sm">
                             <thead>
                                 <tr className="bg-white">
-                                    <th className="border border-black px-2 py-3 font-bold">Day / Time</th>
-                                    {timeSlots.map((time, index) => (
-                                        <th key={index} className="border border-black px-2 py-2 font-bold leading-tight">
-                                            Lecture {index + 1} <br />
-                                            <span className="font-normal text-xs">{time}</span>
-                                        </th>
-                                    ))}
+                                    <th className="border border-black px-2 py-3 font-bold">
+                                        Day / Time
+                                    </th>
+
+                                    {timeSlots.map((time, index) => {
+                                        return (
+                                            <th
+                                                key={time}
+                                                className="border border-black px-2 py-2 font-bold leading-tight"
+                                            >
+                                                Lecture {index + 1} <br />
+                                                <span className="font-normal text-xs">{time}</span>
+                                            </th>
+                                        );
+                                    })}
                                 </tr>
                             </thead>
                             <tbody>
@@ -266,25 +275,29 @@ function TimeTableView({
                                         </td>
                                     </tr>
                                 ) : (
-                                    Days.map((day) => (
-                                        <tr key={day}>
-                                            <td className="border border-black px-4 py-3 font-bold text-left">{day}</td>
-                                            {
-                                                timeSlots.map((time) => {
-                                                    const slot = getSLot(day, time);
-                                                    return (
-                                                        <td key={time} className="border border-black px-2 py-3 min-w-[120px]">
-                                                            {slot ? (
-                                                                <div className="whitespace-pre-line font-bold">
-                                                                    {slot.type === 'theory' ? slot.course?.courseName : slot.course?.courseName + "(Lab)"}
-                                                                </div>
-                                                            ) : null}
-                                                        </td>
-                                                    );
-                                                })
+                                    Days.map((day, dayIndex) => (
+                                        <>
 
-                                            }
-                                        </tr>
+                                            <tr key={day}>
+                                                <td className="border border-black px-4 py-3 font-bold text-left">
+                                                    {day}
+                                                </td>
+                                                {
+                                                    timeSlots.map((time) => {
+                                                        const slot = getSLot(day, time);
+                                                        return (
+                                                            <td key={time} className="border border-black px-2 py-3 min-w-[120px]">
+                                                                {slot ? (
+                                                                    <div className="whitespace-pre-line font-bold">
+                                                                        {slot.type === 'theory' ? slot.course?.courseName : slot.course?.courseName + "(Lab)"}
+                                                                    </div>
+                                                                ) : null}
+                                                            </td>
+                                                        );
+                                                    })
+                                                }
+                                            </tr>
+                                        </>
                                     )))}
                             </tbody>
                         </table>

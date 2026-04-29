@@ -49,7 +49,6 @@ export const deleteTimeTableSlot = createAsyncThunk(
     "timetableSlot/deleteSlot",
     async (timetableSlotId, { rejectWithValue }) => {
         try {
-            console.log(timetableSlotId);
             await axios.delete(`http://localhost:8000/api/v1/timetableSlots/delete/${timetableSlotId}`, {
                 withCredentials: true
             });
