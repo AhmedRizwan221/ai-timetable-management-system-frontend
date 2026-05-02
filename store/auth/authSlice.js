@@ -40,12 +40,53 @@ export const getUser = createAsyncThunk(
     }
 )
 
+// forget password
+export const forgetPassword = createAsyncThunk(
+    "user/forgetPassword",
+    async (email, { rejectWithValue }) => {
+        console.log(email);
+        try {
+            const response = await axios.post("http://localhost:8000/api/v1/users/forget-password", email, {
+                withCredentials: true
+            });
+
+            console.log(response.data.data);
+
+            return response.data.data
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
+// reset password
+export const resetPassword = createAsyncThunk(
+    "user/resetPassword",
+    async ({ password, token }, { rejectWithValue }) => {
+        console.log(password, token);
+        try {
+            const response = await axios.post(`http://localhost:8000/api/v1/users/reset-password/${token}`,
+                {password},
+                {
+                    withCredentials: true
+                });
+
+            console.log(response.data.data);
+
+            return response.data.data
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
 const initialState = {
     user: null,
     status: "idle",
     error: null,
     department: null,
-    faculty: null
+    faculty: null,
+    message:""
 }
 
 const authSlice = createSlice({
@@ -88,6 +129,28 @@ const authSlice = createSlice({
                 state.status = "failed";
                 state.user = null;
                 state.error = action.payload;
+            })
+            .addCase(forgetPassword.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(forgetPassword.fulfilled, (state, action) => {
+                state.status = 'Succeeded';
+            })
+            .addCase(forgetPassword.rejected, (state, action) => {
+                state.status = 'rejected';
+                state.error = action.payload.message
+            })
+             .addCase(resetPassword.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(resetPassword.fulfilled, (state, action) => {
+                state.status = 'Succeeded';
+                state.message = action.payload.message
+
+            })
+            .addCase(resetPassword.rejected, (state, action) => {
+                state.status = 'rejected';
+                state.error = action.payload.message
             })
     }
 })

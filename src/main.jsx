@@ -31,7 +31,9 @@ import {
   ManageDepartments,
   EditDepartment,
   ApproveTimeTable,
-  ViewTimeTable
+  ViewTimeTable,
+  ForgetPassword,
+  ResetPassword
 } from '../components/index';
 import Department from "../pages/Department";
 import ManageApproveAndRejectTimeTable from '../components/dashboard/users/ManageApproveAndRejectTimeTable.jsx';
@@ -60,6 +62,21 @@ const router = createBrowserRouter([
         element: (
           <AuthLayout authentication={false}>
             <SignUp />
+          </AuthLayout>
+        )
+      },
+      {
+        path: '/forget-password',
+        element: (
+          <AuthLayout authentication={false}>
+            <ForgetPassword />
+          </AuthLayout>
+        )
+      },{
+        path: '/reset-password/:token',
+        element: (
+          <AuthLayout authentication={false}>
+            <ResetPassword />
           </AuthLayout>
         )
       },

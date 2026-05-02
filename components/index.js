@@ -48,6 +48,8 @@ import EditFaculty from "../pages/EditFaculty.jsx";
 import EditDepartment from "../pages/EditDepartment.jsx";
 import ApproveTimeTable from "../pages/ApproveTimeTable.jsx";
 import ViewTimeTable from "../pages/ViewTimeTable.jsx";
+import ForgetPassword from "../pages/ForgetPassword.jsx";
+import ResetPassword from "../pages/ResetPassword.jsx";
 
 
 export {
@@ -100,5 +102,7 @@ export {
     EditFaculty,
     EditDepartment,
     ApproveTimeTable,
-    ViewTimeTable
+    ViewTimeTable,
+    ForgetPassword,
+    ResetPassword
 }

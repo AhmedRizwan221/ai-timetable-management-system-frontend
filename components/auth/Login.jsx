@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
@@ -6,7 +6,7 @@ import { login as authLogin } from "../../store/auth/authSlice.js";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Input, Button } from "../index.js";
-import { Mail, Lock } from "lucide-react"
+import { Mail, Lock } from "lucide-react";
 
 export default function Login() {
 
@@ -54,9 +54,6 @@ export default function Login() {
         <div className="flex justify-center items-center min-h-screen">
             <div className={`m-auto w-full max-w-lg bg-white rounded-xl p-10 border border-black/10`}>
                 <div className="mb-2 justify-center">
-                    {/* <span className="flex justify-center items-center  w-full max-w-[100px]">
-                    <h1 className="">Logo will be here</h1>
-                </span> */}
                     <h2 className="text-center text-xl lg:text-2xl leading-tight text-black font-bold">Sign up to create account</h2>
                     <p className="mt-2 text-center text-base text-black/60">
                         Do not have account?&nbsp;
@@ -86,7 +83,7 @@ export default function Login() {
                                         })}
                                     />
                                 </div>
-                                <div  className="space-y-2">
+                                <div className="space-y-2">
                                     <Input
                                         label="password"
                                         type="password"
@@ -102,8 +99,17 @@ export default function Login() {
                                 </div>
 
                                 <Button className="w-full flex justify-center items-center sm:w-auto bg-[#1D293D] text-white hover:bg-[#162131] cursor-pointer" type="submit" >Login</Button>
+
                             </div>
                         </form>
+                        <div>
+                            <Link
+                                to="/forget-password"
+                                className="font-medium text-primary transition-all duration-200 hover:underline"
+                            >
+                                Forget Password
+                            </Link>
+                        </div>
                     </div>
 
 
