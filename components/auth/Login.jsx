@@ -53,7 +53,7 @@ export default function Login() {
     return (
         <div className="flex justify-center items-center min-h-screen">
             <div className={`m-auto w-full max-w-lg bg-white rounded-xl p-10 border border-black/10`}>
-                <div className="mb-2 justify-center">
+                <div className=" justify-center">
                     <h2 className="text-center text-xl lg:text-2xl leading-tight text-black font-bold">Sign up to create account</h2>
                     <p className="mt-2 text-center text-base text-black/60">
                         Do not have account?&nbsp;
@@ -102,11 +102,12 @@ export default function Login() {
 
                             </div>
                         </form>
-                        <div>
+                        <div className="flex justify-end">
                             <Link
                                 to="/forget-password"
-                                className="font-medium text-primary transition-all duration-200 hover:underline"
+                                className="text-sm text-gray-500 hover:text-gray-700 transition-colors flex gap-1 items-center"
                             >
+                                <Lock size={14} />
                                 Forget Password
                             </Link>
                         </div>

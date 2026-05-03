@@ -4,24 +4,35 @@ import { useDispatch, useSelector } from "react-redux";
 import { Input } from "../components";
 import { Mail, Lock } from "lucide-react";
 import { Button } from "../components";
-import { forgetPassword } from "../store/auth/authSlice";
+import { clearError, forgetPassword } from "../store/auth/authSlice";
 
 export default function () {
     const dispatch = useDispatch();
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, reset, watch } = useForm();
 
-    const { error } = useSelector((state) => state.auth);
+    const { error, message } = useSelector((state) => state.auth);
 
     const handleForgetPassword = (email) => {
-        dispatch(forgetPassword(email))
+        dispatch(clearError());
+        dispatch(forgetPassword(email));
     }
+
 
     return (
         <div className="flex justify-center items-center min-h-screen">
             <div className={`m-auto w-full max-w-lg bg-white rounded-xl p-10 border border-black/10`}>
                 <div className="mb-2 justify-center">
+                    <h2 className="text-center text-xl lg:text-2xl leading-tight text-black font-bold">Forget Password</h2>
+                    <p className="mt-2 text-center text-base text-black/60"></p>
                     <div className="container mx-auto max-w-4xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
                         {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
+                        {message && (
+                            <div className="mt-4 rounded-lg border border-green-200 bg-green-50 p-4">
+                                <p className="text-green-700 text-sm font-medium">
+                                    {message}
+                                </p>
+                            </div>
+                        )}
                         <form onSubmit={handleSubmit(handleForgetPassword)}>
                             <div className="grid gap-5 sm:grid-cols-1">
                                 <div className="space-y-2">
