@@ -13,7 +13,7 @@ export const createTimeTableSlot = createAsyncThunk(
                 withCredentials: true
             });
 
-            console.log(response.data.data);
+            // console.log(response.data.data);
             return response.data.data.createdSlot
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
@@ -66,7 +66,7 @@ export const updateTimeTableSlot = createAsyncThunk(
         try {
             const response = await axios.patch(`http://localhost:8000/api/v1/timetableSlots/update/${timetableSlotId}`, data, { withCredentials: true });
 
-            console.log(response.data.data);
+            // console.log(response.data.data);
 
             return response.data.data.findTimetableSLot
         } catch (error) {
@@ -103,7 +103,7 @@ export const getAllSlots = createAsyncThunk(
                 withCredentials: true
             });
 
-            console.log(response.data.data);
+            // console.log(response.data.data);
             return response.data.data
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);

@@ -40,7 +40,7 @@ export default function ManageFaculties() {
 
 
     return (
-        <div className="min-h-screen bg-muted/30 py-10 px-4 sm:px-6">
+        <div className="min-h-screen bg-muted/30 md:py-10 md:px-4 sm:px-6">
             <div className="bg-white border border-gray-200 rounded-lg">
                 <div className="bg-card">
                     <div className="block md:flex items-center container mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8 border-b">
@@ -70,7 +70,7 @@ export default function ManageFaculties() {
                 )}
 
                 {/* mobile screen */}
-                <div className="grid grid-cols-1 gap-4 md:hidden">
+                <div className="grid grid-cols-1 gap-4 md:hidden p-4">
                     {loading ? (
                         <div>
                             <Loader loading={loading} />
@@ -82,16 +82,16 @@ export default function ManageFaculties() {
                             filterFaculties.map((fact) => (
                                 <div key={fact._id} className="bg-card p-4 rounded-xl border border-border shadow-sm space-y-3">
                                     <div className="flex justify-between items-start">
-                                        <div className="flex items-center gap-3">
+                                        <div className="block items-center gap-3">
                                             <p className="font-bold text-foreground"> {fact?.facultyName}</p>
                                             <div className="flex items-center gap-1">
-                                                <p className="font-bold text-foreground"> {fact?.dean ? fact.dean?.fullName : "Not Assigned"}</p>
+                                                <p className="text-foreground"> {fact?.dean ? fact.dean?.fullName : "Not Assigned"}</p>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div className="flex justify-between items-center pt-2 border-t border-border/50">
-                                        <p className="text-sm font-medium"><span className="text-muted-foreground font-normal">Batch:</span> {fact?.batch?.batchName}</p>
+                                        {/* <p className="text-sm font-medium"><span className="text-muted-foreground font-normal">Batch:</span> {fact?.batch?.batchName}</p> */}
                                         <div className="flex gap-2">
                                             <button onClick={() => navigate(`/dashboard/superadmin/edit-faculties/${fact._id}`)} className="p-2 bg-muted rounded-md"><Pencil className="h-4 w-4 text-primary" /></button>
                                             <button onClick={() => facultyDeleteHandler(fact._id)} className="p-2 bg-muted rounded-md"><Trash className="h-4 w-4 text-red-500" /></button>

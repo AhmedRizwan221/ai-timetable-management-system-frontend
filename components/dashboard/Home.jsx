@@ -14,7 +14,7 @@ export default function Home() {
     // redux level fetching
     const { timeTableSlot = [] } = useSelector((state) => state.timetabelSlot);
     const { departments = [] } = useSelector((state) => state.department);
-    console.log(timeTableSlot);
+    // console.log(timeTableSlot);
 
     //fetch depts from redux 
     useEffect(() => {

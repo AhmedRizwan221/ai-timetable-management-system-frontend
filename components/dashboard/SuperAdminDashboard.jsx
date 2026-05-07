@@ -18,7 +18,7 @@ function SuperAdminDashboard() {
   const { departments = [] } = useSelector((state) => state.department);
   const {totalDeans} = useSelector((state) => state.user);
 
-  // console.log(totalCourses);
+  // console.log(timeTableSlot);
 
   useEffect(() => {
     if (user) {

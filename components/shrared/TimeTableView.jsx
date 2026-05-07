@@ -68,19 +68,46 @@ function TimeTableView({
     // console.log(filteredTimeTable);
 
 
-    // get times of particular slot 
-    const timeSlots = [... new Set(
-        filteredTimeTable.map((slot) => `${slot.startTime}-${slot.endTime}`)
-    )];
+    const timeSlots = filteredTimeTable.flatMap((slot) => {
+        const slots = [
+            {
+                type: "lecture",
+                startTime: slot.startTime,
+                endTime: slot.endTime
+            }
+        ];
+
+        if (slot?.timetable?.breakStartTime && slot?.timetable?.breakEndTime) {
+            slots.push({
+                type: "break",
+                startTime: slot.timetable.breakStartTime,
+                endTime: slot.timetable.breakEndTime
+            });
+        }
+
+        return slots;
+    });
+
+    const uniqueTimeSlots = [
+        ...new Map(
+            timeSlots.map((slot) => [
+                `${slot.startTime}-${slot.endTime}`,
+                slot
+            ])
+        ).values()
+    ].sort((a, b) => a.startTime.localeCompare(b.startTime));
+    // console.log(uniqueTimeSlots);
 
 
-    const getSLot = (day, time) => {
+  const getSLot = (day, time) => {
         return filteredTimeTable.find(
-            slot =>
+            (slot) =>
                 slot.day === day &&
-                `${slot.startTime}-${slot.endTime}` === time
+                slot.startTime === time.startTime &&
+                slot.endTime === time.endTime
         );
-    }
+    };
+    // console.log(getSLot);
 
 
     const uniqueDepartment = useMemo(() => {
@@ -146,7 +173,7 @@ function TimeTableView({
                 <button
                     onClick={() => DownloadTimeTablePDF({
                         Days,
-                        timeSlots,
+                        uniqueTimeSlots,
                         filteredTimeTable,
                         getSLot
                     })}
@@ -251,54 +278,72 @@ function TimeTableView({
                                         Day / Time
                                     </th>
 
-                                    {timeSlots.map((time, index) => {
-                                        return (
-                                            <th
-                                                key={time}
-                                                className="border border-black px-2 py-2 font-bold leading-tight"
-                                            >
-                                                Lecture {index + 1} <br />
-                                                <span className="font-normal text-xs">{time}</span>
-                                            </th>
-                                        );
-                                    })}
+                                    {uniqueTimeSlots.map((slot, index) =>
+                                    (
+                                        <th
+                                            key={index}
+
+                                            className="border border-black px-2 py-2 font-bold leading-tight"
+                                        >
+                                            {slot.type === "break"
+                                                ? "Break ☕"
+                                                : `Lecture ${index + 1}`}
+
+                                            <br />
+
+                                            <span className="font-normal text-xs">
+                                                {slot.startTime} - {slot.endTime}
+                                            </span>
+                                        </th>
+                                    )
+                                    )}
                                 </tr>
                             </thead>
                             <tbody>
-                                {timeSlots.length === 0 ? (
-                                    <tr>
-                                        <td
-                                            colSpan={timeSlots.length + 1 || 2}
-                                            className="text-center py-6 font-semibold text-red-500"
-                                        >
-                                            No slots found
+                                {Days.map((day, dayIndex) => (
+                                    <tr key={day}>
+                                        <td className="border border-black px-4 py-3 font-bold text-left">
+                                            {day}
                                         </td>
-                                    </tr>
-                                ) : (
-                                    Days.map((day, dayIndex) => (
-                                        <>
 
-                                            <tr key={day}>
-                                                <td className="border border-black px-4 py-3 font-bold text-left">
-                                                    {day}
-                                                </td>
-                                                {
-                                                    timeSlots.map((time) => {
-                                                        const slot = getSLot(day, time);
-                                                        return (
-                                                            <td key={time} className="border border-black px-2 py-3 min-w-[120px]">
-                                                                {slot ? (
-                                                                    <div className="whitespace-pre-line font-bold">
-                                                                        {slot.type === 'theory' ? slot.course?.courseName : slot.course?.courseName + "(Lab)"}
-                                                                    </div>
-                                                                ) : null}
-                                                            </td>
-                                                        );
-                                                    })
+                                        {uniqueTimeSlots.map((time, index) => {
+                                            // Render break only once (first row)
+                                            if (time.type === "break") {
+                                                if (dayIndex === 0) {
+                                                    return (
+                                                        <td
+                                                            key={`${time.startTime}-${time.endTime}`}
+                                                            rowSpan={Days.length}
+                                                            className="border border-black px-2 py-3 font-bold text-center align-middle"
+                                                        >
+                                                            Break ☕
+                                                        </td>
+                                                    );
                                                 }
-                                            </tr>
-                                        </>
-                                    )))}
+
+                                                // skip break cell for other rows
+                                                return null;
+                                            }
+
+                                            const slot = getSLot(day, time);
+
+                                            return (
+                                                <td
+                                                    key={`${time.startTime}-${time.endTime}-${day}`}
+                                                    className="border border-black px-2 py-3 min-w-[120px]"
+                                                >
+                                                    {slot ? (
+                                                        <div className="whitespace-pre-line font-bold">
+                                                            {slot.type === "theory"
+                                                                ? slot.course?.courseName
+                                                                : `${slot.course?.courseName} (Lab)`}
+                                                        </div>
+                                                    ) : null}
+                                                </td>
+                                            );
+                                        })}
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
                     </div>

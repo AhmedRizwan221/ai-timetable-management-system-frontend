@@ -25,7 +25,7 @@ function ChairmanDashboard() {
 
     const Days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 
-    console.log(timeTableSlot);
+    // console.log(timeTableSlot);
 
     useEffect(() => {
         if (user) {
@@ -62,7 +62,7 @@ function ChairmanDashboard() {
             return matchBatch && matchSemester && matchYear && matchSection;
         });
     }, [timeTableSlot, selectedBatch, selectedSemester, selectedYear, selectedSection]);
-    console.log(filteredTimeTable);
+    // console.log(filteredTimeTable);
 
 
     const timeSlots = filteredTimeTable.flatMap((slot) => {
@@ -95,7 +95,7 @@ function ChairmanDashboard() {
             ])
         ).values()
     ].sort((a, b) => a.startTime.localeCompare(b.startTime));
-    console.log(uniqueTimeSlots);
+    // console.log(uniqueTimeSlots);
 
 
     const getSLot = (day, time) => {
