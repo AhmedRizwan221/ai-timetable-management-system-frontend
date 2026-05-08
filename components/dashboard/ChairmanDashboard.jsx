@@ -135,6 +135,7 @@ function ChairmanDashboard() {
         }, {})
     );
 
+    let departmentName = user.department?.deptName;
     // console.log(mergedCourses);
     return (
         <div>
@@ -159,9 +160,10 @@ function ChairmanDashboard() {
                     <button
                         onClick={() => DownloadTimeTablePDF({
                             Days,
-                            timeSlots,
+                            uniqueTimeSlots,
                             filteredTimeTable,
-                            getSLot
+                            getSLot,
+                            departmentName
                         })}
                         title="Download PDF"
                         className="flex items-center justify-center gap-2 bg-[#1D293D] text-white p-2.5 sm:px-5 sm:py-2.5 rounded-lg hover:bg-[#2a3a54] transition-all shadow-sm shrink-0"

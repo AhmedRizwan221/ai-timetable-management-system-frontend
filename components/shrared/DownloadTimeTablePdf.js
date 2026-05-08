@@ -3,16 +3,19 @@ import autoTable from "jspdf-autotable";
 
 const downloadTimeTablePDF = ({
     Days,
-    timeSlots,
+    uniqueTimeSlots,
     filteredTimeTable,
-    getSLot
+    getSLot,
+    departmentName
 
 }) => {
-    // console.log( Days,
-    // timeSlots,
-    // filteredTimeTable
+    // console.log(Days,
+    //     uniqueTimeSlots,
+    //     filteredTimeTable,
+    //     departmentName
     // );
     const firstSlot = filteredTimeTable?.[0];
+    console.log(firstSlot);
     const doc = new jsPDF("landscape");
 
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -31,7 +34,7 @@ const downloadTimeTablePDF = ({
     doc.setFontSize(13);
 
     doc.text(
-        `${firstSlot?.department?.deptName} Department`,
+        `${departmentName} Department`,
         pageWidth / 2,
         25,
         { align: "center" }
@@ -50,17 +53,35 @@ const downloadTimeTablePDF = ({
     const head = [
         [
             "Day / Time",
-            ...timeSlots.map(
-                (time, index) => `Lecture ${index + 1}\n${time}`
+            ...uniqueTimeSlots.map((slot, index) =>
+                slot.type === 'break'
+                    ? `Break\n${slot.startTime}-${slot.endTime}`
+                    : `Lecture ${index + 1}\n${slot.startTime}-${slot.endTime}`
             )
         ]
     ];
 
     // Table body
-    const body = Days.map((day) => {
+    const body = Days.map((day, dayIndex) => {
         const row = [day];
 
-        timeSlots.forEach((time) => {
+        uniqueTimeSlots.forEach((time) => {
+            if (time.type === "break") {
+                // Only add break cell in first row, span all rows
+                if (dayIndex === 0) {
+                    row.push({
+                        content: "Break",
+                        rowSpan: Days.length,
+                        styles: {
+                            halign: "center",
+                            valign: "middle"
+                        }
+                    });
+                }
+                // Skip break cell for remaining rows
+                return;
+            }
+
             const slot = getSLot(day, time);
 
             row.push(

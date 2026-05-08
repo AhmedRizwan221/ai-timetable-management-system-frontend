@@ -13,7 +13,6 @@ export default function ViewTimeTable() {
 
     const { user } = useSelector((state) => state.auth);
     const { timeTables = [] } = useSelector((state) => state.timetable);
-    console.log(timeTables);
     const timetable = timeTables[0];
 
 

@@ -331,7 +331,6 @@ const timetableSlice = createSlice({
             })
             .addCase(getTimeTableById.fulfilled, (state, action) => {
                 state.status = 'Succeeded';
-                console.log(action.payload);
                 state.timeTables = action.payload;
                 console.log(state.timeTables);
             })
