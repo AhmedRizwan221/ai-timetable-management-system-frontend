@@ -10,7 +10,7 @@ export const sendChatMessages = createAsyncThunk(
                 { withCredentials: true }
             );
 
-            console.log(response.data.data);
+            // console.log(response.data.data);
 
             return {
                 userMessage: message,
@@ -25,10 +25,34 @@ export const sendChatMessages = createAsyncThunk(
     }
 )
 
+// send user query 
+export const userQuery = createAsyncThunk(
+    "chatbot/sendQuery",
+    async (message, { rejectWithValue }) => {
+        try {
+            const response = await axios.post('http://localhost:8000/api/v1/query/', { message }, {
+                withCredentials: true
+            });
+            // console.log(response.data.data);
+            return {
+                userMessage: message,
+                response: response.data.data.executeQuery.slots
+            }
+        } catch (error) {
+            // console.log(error);
+            return rejectWithValue(
+                error.response?.data.message || error.message
+            );
+        }
+    }
+)
+
 const initialState = {
     messages: [],
+    timetableSlots: [],
     error: '',
-    loading: false
+    loading: false,
+    status: ''
 }
 
 
@@ -67,7 +91,21 @@ const chatbotSlice = createSlice({
             .addCase(sendChatMessages.rejected, (state, action) => {
                 state.loading = false;
                 console.log(action.payload);
-                state.error = action.payload ;
+                state.error = action.payload;
+            })
+            .addCase(userQuery.pending, (state) => {
+                state.status = 'pending',
+                    state.loading = true
+            })
+            .addCase(userQuery.fulfilled, (state, action) => {
+                state.status = 'succeded',
+                    state.loading = false,
+                    state.timetableSlots = action.payload.response
+            })
+            .addCase(userQuery.rejected, (state, action) => {
+                state.status = 'rejected',
+                    state.loading = false,
+                    state.error = action.payload
             })
     }
 })

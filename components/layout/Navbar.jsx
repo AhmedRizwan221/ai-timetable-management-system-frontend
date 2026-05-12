@@ -9,7 +9,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-   <header className="sticky top-0 z-50 w-full bg-slate-800 text-white border-b border-slate-700">
+    <header className="sticky top-0 z-50 w-full bg-slate-800 text-white border-b border-slate-700">
       <nav className="w-full flex justify-between items-center bg-slate-800 text-white p-2 md:p-5 relative z-50">
         <div className="flex items-center gap-3">
           {/* Logo Icon */}
@@ -38,31 +38,6 @@ export default function Navbar() {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-4">
-          <ul className="hidden md:flex gap-4 items-center">
-            <li>
-              <Link to="/" className="flex items-center gap-1 text-white">
-                <DoorOpen size={18} /> Departments
-              </Link>
-            </li>
-            <li>
-              <Link to="/" className="flex items-center gap-1 text-white">
-                <DoorOpen size={18} /> Faculties
-              </Link>
-            </li>
-            <li>
-              <Link to="/" className="flex items-center gap-1 text-white">
-                <DoorOpen size={18} /> TimeTable
-              </Link>
-            </li>
-            <li>
-              <Link to="/" className="flex items-center gap-1 text-white">
-                <DoorOpen size={18} /> Courses
-              </Link>
-            </li>
-          </ul>
-        </div>
-
         <div className="flex items-center gap-4">
           <ul className="hidden md:flex gap-4 items-center">
             <li>

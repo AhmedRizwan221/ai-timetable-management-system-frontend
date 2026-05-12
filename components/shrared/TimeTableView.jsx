@@ -15,6 +15,7 @@ function TimeTableView({
     timeTableSlot = [],
     departments = [],
     totalDeans,
+    isQueryMode
 }) {
 
 
@@ -23,10 +24,13 @@ function TimeTableView({
     const [selectedYear, setSelectedYear] = useState("");
     const [selectedSection, setSelectedSection] = useState("");
     const [selectedDepartment, setSelectedDepartment] = useState("");
-    // console.log(selectedDepartment);
+    console.log(timeTableSlot);
 
     // filter functionality
     const filteredTimeTable = useMemo(() => {
+
+        if (isQueryMode) return timeTableSlot;
+
         if (!timeTableSlot) return [];
 
         return timeTableSlot.filter((slot) => {
@@ -99,7 +103,7 @@ function TimeTableView({
     // console.log(uniqueTimeSlots);
 
 
-  const getSLot = (day, time) => {
+    const getSLot = (day, time) => {
         return filteredTimeTable.find(
             (slot) =>
                 slot.day === day &&
@@ -186,41 +190,43 @@ function TimeTableView({
                 </button>
             </header>
             <main className="p-2 md:p-4">
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-                    <FilterSelect
-                        label="Batch"
-                        value={selectedBatch}
-                        onChange={(e) => setSelectedBatch(e.target.value)}
-                        options={[{ val: "morning", lab: "Morning" }, { val: "evening", lab: "Evening" }]}
-                    />
-                    <FilterSelect
-                        label="Year"
-                        value={selectedYear}
-                        onChange={(e) => setSelectedYear(Number(e.target.value))}
-                        options={[1, 2, 3, 4].map(y => ({ val: y, lab: `Year ${y}` }))}
-                    />
-                    <FilterSelect
-                        label="Semester"
-                        value={selectedSemester}
-                        onChange={(e) => setSelectedSemester(Number(e.target.value))}
-                        options={[1, 2].map(s => ({ val: s, lab: `Semester ${s}` }))}
-                    />
-                    <FilterSelect
-                        label="Section"
-                        value={selectedSection}
-                        onChange={(e) => setSelectedSection(e.target.value)}
-                        options={['A', 'B'].map(s => ({ val: s, lab: `Section ${s}` }))}
-                    />
-                    <FilterSelect
-                        label="Department"
-                        value={selectedDepartment}
-                        onChange={(e) => setSelectedDepartment(e.target.value)}
-                        options={uniqueDepartment.map((dept) => ({
-                            val: dept?.deptName,
-                            lab: dept?.deptName
-                        }))}
-                    />
-                </div>
+                {!isQueryMode && (
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                        <FilterSelect
+                            label="Batch"
+                            value={selectedBatch}
+                            onChange={(e) => setSelectedBatch(e.target.value)}
+                            options={[{ val: "morning", lab: "Morning" }, { val: "evening", lab: "Evening" }]}
+                        />
+                        <FilterSelect
+                            label="Year"
+                            value={selectedYear}
+                            onChange={(e) => setSelectedYear(Number(e.target.value))}
+                            options={[1, 2, 3, 4].map(y => ({ val: y, lab: `Year ${y}` }))}
+                        />
+                        <FilterSelect
+                            label="Semester"
+                            value={selectedSemester}
+                            onChange={(e) => setSelectedSemester(Number(e.target.value))}
+                            options={[1, 2].map(s => ({ val: s, lab: `Semester ${s}` }))}
+                        />
+                        <FilterSelect
+                            label="Section"
+                            value={selectedSection}
+                            onChange={(e) => setSelectedSection(e.target.value)}
+                            options={['A', 'B'].map(s => ({ val: s, lab: `Section ${s}` }))}
+                        />
+                        <FilterSelect
+                            label="Department"
+                            value={selectedDepartment}
+                            onChange={(e) => setSelectedDepartment(e.target.value)}
+                            options={uniqueDepartment.map((dept) => ({
+                                val: dept?.deptName,
+                                lab: dept?.deptName
+                            }))}
+                        />
+                    </div>
+                )}
                 {user && (
                     < div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 mt-8">
                         {user?.role === 'chairman' && (
