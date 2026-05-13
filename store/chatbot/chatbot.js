@@ -37,7 +37,7 @@ export const userQuery = createAsyncThunk(
             return {
                 userMessage: message,
                 response: response.data.data.executeQuery.slots,
-                timetable: response.data.data.executeQuery.timetable
+                timetable: response.data.data.executeQuery.timetable,
             }
         } catch (error) {
             // console.log(error);
@@ -73,6 +73,12 @@ const chatbotSlice = createSlice({
                 sender: "user",
                 text: action.payload
             });
+        },
+        addBotSuccessMessage: (state, action) => {
+            state.messages.push({
+                sender: "bot",
+                text: action.payload.message,
+            });
         }
     },
     extraReducers: (builder) => {
@@ -100,20 +106,36 @@ const chatbotSlice = createSlice({
                     state.loading = true
             })
             .addCase(userQuery.fulfilled, (state, action) => {
-                state.status = 'succeded',
-                    state.loading = false,
-                    state.timetableSlots = action.payload.response,
-                    state.timetable = action.payload.timetable
+                state.status = 'succeded';
+                state.loading = false;
+                state.timetableSlots = action.payload.response;
+                state.timetable = action.payload.timetable;
+
+                const timetable = action.payload.timetable;
+                const successMessage =
+                    `${timetable?.department?.deptName || "Unknown"} timetable for semester ${timetable?.semester?.semesterNumber || "?"} year ${timetable?.semester?.studyYear || "?"} batch ${timetable?.batch?.batchName || "?"} fetched successfully`;
+                // console.log(successMessage);
+
+                state.messages.push({
+                    sender: "bot",
+                    text: successMessage
+                })
             })
             .addCase(userQuery.rejected, (state, action) => {
                 state.status = 'rejected',
                     state.loading = false,
-                    state.error = action.payload
+                    state.error = action.payload;
+
+                    state.messages.push({
+                        sender: "bot",
+                        type: "error",
+                        text: action.payload
+                    })
             })
     }
 })
 
 
-export const { clearError, clearMessages, addUserMessage } = chatbotSlice.actions;
+export const { clearError, clearMessages, addUserMessage, addBotSuccessMessage } = chatbotSlice.actions;
 
 export default chatbotSlice.reducer;

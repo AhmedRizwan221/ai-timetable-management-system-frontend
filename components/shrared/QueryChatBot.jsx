@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addUserMessage, clearError, userQuery } from "../../store/chatbot/chatbot.js";
+import { addUserMessage, clearError, userQuery, addBotSuccessMessage } from "../../store/chatbot/chatbot.js";
 import {
     Send,
     Bot,
@@ -17,7 +17,8 @@ export default function QueryChatBot() {
     const messagesEndRef = useRef(null);
 
     const { messages, loading, error, timetableSlots, timetable } = useSelector((state) => state.chatbot);
-    console.log(timetable);
+    // console.log(timetable);
+
 
     const handleKeyDown = (e) => {
         if (e.key === "Enter") handleSend();
@@ -31,6 +32,7 @@ export default function QueryChatBot() {
             console.log(userMessage);
             dispatch(userQuery(userMessage));
             dispatch(addUserMessage(userMessage));
+
             setInput("");
         } catch (error) {
             setError(error)
@@ -77,11 +79,11 @@ export default function QueryChatBot() {
                         </button>
                     </div>
 
-                    {error && (
+                    {/* {error && (
                         <p className="text-red-500 text-sm text-center py-2">
                             {error || "Something went wrong"}
                         </p>
-                    )}
+                    )} */}
 
                     <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50">
                         {messages.length === 0 && (
