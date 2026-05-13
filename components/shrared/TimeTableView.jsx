@@ -24,7 +24,7 @@ function TimeTableView({
     const [selectedYear, setSelectedYear] = useState("");
     const [selectedSection, setSelectedSection] = useState("");
     const [selectedDepartment, setSelectedDepartment] = useState("");
-    console.log(timeTableSlot);
+    // console.log(timeTableSlot);
 
     // filter functionality
     const filteredTimeTable = useMemo(() => {

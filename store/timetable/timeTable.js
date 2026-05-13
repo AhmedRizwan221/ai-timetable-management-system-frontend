@@ -161,9 +161,10 @@ export const rejectTimetable = createAsyncThunk(
 export const getTimeTableById = createAsyncThunk(
     "timetabel/getTimetable",
     async (timetableId, { rejectWithValue }) => {
+        // console.log("Redux slice console :", timetableId);
         try {
             const response = await axios.get(`http://localhost:8000/api/v1/timetables/${timetableId}`);
-            console.log(response.data.data);
+            // console.log(response.data.data);
             return response.data.data.timetable
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
@@ -332,7 +333,6 @@ const timetableSlice = createSlice({
             .addCase(getTimeTableById.fulfilled, (state, action) => {
                 state.status = 'Succeeded';
                 state.timeTables = action.payload;
-                console.log(state.timeTables);
             })
             .addCase(getTimeTableById.rejected, (state, action) => {
                 state.status = 'Failed',

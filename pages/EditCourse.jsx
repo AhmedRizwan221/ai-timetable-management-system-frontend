@@ -6,7 +6,7 @@ import { getTeachers } from "../store/user/user";
 import Button from "../components/shrared/Button";
 import { CalendarDays, Layers, Plus, BookOpen, ArrowLeft, User } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getSemesters } from "../store/semester/semester"
+import { getAllSemesters } from "../store/semester/semester"
 import { updateCourse } from "../store/course/course";
 
 
@@ -24,7 +24,7 @@ export default function EditCourse() {
 
     useEffect(() => {
         if (user) {
-            dispatch(getSemesters(user?.department?._id));
+            dispatch(getAllSemesters(user?.department?._id));
             dispatch(getTeachers());
         }
     }, [dispatch, user]);

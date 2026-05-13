@@ -16,8 +16,8 @@ export default function QueryChatBot() {
     const [input, setInput] = useState("");
     const messagesEndRef = useRef(null);
 
-    const { messages, loading, error, timetableSlots } = useSelector((state) => state.chatbot);
-    // console.log(timetableSlots);
+    const { messages, loading, error, timetableSlots, timetable } = useSelector((state) => state.chatbot);
+    console.log(timetable);
 
     const handleKeyDown = (e) => {
         if (e.key === "Enter") handleSend();

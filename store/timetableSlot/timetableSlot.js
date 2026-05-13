@@ -7,7 +7,7 @@ import axios from "axios";
 export const createTimeTableSlot = createAsyncThunk(
     "timetableSlot/create",
     async (data, { rejectWithValue }) => {
-        console.log(data);
+        // console.log(data);
         try {
             const response = await axios.post('http://localhost:8000/api/v1/timetableSlots/create', data, {
                 withCredentials: true

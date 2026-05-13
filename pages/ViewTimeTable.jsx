@@ -14,6 +14,12 @@ export default function ViewTimeTable() {
     const { user } = useSelector((state) => state.auth);
     const { timeTables = [] } = useSelector((state) => state.timetable);
     const timetable = timeTables[0];
+    // console.log(timetable, "first object of timetable");
+    const slots = timetable?.slots || [];
+    // console.log(slots, "slots ");
+
+    const breakStartTime = timetable?.breakStartTime;
+    const breakEndTime = timetable?.breakEndTime;
 
 
     useEffect(() => {
@@ -24,31 +30,52 @@ export default function ViewTimeTable() {
 
     const Days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 
-    const getSlot = (day, time) => {
-        return timeTables.flatMap((timetable) => timetable.slots || [])
-            .find(
-                (slot) =>
-                    slot.day === day &&
-                    `${slot.startTime}-${slot.endTime}` === time
-            );
+    const getSLot = (day, time) => {
+        // console.log(day, time);
+        return slots.find(
+            (slot) =>
+                slot.day === day &&
+                slot.startTime === time.startTime &&
+                slot.endTime === time.endTime
+        );
     };
-    // console.log(getSlot);
 
-    const timeSlots = [
-        ...new Set(
-            timeTables.flatMap((timetable) =>
-                timetable?.slots?.map(
-                    (slot) => `${slot.startTime}-${slot.endTime}`
-                )
-            )
-        )
-    ];
+    const timeSlots = slots.flatMap((slot) => {
+        const slots = [
+            {
+                type: "lecture",
+                startTime: slot.startTime,
+                endTime: slot.endTime
+            }
+        ];
+
+        if (breakStartTime && breakEndTime) {
+            slots.push({
+                type: "break",
+                startTime: breakStartTime,
+                endTime: breakEndTime
+            })
+        }
+
+        return slots;
+    });
+    // console.log(timeSlots, "time slots ");
+
+    const uniqueTimeSlots = [
+        ...new Map(
+            timeSlots.map((slot) => [
+                `${slot.startTime}-${slot.endTime}`,
+                slot
+            ])
+        ).values()
+    ].sort((a, b) => a.startTime.localeCompare(b.startTime));
+    // console.log(uniqueTimeSlots, "unique timetable slots ");
 
     return (
-        <div className="min-h-screen bg-muted/30 py-10 px-4 sm:px-6">
+        <div className="min-h-screen bg-muted/30 py-10 px-4 sm:px-6 ">
             <div className="bg-white border border-gray-200 rounded-lg">
                 <div className="border-b">
-                    <div className="container mx-auto max-w-4xl px-4 py-6">
+                    <div className="container mx-auto max-w-4xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
                         <div className="flex items-center gap-3">
                             <button
                                 onClick={() => navigate('/dashboard/chairman/manage-timetables')}
@@ -93,56 +120,90 @@ export default function ViewTimeTable() {
                             </p>
                         )}
                     </div>
-
-                    {/* 🧾 SLOT GRID */}
-                    <div className="bg-white p-4 shadow rounded">
-                        <table className="min-w-full border text-center text-sm">
-                            <thead>
-                                <tr className="bg-white">
-                                    <th className="border border-black px-2 py-3 font-bold">Day / Time</th>
-                                    {timeSlots.map((time, index) => (
-                                        <th key={index} className="border border-black px-2 py-2 font-bold leading-tight">
-                                            Lecture {index + 1} <br />
-                                            <span className="font-normal text-xs">{time}</span>
-                                        </th>
-                                    ))}
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                {timeSlots.length === 0 ? (
-                                    <tr>
-                                        <td
-                                            colSpan={timeSlots.length + 1 || 2}
-                                            className="text-center py-6 font-semibold text-red-500"
-                                        >
-                                            No slots found
-                                        </td>
-                                    </tr>
-                                ) : (
-                                    Days.map((day) => (
-                                        <tr key={day}>
-                                            <td className="border px-2 py-2 font-bold">{day}</td>
-                                            {timeSlots.map((time) => {
-                                                const slot = getSlot(day, time);
-                                                return (
-                                                    <td key={time} className="border border-black px-2 py-3 min-w-[120px]">
-                                                        {slot ? (
-                                                            <div className="whitespace-pre-line font-bold">
-                                                                {slot.type === 'theory' ? slot.course?.courseName : slot.course?.courseName + "(Lab)"}
-                                                            </div>
-                                                        ) : null}
-                                                    </td>
-                                                );
-                                            })}
-                                        </tr>
-                                    ))
-                                )}
-
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
+                {/* 🧾 SLOT GRID */}
+                <div className="bg-white p-4 shadow rounded">
+                    <table className="min-w-full border text-center text-sm">
+                        <thead>
+                            {uniqueTimeSlots.map((slot, index) =>
+                            (
+                                <th
+                                    key={index}
+
+                                    className="border border-black px-2 py-2 font-bold leading-tight"
+                                >
+                                    {slot.type === "break"
+                                        ? "Break ☕"
+                                        : `Lecture ${index + 1}`}
+
+                                    <br />
+
+                                    <span className="font-normal text-xs">
+                                        {slot.startTime} - {slot.endTime}
+                                    </span>
+                                </th>
+                            )
+                            )}
+                        </thead>
+
+                        <tbody>
+                            {timeSlots.length === 0 ? (
+                                <tr>
+                                    <td
+                                        colSpan={timeSlots.length + 1 || 2}
+                                        className="text-center py-6 font-semibold text-red-500"
+                                    >
+                                        No slots found
+                                    </td>
+                                </tr>
+                            ) : (
+                                Days.map((day, dayIndex) => (
+                                    <tr key={day}>
+                                        <td className="border px-2 py-2 font-bold">{day}</td>
+                                        {uniqueTimeSlots.map((time, index) => {
+                                            // Render break only once (first row)
+                                            if (time.type === "break") {
+                                                if (dayIndex === 0) {
+                                                    return (
+                                                        <td
+                                                            key={`${time.startTime}-${time.endTime}`}
+                                                            rowSpan={Days.length}
+                                                            className="border border-black px-2 py-3 font-bold text-center align-middle"
+                                                        >
+                                                            Break ☕
+                                                        </td>
+                                                    );
+                                                }
+
+                                                // skip break cell for other rows
+                                                return null;
+                                            }
+
+                                            const slot = getSLot(day, time);
+                                            // console.log(slot);
+                                            return (
+                                                <td
+                                                    key={`${time.startTime}-${time.endTime}-${day}`}
+                                                    className="border border-black px-2 py-3 min-w-[120px]"
+                                                >
+                                                    {slot ? (
+                                                        <div className="whitespace-pre-line font-bold">
+                                                            {slot.type === "theory"
+                                                                ? slot.course?.courseName
+                                                                : `${slot.course?.courseName} (Lab)`}
+                                                        </div>
+                                                    ) : null}
+                                                </td>
+                                            );
+                                        })}
+                                    </tr>
+                                ))
+                            )}
+
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
         </div>
     );

@@ -33,10 +33,11 @@ export const userQuery = createAsyncThunk(
             const response = await axios.post('http://localhost:8000/api/v1/query/', { message }, {
                 withCredentials: true
             });
-            // console.log(response.data.data);
+            console.log(response.data.data.executeQuery);
             return {
                 userMessage: message,
-                response: response.data.data.executeQuery.slots
+                response: response.data.data.executeQuery.slots,
+                timetable: response.data.data.executeQuery.timetable
             }
         } catch (error) {
             // console.log(error);
@@ -50,6 +51,7 @@ export const userQuery = createAsyncThunk(
 const initialState = {
     messages: [],
     timetableSlots: [],
+    timetable: [],
     error: '',
     loading: false,
     status: ''
@@ -100,7 +102,8 @@ const chatbotSlice = createSlice({
             .addCase(userQuery.fulfilled, (state, action) => {
                 state.status = 'succeded',
                     state.loading = false,
-                    state.timetableSlots = action.payload.response
+                    state.timetableSlots = action.payload.response,
+                    state.timetable = action.payload.timetable
             })
             .addCase(userQuery.rejected, (state, action) => {
                 state.status = 'rejected',

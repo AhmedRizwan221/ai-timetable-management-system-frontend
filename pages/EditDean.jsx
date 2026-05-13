@@ -4,13 +4,16 @@ import { updateUserData } from "../store/user/user";
 import { useForm } from "react-hook-form";
 import { Users, Lock, Mail, User } from "lucide-react";
 import EditUser from "../components/shrared/EditUser";
+import { useState } from "react";
 
 export default function EditDean() {
     const { id } = useParams();
     const dispatch = useDispatch();
     const { register, handleSubmit, reset } = useForm();
+    const [err, setErr] = useState("");
 
-    const { user } = useSelector((state) => state.auth);
+    const { user, error } = useSelector((state) => state.auth);
+    // console.log(error);
 
     const handleUpdateDeanData = async (data) => {
         try {
@@ -25,12 +28,9 @@ export default function EditDean() {
             })).unwrap();
             reset();
             alert("Dean updated successfully!");
-            if (user?.role === 'admin') {
-                navigate('/dashboard/superadmin');
-            }
         } catch (error) {
             //    console.log(error);
-            return error
+            setErr(error);
         }
     };
 
@@ -49,6 +49,7 @@ export default function EditDean() {
             onSubmit={handleUpdateDeanData}
             redirectUrl='/dashboard/superadmin/manage-deans'
             Icon={User}
+            err={err}
         />
 
 
