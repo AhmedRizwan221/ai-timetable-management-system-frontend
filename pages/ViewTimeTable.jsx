@@ -125,6 +125,7 @@ export default function ViewTimeTable() {
                 <div className="bg-white p-4 shadow rounded">
                     <table className="min-w-full border text-center text-sm">
                         <thead>
+                             <th className="border border-black px-2 py-3 font-bold">Day / Time</th>
                             {uniqueTimeSlots.map((slot, index) =>
                             (
                                 <th

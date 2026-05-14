@@ -83,7 +83,7 @@ export default function CreateTimeTable() {
 
     const handleCreateTimeTableSlot = async (data) => {
         setErr(" ");
-        // console.log(data.teacherId);
+        // console.log(data.teacherId);\
         try {
             await dispatch(createTimeTableSlot({
                 timetableId: data.timetableId,

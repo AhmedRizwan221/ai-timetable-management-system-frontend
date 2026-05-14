@@ -14,7 +14,7 @@ export default function ManageTimeTableSlots() {
 
     const { timeTableSlot = [], error: timetableSlotError, hasPrevPage, hasNextPage, totalPages, currentPage, loading } = useSelector((state) => state.timetabelSlot);
     const { user } = useSelector((state) => state.auth);
-
+    console.log(hasNextPage, hasPrevPage, totalPages, currentPage);
     useEffect(() => {
         if (user) {
             dispatch(getAllTimeTableSlot({
