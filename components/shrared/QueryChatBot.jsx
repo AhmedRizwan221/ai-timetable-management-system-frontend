@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addUserMessage, clearError, userQuery, addBotSuccessMessage } from "../../store/chatbot/chatbot.js";
+import { addUserMessage, clearError, userQuery, addBotSuccessMessage, getAllSlotsOfTeacher } from "../../store/chatbot/chatbot.js";
 import {
     Send,
     Bot,
@@ -9,7 +9,7 @@ import {
     ChevronDown
 } from "lucide-react";
 
-export default function QueryChatBot() {
+export default function QueryChatBot({ role ="guest" }) {
     const dispatch = useDispatch();
     // const [message, setMessage] = useState("");
     const [isOpen, setIsOpen] = useState(false);
@@ -17,8 +17,7 @@ export default function QueryChatBot() {
     const messagesEndRef = useRef(null);
 
     const { messages, loading, error, timetableSlots, timetable } = useSelector((state) => state.chatbot);
-    // console.log(timetable);
-
+    
 
     const handleKeyDown = (e) => {
         if (e.key === "Enter") handleSend();
@@ -30,8 +29,13 @@ export default function QueryChatBot() {
 
             const userMessage = input.trim();
             console.log(userMessage);
-            dispatch(userQuery(userMessage));
             dispatch(addUserMessage(userMessage));
+
+            if (role === 'chairman') {
+                dispatch(getAllSlotsOfTeacher(userMessage));
+            } else {
+                dispatch(userQuery(userMessage));
+            }
 
             setInput("");
         } catch (error) {
@@ -86,9 +90,14 @@ export default function QueryChatBot() {
                     )} */}
 
                     <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50">
-                        {messages.length === 0 && (
+                        {role === 'guest' && messages.length === 0 && (
                             <div className="text-sm text-gray-500">
                                 👋 Hello! Ask me to fetch timetable of any department by giving semester , year, batch, and department name .
+                            </div>
+                        )}
+                        {role === 'chairman' && messages.length === 0 && (
+                            <div className="text-sm text-gray-500">
+                                👋 Hello! Ask me to fetch Teacher slots by giving me the teacher name .
                             </div>
                         )}
 

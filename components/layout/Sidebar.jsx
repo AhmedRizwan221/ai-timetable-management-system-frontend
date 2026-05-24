@@ -433,6 +433,11 @@ export default function Sidebar() {
           { name: "Manage Courses", path: "/dashboard/chairman/manage-courses" },
         ],
       },
+      {
+        name: "View Teacher Slots",
+        icon: <BookOpen size={20}/>,
+        path: "/dashboard/chairman/view-teacherSlots"
+      }
     ],
   };
 

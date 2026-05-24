@@ -30,9 +30,7 @@ export const userQuery = createAsyncThunk(
     "chatbot/sendQuery",
     async (message, { rejectWithValue }) => {
         try {
-            const response = await axios.post('http://localhost:8000/api/v1/query/', { message }, {
-                withCredentials: true
-            });
+            const response = await axios.get('http://localhost:8000/api/v1/query/', { message });
             console.log(response.data.data.executeQuery);
             return {
                 userMessage: message,
@@ -48,13 +46,36 @@ export const userQuery = createAsyncThunk(
     }
 )
 
+// get all slots of teacher 
+export const getAllSlotsOfTeacher = createAsyncThunk(
+    "chatbot/allSlotsTeacher",
+    async (message, { rejectWithValue }) => {
+        try {
+            console.log(message);
+            const response = await axios.post("http://localhost:8000/api/v1/query/teacher-slots", { message }, {
+                withCredentials: true
+            });
+
+            console.log(response.data.data);
+            return response.data.data.executeQuery
+        } catch (error) {
+            return rejectWithValue(
+                error.response?.data.message || error.message
+            );
+        }
+    }
+)
+
 const initialState = {
     messages: [],
     timetableSlots: [],
     timetable: [],
     error: '',
     loading: false,
-    status: ''
+    status: 'idle',
+    teacherSlots: [],
+    totalTeacherSlots: null
+
 }
 
 
@@ -126,11 +147,39 @@ const chatbotSlice = createSlice({
                     state.loading = false,
                     state.error = action.payload;
 
-                    state.messages.push({
-                        sender: "bot",
-                        type: "error",
-                        text: action.payload
-                    })
+                state.messages.push({
+                    sender: "bot",
+                    type: "error",
+                    text: action.payload
+                })
+            })
+            .addCase(getAllSlotsOfTeacher.pending, (state) => {
+                state.status = 'pending',
+                    state.loading = true
+            })
+            .addCase(getAllSlotsOfTeacher.fulfilled, (state, action) => {
+                state.status = 'succeed',
+                    state.loading = false;
+                state.teacherSlots = action.payload.teacherSlots;
+                state.totalTeacherSlots = action.payload.totalSlots;
+
+
+                const successMessage = `Teacher slots fetched successfully`;
+                state.messages.push({
+                    sender: "bot",
+                    text: successMessage
+                })
+            })
+            .addCase(getAllSlotsOfTeacher.rejected, (state, action) => {
+                state.status = 'rejected',
+                    state.loading = false,
+                    state.error = action.payload;
+
+                state.messages.push({
+                    sender: "bot",
+                    type: "error",
+                    text: action.payload
+                })
             })
     }
 })
