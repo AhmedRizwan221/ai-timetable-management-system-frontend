@@ -11,10 +11,10 @@ export default function TeacherSlots() {
 
 
     const { user } = useSelector((state) => state.auth);
-    console.log(user);
+    // console.log(user);
 
     const { teacherSlots, totalTeacherSlots } = useSelector((state) => state.chatbot);
-    console.log(teacherSlots, totalTeacherSlots);
+    // console.log(teacherSlots, totalTeacherSlots);
 
     const Days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 
@@ -56,18 +56,19 @@ export default function TeacherSlots() {
                 slot.endTime === time.endTime
         );
     };
-    // console.log(getSLot);
+    // console.log(uniqueTimeSlots);
 
     const mergedCourses = Object.values(
         teacherSlots.reduce((acc, item) => {
-            const courseName = item?.course?.courseName;
+
+            const courseName = item?.course[0]?.courseName;
 
             if (!acc[courseName]) {
                 acc[courseName] = {
                     courseName,
                     courseFacilitator: "",
                     practicalFacilitator: "",
-                    creditHours: item?.course?.creditHours
+                    creditHours: item?.course[0]?.creditHours
                 };
             }
 
@@ -85,6 +86,7 @@ export default function TeacherSlots() {
             return acc;
         }, {})
     );
+    // console.log(mergedCourses, "Merge courses ");
 
     return (
         <div className="bg-white border border-gray-200 rounded-lg w-full">
@@ -95,7 +97,7 @@ export default function TeacherSlots() {
                     </div>
                     <div className="min-w-0 flex flex-col">
                         <h1 className="text-lg sm:text-2xl font-bold text-gray-900 truncate">
-                            {teacherSlots.teacher?.fullName || "UserName"}
+                            {teacherSlots[0]?.teacher?.fullName || "No Teacher "}
                         </h1>
                     </div>
                 </div>)}
@@ -105,112 +107,120 @@ export default function TeacherSlots() {
             </header>
             <main>
                 <div className="w-full space-y-8 md:p-4 bg-white mt-4">
-                    <div className="overflow-x-auto">
-                        <table className="min-w-full border-collapse border border-black text-center text-sm">
-                            <thead>
-                                <tr className="bg-white">
-                                    <th className="border border-black px-2 py-3 font-bold">
-                                        Day / Time
-                                    </th>
+                    {teacherSlots.length === 0 ? (
+                        <div className="flex items-center justify-center h-64 text-gray-500 font-medium">
+                            Search a teacher to view timetable slots
+                        </div>
+                    ) : (
+                        <>
 
-                                    {uniqueTimeSlots.map((slot, index) =>
-                                    (
-                                        <th
-                                            key={index}
-                                            className="border border-black px-2 py-2 font-bold leading-tight"
-                                        >
-                                            {slot.type === "break"
-                                                ? "Break ☕"
-                                                : `Lecture ${index + 1}`}
+                            <div className="overflow-x-auto">
+                                <table className="min-w-full border-collapse border border-black text-center text-sm">
+                                    <thead>
+                                        <tr className="bg-white">
+                                            <th className="border border-black px-2 py-3 font-bold">
+                                                Day / Time
+                                            </th>
 
-                                            <br />
+                                            {uniqueTimeSlots.map((slot, index) =>
+                                            (
+                                                <th
+                                                    key={index}
+                                                    className="border border-black px-2 py-2 font-bold leading-tight"
+                                                >
+                                                    {slot.type === "break"
+                                                        ? "Break ☕"
+                                                        : `Lecture ${index + 1}`}
 
-                                            <span className="font-normal text-xs">
-                                                {slot.startTime} - {slot.endTime}
-                                            </span>
-                                        </th>
-                                    )
-                                    )}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {Days.map((day, dayIndex) => (
-                                    <tr key={day}>
-                                        <td className="border border-black px-4 py-3 font-bold text-left">
-                                            {day}
-                                        </td>
-                                        {uniqueTimeSlots.map((time, index) => {
-                                            if (time.type === "break") {
-                                                if (dayIndex === 0) {
+                                                    <br />
+
+                                                    <span className="font-normal text-xs">
+                                                        {slot.startTime} - {slot.endTime}
+                                                    </span>
+                                                </th>
+                                            )
+                                            )}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {Days.map((day, dayIndex) => (
+                                            <tr key={day}>
+                                                <td className="border border-black px-4 py-3 font-bold text-left">
+                                                    {day}
+                                                </td>
+                                                {uniqueTimeSlots.map((time, index) => {
+                                                    if (time.type === "break") {
+                                                        if (dayIndex === 0) {
+                                                            return (
+                                                                <td
+                                                                    key={`${time.startTime}-${time.endTime}`}
+                                                                    rowSpan={Days.length}
+                                                                    className="border border-black px-2 py-3 font-bold text-center align-middle"
+                                                                >
+                                                                    Break ☕
+                                                                </td>
+                                                            );
+                                                        }
+
+                                                        // skip break cell for other rows
+                                                        return null;
+                                                    }
+
+                                                    const slot = getSLot(day, time);
+
                                                     return (
                                                         <td
-                                                            key={`${time.startTime}-${time.endTime}`}
-                                                            rowSpan={Days.length}
-                                                            className="border border-black px-2 py-3 font-bold text-center align-middle"
+                                                            key={`${time.startTime}-${time.endTime}-${day}`}
+                                                            className="border border-black px-2 py-3 min-w-[120px]"
                                                         >
-                                                            Break ☕
+                                                            {slot ? (
+                                                                <div className="whitespace-pre-line font-bold">
+                                                                    {slot.type === "theory"
+                                                                        ? slot.course[0]?.courseName
+                                                                        : `${slot.course[0]?.courseName} (Lab)`}
+                                                                </div>
+                                                            ) : null}
                                                         </td>
                                                     );
-                                                }
-
-                                                // skip break cell for other rows
-                                                return null;
-                                            }
-
-                                            const slot = getSLot(day, time);
-
-                                            return (
-                                                <td
-                                                    key={`${time.startTime}-${time.endTime}-${day}`}
-                                                    className="border border-black px-2 py-3 min-w-[120px]"
-                                                >
-                                                    {slot ? (
-                                                        <div className="whitespace-pre-line font-bold">
-                                                            {slot.type === "theory"
-                                                                ? slot.course?.courseName
-                                                                : `${slot.course?.courseName} (Lab)`}
-                                                        </div>
-                                                    ) : null}
+                                                })}
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div >
+                            <div className="overflow-x-auto">
+                                <table className="min-w-full border-collapse border border-black text-left text-xs">
+                                    <thead>
+                                        <tr className="bg-gray-50">
+                                            <th className="border border-black px-2 py-1 w-12 sm:text-sm">S.No.</th>
+                                            <th className="sm:text-sm text-[10] border border-black px-2 py-1">Course Name</th>
+                                            <th className="border border-black px-2 py-1 w-24">Credit Hours</th>
+                                            <th className="border border-black px-2 py-1">Course Facilitator</th>
+                                            <th className="border border-black px-2 py-1">Practical Facilitator</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {mergedCourses.map((timetable, idx) => (
+                                            <tr key={idx}>
+                                                <td className="border border-black px-2 py-1 font-bold">{String(idx + 1).padStart(2, '0')}</td>
+                                                <td className="border border-black px-2 py-1 font-medium">{timetable?.courseName}</td>
+                                                <td className="border border-black px-2 py-1">
+                                                    {(timetable?.creditHours?.theory ?? 0) + " + " + (timetable?.creditHours?.practical ?? 0)}
                                                 </td>
-                                            );
-                                        })}
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div className="overflow-x-auto">
-                        <table className="min-w-full border-collapse border border-black text-left text-xs">
-                            <thead>
-                                <tr className="bg-gray-50">
-                                    <th className="border border-black px-2 py-1 w-12 sm:text-sm">S.No.</th>
-                                    <th className="sm:text-sm text-[10] border border-black px-2 py-1">Course Name</th>
-                                    <th className="border border-black px-2 py-1 w-24">Credit Hours</th>
-                                    <th className="border border-black px-2 py-1">Course Facilitator</th>
-                                    <th className="border border-black px-2 py-1">Practical Facilitator</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {mergedCourses.map((timetable, idx) => (
-                                    <tr key={idx}>
-                                        <td className="border border-black px-2 py-1 font-bold">{String(idx + 1).padStart(2, '0')}</td>
-                                        <td className="border border-black px-2 py-1 font-medium">{timetable?.courseName}</td>
-                                        <td className="border border-black px-2 py-1">
-                                            {(timetable?.creditHours?.theory ?? 0) + " + " + (timetable?.creditHours?.practical ?? 0)}
-                                        </td>
-                                        <td className="border border-black px-2 py-1">{timetable?.courseFacilitator}</td>
-                                        <td className="border border-black px-2 py-1">{timetable?.practicalFacilitator || ""}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </main>
+                                                <td className="border border-black px-2 py-1">{timetable?.courseFacilitator}</td>
+                                                <td className="border border-black px-2 py-1">{timetable?.practicalFacilitator || ""}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </>
+                    )}
+                </div >
+            </main >
             <div>
-                <QueryChatBot role={user.role} />
+                <QueryChatBot role={user?.role} />
             </div>
-        </div>
-
+        </div >
     )
 }

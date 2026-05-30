@@ -31,7 +31,7 @@ export const userQuery = createAsyncThunk(
     async (message, { rejectWithValue }) => {
         try {
             const response = await axios.get('http://localhost:8000/api/v1/query/', { message });
-            console.log(response.data.data.executeQuery);
+            // console.log(response.data.data.executeQuery);
             return {
                 userMessage: message,
                 response: response.data.data.executeQuery.slots,
@@ -51,12 +51,12 @@ export const getAllSlotsOfTeacher = createAsyncThunk(
     "chatbot/allSlotsTeacher",
     async (message, { rejectWithValue }) => {
         try {
-            console.log(message);
+            // console.log(message);
             const response = await axios.post("http://localhost:8000/api/v1/query/teacher-slots", { message }, {
                 withCredentials: true
             });
 
-            console.log(response.data.data);
+            // console.log(response.data.data);
             return response.data.data.executeQuery
         } catch (error) {
             return rejectWithValue(

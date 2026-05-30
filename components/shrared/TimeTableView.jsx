@@ -69,7 +69,7 @@ function TimeTableView({
         });
 
     }, [timeTableSlot, selectedBatch, selectedSemester, selectedYear, selectedSection, selectedDepartment]);
-    console.log(filteredTimeTable);
+    // console.log(filteredTimeTable);
 
 
     const timeSlots = filteredTimeTable.flatMap((slot) => {
@@ -120,7 +120,7 @@ function TimeTableView({
         )
     }, [departments]);
 
-    console.log("Unique departments", uniqueDepartment)
+    // console.log("Unique departments", uniqueDepartment)
 
     useEffect(() => {
         if (uniqueDepartment.length > 0 && !selectedDepartment) {
