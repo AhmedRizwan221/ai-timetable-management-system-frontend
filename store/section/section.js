@@ -1,12 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 // create section 
 export const createSection = createAsyncThunk(
     "section/create",
     async (data, { rejectWithValue }) => {
         try {
-            const response = await axios.post('http://localhost:8000/api/v1/sections/create', data, { withCredentials: true });
+            const response = await axios.post(`${API_URL}/v1/sections/create`, data, { withCredentials: true });
 
             // console.log(response.data.data);
             return response.data.data.createdSection
@@ -21,7 +23,7 @@ export const getSections = createAsyncThunk(
     "section/getSections",
     async (deptId, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/sections/get-all-sections/${deptId}`, { withCredentials: true });
+            const response = await axios.get(`${API_URL}/v1/sections/get-all-sections/${deptId}`, { withCredentials: true });
 
             // console.log(response.data.data);
 
@@ -37,7 +39,7 @@ export const deleteSection = createAsyncThunk(
     "section/delete",
     async (sectionId, { rejectWithValue }) => {
         try {
-            await axios.delete(`http://localhost:8000/api/v1/sections/delete/${sectionId}`, {
+            await axios.delete(`${API_URL}/v1/sections/delete/${sectionId}`, {
                 withCredentials: true
             });
 
@@ -53,7 +55,7 @@ export const updateSection = createAsyncThunk(
     "section/update",
     async ({ sectionId, data }, { rejectWithValue }) => {
         try {
-            const response = await axios.patch(`http://localhost:8000/api/v1/sections/update/${sectionId}`, data, {
+            const response = await axios.patch(`${API_URL}/v1/sections/update/${sectionId}`, data, {
                 withCredentials: true
             });
 
@@ -71,7 +73,7 @@ export const getAllSections = createAsyncThunk(
     "section/getAllSections",
     async ({ deptId, page, limit }, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/sections/allSections/${deptId}`, {
+            const response = await axios.get(`${API_URL}/v1/sections/allSections/${deptId}`, {
                 params: {
                     page,
                     limit,
@@ -166,12 +168,12 @@ const sectionSlice = createSlice({
             })
             .addCase(getAllSections.pending, (state) => {
                 state.status = 'pending',
-                state.loading = true
+                    state.loading = true
             })
             .addCase(getAllSections.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.loading = false,
-                state.sections = action.payload.sectionsInDept;
+                    state.sections = action.payload.sectionsInDept;
                 state.totalSections = action.payload.totalSectionsInDept;
 
                 // pagination

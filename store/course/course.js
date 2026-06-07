@@ -1,12 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 // create course
 export const createCourse = createAsyncThunk(
     "course/create",
     async (data, { rejectWithValue }) => {
         try {
-            const response = await axios.post('http://localhost:8000/api/v1/courses/create', data, {
+            const response = await axios.post(`${API_URL}/v1/courses/create`, data, {
                 withCredentials: true
             });
 
@@ -23,7 +25,7 @@ export const getAllCourses = createAsyncThunk(
     "course/getall",
     async (semesterId, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/courses/allCourses/${semesterId}`, {
+            const response = await axios.get(`${API_URL}/v1/courses/allCourses/${semesterId}`, {
                 withCredentials: true
             });
 
@@ -42,7 +44,7 @@ export const getAllCoursesInDept = createAsyncThunk(
     async ({ deptId, page, limit }, { rejectWithValue }) => {
         try {
             // console.log(deptId, page, limit);
-            const response = await axios.get(`http://localhost:8000/api/v1/courses/all-courses/${deptId}`, {
+            const response = await axios.get(`${API_URL}/v1/courses/all-courses/${deptId}`, {
                 params: {
                     page,
                     limit,
@@ -66,7 +68,7 @@ export const getAllCoursesInFaculty = createAsyncThunk(
     async (facultyId, { rejectWithValue }) => {
         try {
             // console.log(deptId);
-            const response = await axios.get(`http://localhost:8000/api/v1/courses/faculty/${facultyId}/courses`, {
+            const response = await axios.get(`${API_URL}/v1/courses/faculty/${facultyId}/courses`, {
                 withCredentials: true
             });
 
@@ -84,7 +86,7 @@ export const deleteCourse = createAsyncThunk(
     "course/delete",
     async (courseId, { rejectWithValue }) => {
         try {
-            await axios.delete(`http://localhost:8000/api/v1/courses/delete/${courseId}`, { withCredentials: true });
+            await axios.delete(`${API_URL}/v1/courses/delete/${courseId}`, { withCredentials: true });
 
             return courseId
         } catch (error) {
@@ -99,7 +101,7 @@ export const updateCourse = createAsyncThunk(
     async ({ courseId, data }, { rejectWithValue }) => {
         try {
             // console.log(courseId, data);
-            const response = await axios.patch(`http://localhost:8000/api/v1/courses/update/${courseId}`, data, { withCredentials: true });
+            const response = await axios.patch(`${API_URL}/v1/courses/update/${courseId}`, data, { withCredentials: true });
 
             console.log(response.data.data);
             return response.data.data;
@@ -113,7 +115,7 @@ export const allCourses = createAsyncThunk(
     "course/all",
     async (deptId, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/courses/all/${deptId}`, { withCredentials: true });
+            const response = await axios.get(`${API_URL}/v1/courses/all/${deptId}`, { withCredentials: true });
 
             // console.log(response.data.data);
             return response.data.data;
@@ -128,7 +130,7 @@ export const allCoursesOfUni = createAsyncThunk(
     "course/AllInUni",
     async (_, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/courses/allCourses`);
+            const response = await axios.get(`${API_URL}/v1/courses/allCourses`);
 
             // console.log(response.data.data);
             return response.data.data.allCoursesInUni;
@@ -188,11 +190,11 @@ const courseSlice = createSlice({
             })
             .addCase(getAllCoursesInDept.pending, (state) => {
                 state.status = 'pending',
-                state.loading = true
+                    state.loading = true
             })
             .addCase(getAllCoursesInDept.fulfilled, (state, action) => {
                 state.status = 'succeeded',
-                state.loading = false,
+                    state.loading = false,
                     state.courses = action.payload.courses;
                 state.totalCourses = action.payload.totalCourses;
 
@@ -205,7 +207,7 @@ const courseSlice = createSlice({
             })
             .addCase(getAllCoursesInDept.rejected, (state, action) => {
                 state.status = 'rejected',
-                state.loading = false,
+                    state.loading = false,
                     state.error = action.payload
             })
             .addCase(deleteCourse.pending, (state) => {
@@ -248,17 +250,17 @@ const courseSlice = createSlice({
             .addCase(allCourses.pending, (state) => {
                 state.status = 'pending';
                 state.courses = [],
-                state.loading = true
+                    state.loading = true
             })
             .addCase(allCourses.fulfilled, (state, action) => {
                 state.status = 'succeeded',
-                state.loading = false,
+                    state.loading = false,
                     state.courses = action.payload.allCourses;
                 state.totalCourses = action.payload.totalCourses
             })
             .addCase(allCourses.rejected, (state, action) => {
                 state.status = 'rejected',
-                state.loading = false,
+                    state.loading = false,
                     state.error = action.payload,
                     state.courses = []
             })

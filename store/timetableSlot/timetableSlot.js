@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-
+const API_URL = import.meta.env.VITE_API_URL;
 
 // create timetableslot 
 export const createTimeTableSlot = createAsyncThunk(
@@ -9,7 +9,7 @@ export const createTimeTableSlot = createAsyncThunk(
     async (data, { rejectWithValue }) => {
         // console.log(data);
         try {
-            const response = await axios.post('http://localhost:8000/api/v1/timetableSlots/create', data, {
+            const response = await axios.post(`${API_URL}/v1/timetableSlots/create`, data, {
                 withCredentials: true
             });
 
@@ -27,7 +27,7 @@ export const getAllTimeTableSlot = createAsyncThunk(
     async ({ deptId, page, limit }, { rejectWithValue }) => {
         // console.log(deptId, page, limit);
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/timetableSlots/${deptId}/timetables`, {
+            const response = await axios.get(`${API_URL}/v1/timetableSlots/${deptId}/timetables`, {
                 params: {
                     page,
                     limit,
@@ -49,7 +49,7 @@ export const deleteTimeTableSlot = createAsyncThunk(
     "timetableSlot/deleteSlot",
     async (timetableSlotId, { rejectWithValue }) => {
         try {
-            await axios.delete(`http://localhost:8000/api/v1/timetableSlots/delete/${timetableSlotId}`, {
+            await axios.delete(`${API_URL}/v1/timetableSlots/delete/${timetableSlotId}`, {
                 withCredentials: true
             });
 
@@ -64,7 +64,7 @@ export const updateTimeTableSlot = createAsyncThunk(
     "timetableSlot/updateSlot",
     async ({ timetableSlotId, data }, { rejectWithValue }) => {
         try {
-            const response = await axios.patch(`http://localhost:8000/api/v1/timetableSlots/update/${timetableSlotId}`, data, { withCredentials: true });
+            const response = await axios.patch(`${API_URL}/v1/timetableSlots/update/${timetableSlotId}`, data, { withCredentials: true });
 
             // console.log(response.data.data);
 
@@ -82,7 +82,7 @@ export const getFacultyAllTimeTableSlots = createAsyncThunk(
         // console.log(facultyId);
         try {
             // console.log(deptId);
-            const response = await axios.get(`http://localhost:8000/api/v1/timetableSlots/${facultyId}/timetableSlots`, {
+            const response = await axios.get(`${API_URL}/v1/timetableSlots/${facultyId}/timetableSlots`, {
                 withCredentials: true
             });
 
@@ -99,7 +99,7 @@ export const getAllSlots = createAsyncThunk(
     "timetableSlot/all",
     async (deptId, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/timetableSlots/allSlots/${deptId}`, {
+            const response = await axios.get(`${API_URL}/v1/timetableSlots/allSlots/${deptId}`, {
                 withCredentials: true
             });
 
@@ -116,7 +116,7 @@ export const allSlotsInUni = createAsyncThunk(
     "timetableSlot/allSlots",
     async (_, { rejectWithValue }) => {
         try {
-            const response = await axios.get('http://localhost:8000/api/v1/timetableSlots/guestUser/timetableSlots');
+            const response = await axios.get(`${API_URL}/v1/timetableSlots/guestUser/timetableSlots`);
 
             // console.log(response.data.data);
             return response.data.data.guestUserAllSlots

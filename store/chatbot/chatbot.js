@@ -1,11 +1,13 @@
 import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const sendChatMessages = createAsyncThunk(
     "chatbot/sendMessages",
     async ({ message, role }, { rejectWithValue }) => {
         try {
-            const response = await axios.post('http://localhost:8000/api/v1/chatbot/',
+            const response = await axios.post(`${API_URL}/v1/chatbot/`,
                 { message, role },
                 { withCredentials: true }
             );
@@ -30,7 +32,7 @@ export const userQuery = createAsyncThunk(
     "chatbot/sendQuery",
     async (message, { rejectWithValue }) => {
         try {
-            const response = await axios.get('http://localhost:8000/api/v1/query/', { message });
+            const response = await axios.get(`${API_URL}/v1/query/`, { message });
             // console.log(response.data.data.executeQuery);
             return {
                 userMessage: message,
@@ -52,7 +54,7 @@ export const getAllSlotsOfTeacher = createAsyncThunk(
     async (message, { rejectWithValue }) => {
         try {
             // console.log(message);
-            const response = await axios.post("http://localhost:8000/api/v1/query/teacher-slots", { message }, {
+            const response = await axios.post(`${API_URL}/v1/query/teacher-slots`, { message }, {
                 withCredentials: true
             });
 

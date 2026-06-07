@@ -15,17 +15,19 @@ export default function Login() {
     const [error, setError] = useState("");
     const { register, handleSubmit } = useForm();
 
+    const API_URL = import.meta.env.VITE_API_URL;
+
     const handlelogin = async (data) => {
         setError("");
         try {
-
-            await axios.post('http://localhost:8000/api/v1/users/login', data,
+            console.log("API_URL:", API_URL);
+            await axios.post(`${API_URL}/v1/users/login`, data,
                 {
                     withCredentials: true
                 });
-
+            console.log("Final URL:", `${API_URL}v1/users/login`);
             const currentUser = await axios.get(
-                "http://localhost:8000/api/v1/users/current-user",
+                `${API_URL}/v1/users/current-user`,
                 { withCredentials: true }
             );
 

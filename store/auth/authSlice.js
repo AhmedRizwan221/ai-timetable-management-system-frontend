@@ -1,12 +1,14 @@
 import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
+
 
 // login user 
 export const userLogin = createAsyncThunk(
     "user/login",
     async (data, { rejectWithValue }) => {
         try {
-            const response = await axios.post('http://localhost:8000/api/v1/users/login', data, {
+            const response = await axios.post(`${API_URL}/v1/users/login`, data, {
                 withCredentials: true
             });
 
@@ -23,7 +25,7 @@ export const getUser = createAsyncThunk(
     "user/fetch",
     async (_, { rejectWithValue }) => {
         try {
-            const response = await axios.get('http://localhost:8000/api/v1/users/current-user',
+            const response = await axios.get(`${API_URL}/v1/users/current-user`,
                 { withCredentials: true }
             );
             // console.log("Thunk console: ", response.data.data);
@@ -45,7 +47,7 @@ export const forgetPassword = createAsyncThunk(
     "user/forgetPassword",
     async (email, { rejectWithValue }) => {
         try {
-            const response = await axios.post("http://localhost:8000/api/v1/users/forget-password", email, {
+            const response = await axios.post(`${API_URL}/v1/users/forget-password`, email, {
                 withCredentials: true
             });
 
@@ -63,7 +65,7 @@ export const resetPassword = createAsyncThunk(
     async ({ password, token }, { rejectWithValue }) => {
         console.log(password, token);
         try {
-            const response = await axios.post(`http://localhost:8000/api/v1/users/reset-password/${token}`,
+            const response = await axios.post(`${API_URL}/v1/users/reset-password/${token}`,
                 { password },
                 {
                     withCredentials: true

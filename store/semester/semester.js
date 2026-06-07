@@ -1,13 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 // create semester 
 export const createSemester = createAsyncThunk(
     "semester/create",
     async (data, { rejectWithValue }) => {
         try {
             // console.log(data);
-            const response = await axios.post(`http://localhost:8000/api/v1/semesters/create`, data, { withCredentials: true });
+            const response = await axios.post(`${API_URL}/v1/semesters/create`, data, { withCredentials: true });
 
             // console.log(response.data.data);
 
@@ -23,7 +25,7 @@ export const getSemesters = createAsyncThunk(
     "semester/getSemesters",
     async ({ departmentId, page, limit }, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/semesters/getAllSemester/${departmentId}`, {
+            const response = await axios.get(`${API_URL}/v1/semesters/getAllSemester/${departmentId}`, {
                 params: {
                     page,
                     limit,
@@ -47,7 +49,7 @@ export const updateSemester = createAsyncThunk(
     "semester/update",
     async ({ semesterId, data }, { rejectWithValue }) => {
         try {
-            const response = await axios.patch(`http://localhost:8000/api/v1/semesters/update/${semesterId}`, data, {
+            const response = await axios.patch(`${API_URL}/v1/semesters/update/${semesterId}`, data, {
                 withCredentials: true
             });
 
@@ -65,7 +67,7 @@ export const deleteSemester = createAsyncThunk(
     "semester/delete",
     async (semesterId, { rejectWithValue }) => {
         try {
-            await axios.delete(`http://localhost:8000/api/v1/semesters/delete/${semesterId}`, { withCredentials: true });
+            await axios.delete(`${API_URL}/v1/semesters/delete/${semesterId}`, { withCredentials: true });
 
             return semesterId
         } catch (error) {
@@ -80,7 +82,7 @@ export const getAllSemesters = createAsyncThunk(
     "semester/getAll",
     async (deptId, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/semesters/semesters/${deptId}`, { withCredentials: true });
+            const response = await axios.get(`${API_URL}/v1/semesters/semesters/${deptId}`, { withCredentials: true });
 
             // console.log(response.data.data);
             return response.data.data.allSemesters

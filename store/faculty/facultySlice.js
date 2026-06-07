@@ -1,13 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 // create faculty
 export const facultyCreate = createAsyncThunk(
     "faculties/create",
     async (facultyData, { rejectWithValue }) => {
         // console.log(facultyData);
         try {
-            const response = await axios.post('http://localhost:8000/api/v1/faculties/create', facultyData, {
+            const response = await axios.post(`${API_URL}/v1/faculties/create`, facultyData, {
                 withCredentials: true
             });
             // console.log(response.data.data);
@@ -23,7 +25,7 @@ export const fetchFaculties = createAsyncThunk(
     "faculties/all-faculties",
     async ({ page, limit }, { rejectWithValue }) => {
         try {
-            const response = await axios.get('http://localhost:8000/api/v1/faculties/all-faculties',
+            const response = await axios.get(`${API_URL}/v1/faculties/all-faculties`,
                 {
                     params: {
                         page,
@@ -46,7 +48,7 @@ export const facultyUpdate = createAsyncThunk(
     "faculties/update",
     async ({ facultyId, data }, { rejectWithValue }) => {
         try {
-            const response = await axios.patch(`http://localhost:8000/api/v1/faculties/update/${facultyId}`, data, {
+            const response = await axios.patch(`${API_URL}/v1/faculties/update/${facultyId}`, data, {
                 withCredentials: true
             });
 
@@ -63,7 +65,7 @@ export const deleteFaculty = createAsyncThunk(
     "faculties/delete",
     async (facultyId, { rejectWithValue }) => {
         try {
-            await axios.delete(`http://localhost:8000/api/v1/faculties/delete/${facultyId}`, { withCredentials: true });
+            await axios.delete(`${API_URL}/v1/faculties/delete/${facultyId}`, { withCredentials: true });
 
             return facultyId
 
@@ -118,7 +120,7 @@ const facultySlice = createSlice({
                 state.loading = false;
                 state.faculties = action.payload.faculties;  // store data here
 
-                  // pagination data 
+                // pagination data 
                 state.totalPages = action.payload.pagination.totalPages;
                 state.currentPage = action.payload.pagination.currentPage;
                 state.hasNextPage = action.payload.pagination.hasNextPage;

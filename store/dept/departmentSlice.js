@@ -1,11 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const departmentCreate = createAsyncThunk(
     "departments/create",
     async (deptData, { rejectWithValue }) => {
         try {
-            const response = await axios.post('http://localhost:8000/api/v1/departments/create', deptData, {
+            const response = await axios.post(`${API_URL}/v1/departments/create`, deptData, {
                 withCredentials: true
             })
             return response.data.data.createdDepartment;
@@ -21,7 +23,7 @@ export const fetchDepartments = createAsyncThunk(
     async ({ facultyId, page, limit }, { rejectWithValue }) => {
         try {
             // console.log(facultyId);
-            const response = await axios.get(`http://localhost:8000/api/v1/departments/allDepartments/${facultyId}/departments`, {
+            const response = await axios.get(`${API_URL}/v1/departments/allDepartments/${facultyId}/departments`, {
                 params: {
                     page,
                     limit,
@@ -44,7 +46,7 @@ export const fetchAllDepartments = createAsyncThunk(
     "department/fetchAllDept",
     async (_, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/departments/allDepartments`,)
+            const response = await axios.get(`${API_URL}/v1/departments/allDepartments`,)
             // console.log(response.data.data.departments);
             return response.data.data.departments;
         } catch (error) {
@@ -59,7 +61,7 @@ export const getDepartment = createAsyncThunk(
     async (deptId, { rejectWithValue }) => {
         try {
             // console.log(deptId);
-            const response = await axios.get(`http://localhost:8000/api/v1/departments/${deptId}`, {
+            const response = await axios.get(`${API_URL}/v1/departments/${deptId}`, {
                 withCredentials: true
             });
             // console.log(response.data.data);
@@ -74,7 +76,7 @@ export const departmentUpdate = createAsyncThunk(
     "department/update",
     async ({ departmentId, data }, { rejectWithValue }) => {
         try {
-            const response = await axios.patch(`http://localhost:8000/api/v1/departments/update/${departmentId}`, data, { withCredentials: true });
+            const response = await axios.patch(`${API_URL}/v1/departments/update/${departmentId}`, data, { withCredentials: true });
 
             // console.log(response.data.data);
 
@@ -90,7 +92,7 @@ export const departmentDelete = createAsyncThunk(
     async (departmentId, { rejectWithValue }) => {
         console.log(departmentId);
         try {
-            await axios.delete(`http://localhost:8000/api/v1/departments/delete/${departmentId}`, {
+            await axios.delete(`${API_URL}/v1/departments/delete/${departmentId}`, {
                 withCredentials: true
             });
 
@@ -103,10 +105,10 @@ export const departmentDelete = createAsyncThunk(
 
 // fetch faculty departments without pagination
 export const getFacultyDepartments = createAsyncThunk(
-     "department/facultyDepartments",
+    "department/facultyDepartments",
     async (facultyId, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/departments/facultyDepts/${facultyId}`, {
+            const response = await axios.get(`${API_URL}/v1/departments/facultyDepts/${facultyId}`, {
                 withCredentials: true
             })
             // console.log(response.data.data);
@@ -126,7 +128,7 @@ const initialState = {
     courses: [],
     status: 'idle',
     error: null,
-    loading : false,
+    loading: false,
 
     // pagination data 
     totalPages: 0,

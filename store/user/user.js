@@ -1,12 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 // fetch deans 
 export const getDeans = createAsyncThunk(
     "user/deans",
     async ({ page, limit } = {}, { rejectWithValue }) => {
         try {
-            const response = await axios.get('http://localhost:8000/api/v1/users/deans',
+            const response = await axios.get(`${API_URL}/v1/users/deans`,
                 {
                     params: {
                         page,
@@ -31,7 +33,7 @@ export const getChairmans = createAsyncThunk(
     "user/chairmans",
     async (_, { rejectWithValue }) => {
         try {
-            const response = await axios.get('http://localhost:8000/api/v1/users/chairmans',
+            const response = await axios.get(`${API_URL}/v1/users/chairmans`,
                 { withCredentials: true }
             );
             // console.log(response);
@@ -49,7 +51,7 @@ export const getAllTeachersInDept = createAsyncThunk(
     async (deptId, { rejectWithValue }) => {
         try {
             // console.log(deptId);
-            const response = await axios.get(`http://localhost:8000/api/v1/users/${deptId}/teachers`,
+            const response = await axios.get(`${API_URL}/v1/users/${deptId}/teachers`,
                 { withCredentials: true }
             );
 
@@ -67,7 +69,7 @@ export const updateUserData = createAsyncThunk(
     "user/updateUser",
     async ({ role, id, data }, { rejectWithValue }) => {
         try {
-            const response = await axios.patch(`http://localhost:8000/api/v1/users/update/${role}/${id}`, data,
+            const response = await axios.patch(`${API_URL}/v1/users/update/${role}/${id}`, data,
                 { withCredentials: true }
             );
             // console.log(response.data.data);
@@ -83,7 +85,7 @@ export const deleteUser = createAsyncThunk(
     "user/deleteUser",
     async (id, { rejectWithValue }) => {
         try {
-            const response = await axios.delete(`http://localhost:8000/api/v1/users/delete-user/${id}`, {
+            const response = await axios.delete(`${API_URL}/v1/users/delete-user/${id}`, {
                 withCredentials: true
             });
             // console.log(response);
@@ -99,7 +101,7 @@ export const getTeachers = createAsyncThunk(
     "user/teachers",
     async (_, { rejectWithValue }) => {
         try {
-            const response = await axios.get('http://localhost:8000/api/v1/users/teachers', {
+            const response = await axios.get(`${API_URL}/v1/users/teachers`, {
                 withCredentials: true
             });
 
@@ -117,7 +119,7 @@ export const getAllTeachersInFaculty = createAsyncThunk(
     "user/getAllTeachersInFacutly",
     async (facultyId, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/users/faculty/${facultyId}/teachers`,
+            const response = await axios.get(`${API_URL}/v1/users/faculty/${facultyId}/teachers`,
                 { withCredentials: true }
             );
 
@@ -135,7 +137,7 @@ export const getAllChairmansInFaculty = createAsyncThunk(
     async ({ facultyId, page, limit }, { rejectWithValue }) => {
         try {
             // console.log(facultyId);
-            const response = await axios.get(`http://localhost:8000/api/v1/users/faculty/${facultyId}/chairmans`,
+            const response = await axios.get(`${API_URL}/v1/users/faculty/${facultyId}/chairmans`,
                 {
                     params: {
                         page,
@@ -160,7 +162,7 @@ export const getAllChairmansCountInFaculty = createAsyncThunk(
     "user/totalChairmans",
     async (facultyId, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/users/totalChairmans/${facultyId}`, { withCredentials: true });
+            const response = await axios.get(`${API_URL}/v1/users/totalChairmans/${facultyId}`, { withCredentials: true });
 
             // console.log(response.data.data);
 
@@ -176,7 +178,7 @@ export const getAlDeans = createAsyncThunk(
     "user/getAllDeans",
     async (_, { rejectWithValue }) => {
         try {
-            const response = await axios.get("http://localhost:8000/api/v1/users/allDeans", { withCredentials: true });
+            const response = await axios.get(`${API_URL}/v1/users/allDeans`, { withCredentials: true });
 
             // console.log(response.data.data)
 
@@ -194,7 +196,7 @@ export const allTeachersInDept = createAsyncThunk(
         // console.log(deptId, page, limit);
         try {
             // console.log(deptId);
-            const response = await axios.get(`http://localhost:8000/api/v1/users/department/${deptId}/teachers`,
+            const response = await axios.get(`${API_URL}/v1/users/department/${deptId}/teachers`,
                 {
                     params: {
                         page,

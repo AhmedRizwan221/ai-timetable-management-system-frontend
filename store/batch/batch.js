@@ -1,13 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 // create batch 
 export const createBatch = createAsyncThunk(
     "batch/create",
     async (data, { rejectWithValue }) => {
         // console.log("data for batch", data);
         try {
-            const response = await axios.post(`http://localhost:8000/api/v1/batches/create`, data, { withCredentials: true });
+            const response = await axios.post(`${API_URL}/v1/batches/create`, data, { withCredentials: true });
 
             // console.log(response.data.data);
 
@@ -23,7 +25,7 @@ export const getBatches = createAsyncThunk(
     "batch/getBatches",
     async ({ deptId, page, limit }, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/batches/allBatches/${deptId}`, {
+            const response = await axios.get(`${API_URL}/v1/batches/allBatches/${deptId}`, {
                 params: {
                     page,
                     limit,
@@ -46,7 +48,7 @@ export const deleteBatch = createAsyncThunk(
     "batch/delete",
     async (batchId, { rejectWithValue }) => {
         try {
-            await axios.delete(`http://localhost:8000/api/v1/batches/delete/${batchId}`, {
+            await axios.delete(`${API_URL}/v1/batches/delete/${batchId}`, {
                 withCredentials: true
             });
 
@@ -62,7 +64,7 @@ export const updateBatch = createAsyncThunk(
     "batch/update",
     async ({ batchId, data }, { rejectWithValue }) => {
         try {
-            const response = await axios.patch(`http://localhost:8000/api/v1/batches/update/${batchId}`, data, {
+            const response = await axios.patch(`${API_URL}/v1/batches/update/${batchId}`, data, {
                 withCredentials: true
             });
 
@@ -76,19 +78,19 @@ export const updateBatch = createAsyncThunk(
 )
 
 export const allBatches = createAsyncThunk(
-     "batch/allBatches",
-     async(deptId, {rejectWithValue}) => {
+    "batch/allBatches",
+    async (deptId, { rejectWithValue }) => {
         // console.log(deptId);
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/batches/${deptId}/batches`, {
+            const response = await axios.get(`${API_URL}/v1/batches/${deptId}/batches`, {
                 withCredentials: true
             });
             // console.log(response.data.data);
             return response.data.data.allBatches
         } catch (error) {
-             return rejectWithValue(error.response?.data || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
-     }
+    }
 )
 
 
@@ -130,7 +132,7 @@ const batchSlice = createSlice({
             })
             .addCase(getBatches.pending, (state) => {
                 state.status = 'pending',
-                state.loading = true
+                    state.loading = true
             })
             .addCase(getBatches.fulfilled, (state, action) => {
                 state.status = 'succeeded';
@@ -175,7 +177,7 @@ const batchSlice = createSlice({
                 state.status = 'rejected';
                 state.error = action.payload
             })
-              .addCase(allBatches.pending, (state) => {
+            .addCase(allBatches.pending, (state) => {
                 state.status = 'pending'
             })
             .addCase(allBatches.fulfilled, (state, action) => {

@@ -1,13 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 // create time table 
 export const createTimeTable = createAsyncThunk(
     "timetable/create",
     async ({ batchId, semesterId, sectionId = null, departmentId, facultyId, createdBy, status, breakStartTime, breakEndTime }, { rejectWithValue }) => {
         // console.log(batchId, semesterId, sectionId, departmentId, facultyId);
         try {
-            const response = await axios.post('http://localhost:8000/api/v1/timetables/create',
+            const response = await axios.post(`${API_URL}/v1/timetables/create`,
                 { batchId, semesterId, sectionId, departmentId, facultyId, createdBy, status, breakStartTime, breakEndTime },
                 { withCredentials: true }
             );
@@ -26,7 +28,7 @@ export const getDeptallTimeTables = createAsyncThunk(
     async ({ deptId, page, limit }, { rejectWithValue }) => {
         // console.log(deptId, page, limit);
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/timetables/${deptId}/timetables`, {
+            const response = await axios.get(`${API_URL}/v1/timetables/${deptId}/timetables`, {
                 params: {
                     page,
                     limit,
@@ -51,7 +53,7 @@ export const updateTimeTable = createAsyncThunk(
     async ({ timetableId, data }, { rejectWithValue }) => {
         // console.log("Time table id",timetableId);
         try {
-            const response = await axios.patch(`http://localhost:8000/api/v1/timetables/update/${timetableId}`, data, {
+            const response = await axios.patch(`${API_URL}/v1/timetables/update/${timetableId}`, data, {
                 withCredentials: true
             });
 
@@ -68,7 +70,7 @@ export const deleteTimeTable = createAsyncThunk(
     "timetable/delete",
     async (timetableId, { rejectWithValue }) => {
         try {
-            const response = await axios.delete(`http://localhost:8000/api/v1/timetables/delete/${timetableId}`, {
+            const response = await axios.delete(`${API_URL}/v1/timetables/delete/${timetableId}`, {
                 withCredentials: true
             });
             // console.log("return id ",response.data.data._id);
@@ -85,7 +87,7 @@ export const allTimetabels = createAsyncThunk(
     async (deptId, { rejectWithValue }) => {
         // console.log(deptId);
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/timetables/all/${deptId}`, {
+            const response = await axios.get(`${API_URL}/v1/timetables/all/${deptId}`, {
                 withCredentials: true
             },
             );
@@ -104,7 +106,7 @@ export const getAllApproveAndUnapprovTimetablesOfFaculty = createAsyncThunk(
     async ({ facultyId, page, limit }, { rejectWithValue }) => {
         // console.log(facultyId, page, limit);
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/timetables/faculty/${facultyId}/timetables`, {
+            const response = await axios.get(`${API_URL}/v1/timetables/faculty/${facultyId}/timetables`, {
                 params: {
                     page,
                     limit,
@@ -129,7 +131,7 @@ export const approveTimetable = createAsyncThunk(
     async ({ timetableId, data }, { rejectWithValue }) => {
 
         try {
-            const response = await axios.patch(`http://localhost:8000/api/v1/timetables/${timetableId}/approve`, data,
+            const response = await axios.patch(`${API_URL}/v1/timetables/${timetableId}/approve`, data,
                 { withCredentials: true }
             );
             // console.log(response.data.data);
@@ -146,7 +148,7 @@ export const rejectTimetable = createAsyncThunk(
     "timetable/reject",
     async ({ timetableId, data }, { rejectWithValue }) => {
         try {
-            const response = await axios.patch(`http://localhost:8000/api/v1/timetables/${timetableId}/reject`, data, {
+            const response = await axios.patch(`${API_URL}/v1/timetables/${timetableId}/reject`, data, {
                 withCredentials: true
             });
             // console.log(response.data.data);
@@ -163,7 +165,7 @@ export const getTimeTableById = createAsyncThunk(
     async (timetableId, { rejectWithValue }) => {
         // console.log("Redux slice console :", timetableId);
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/timetables/${timetableId}`);
+            const response = await axios.get(`${API_URL}/v1/timetables/${timetableId}`);
             // console.log(response.data.data);
             return response.data.data.timetable
         } catch (error) {
