@@ -46,7 +46,7 @@ export default function CreateSection() {
     }
 
     return (
-        <div className="min-h-screen bg-muted/30 py-10 px-4 sm:px-6 ">
+        <div className="min-h-screen bg-muted/30 md:py-10 md:px-4">
             <div className="bg-white border border-gray-200 rounded-lg ">
                 <div className=" bg-card">
                     <div className="container mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8 border-b">
@@ -54,7 +54,7 @@ export default function CreateSection() {
                             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
                                 <CalendarDays className="h-5 w-5 text-primary-foreground" />
                             </div>
-                            <h1 className="text-2xl font-bold tracking-tight text-foreground">
+                            <h1 className="text-xl md:text-2xl font-bold tracking-tight text-foreground">
                                 Create Section
                             </h1>
                         </div>

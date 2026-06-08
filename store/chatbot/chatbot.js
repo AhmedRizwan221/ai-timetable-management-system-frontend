@@ -32,7 +32,7 @@ export const userQuery = createAsyncThunk(
     "chatbot/sendQuery",
     async (message, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`${API_URL}/v1/query/`, { message });
+            const response = await axios.post(`${API_URL}/v1/query/`, { message });
             // console.log(response.data.data.executeQuery);
             return {
                 userMessage: message,

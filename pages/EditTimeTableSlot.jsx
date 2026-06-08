@@ -70,7 +70,7 @@ export default function EditTimeTableSlot() {
     }
 
     return (
-        <div className="bg-white border border-gray-200 rounded-lg mt-10">
+        <div className="bg-white border border-gray-200 rounded-lg md:mt-10">
             <div className=" bg-card">
                 <div className="container mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8 border-b">
                     <div className="flex items-center gap-3">

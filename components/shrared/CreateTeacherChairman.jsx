@@ -15,10 +15,12 @@ export default function CreateTeacherChairman() {
 
     const {user} = useSelector((state) => state.auth);
 
+     const API_URL = import.meta.env.VITE_API_URL;
+
     const handleUser = async (data) => {
         setError("");
         try {
-            const response = await axios.post('http://localhost:8000/api/v1/users/register', data, {
+            const response = await axios.post(`${API_URL}/v1/users/register`, data, {
                 withCredentials: true
             })
             // console.log(response);

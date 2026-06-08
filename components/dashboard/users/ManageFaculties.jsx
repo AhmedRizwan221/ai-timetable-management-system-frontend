@@ -15,7 +15,7 @@ export default function ManageFaculties() {
 
     const { faculties = [], error, totalPages, currentPage, loading, hasPrevPage, hasNextPage } = useSelector((state) => state.faculty);
     const { user } = useSelector((state) => state.auth);
-
+    
     useEffect(() => {
         if (user) {
             dispatch(fetchFaculties({
@@ -82,16 +82,15 @@ export default function ManageFaculties() {
                             filterFaculties.map((fact) => (
                                 <div key={fact._id} className="bg-card p-4 rounded-xl border border-border shadow-sm space-y-3">
                                     <div className="flex justify-between items-start">
-                                        <div className="block items-center gap-3">
+                                        <div className="flex justify-between items-center gap-3">
                                             <p className="font-bold text-foreground"> {fact?.facultyName}</p>
-                                            <div className="flex items-center gap-1">
                                                 <p className="text-foreground"> {fact?.dean ? fact.dean?.fullName : "Not Assigned"}</p>
+                                            <div className="flex items-center gap-1">
                                             </div>
                                         </div>
                                     </div>
 
                                     <div className="flex justify-between items-center pt-2 border-t border-border/50">
-                                        {/* <p className="text-sm font-medium"><span className="text-muted-foreground font-normal">Batch:</span> {fact?.batch?.batchName}</p> */}
                                         <div className="flex gap-2">
                                             <button onClick={() => navigate(`/dashboard/superadmin/edit-faculties/${fact._id}`)} className="p-2 bg-muted rounded-md"><Pencil className="h-4 w-4 text-primary" /></button>
                                             <button onClick={() => facultyDeleteHandler(fact._id)} className="p-2 bg-muted rounded-md"><Trash className="h-4 w-4 text-red-500" /></button>

@@ -53,10 +53,10 @@ export default function Login() {
     }
 
     return (
-        <div className="flex justify-center items-center min-h-screen">
-            <div className={`m-auto w-full max-w-lg bg-white rounded-xl p-10 border border-black/10`}>
+        <div className="sm: px-4 flex justify-center items-center min-h-screen">
+            <div className={`m-auto w-full max-w-lg bg-white rounded-xl sm: py-10 md: p-10 border border-black/10`}>
                 <div className=" justify-center">
-                    <h2 className="text-center text-xl lg:text-2xl leading-tight text-black font-bold">Sign up to create account</h2>
+                    <h2 className="text-center text-xl lg:text-2xl leading-tight text-black font-bold">Sign in to your account</h2>
                     <p className="mt-2 text-center text-base text-black/60">
                         Do not have account?&nbsp;
                         <Link
@@ -87,7 +87,7 @@ export default function Login() {
                                 </div>
                                 <div className="space-y-2">
                                     <Input
-                                        label="password"
+                                        label="Password"
                                         type="password"
                                         className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                                         placeholder="Enter your password"

@@ -54,7 +54,7 @@ export default function ManageChairmans() {
 
 
     return (
-        <div className="min-h-screen bg-muted/30 py-10 px-4 sm:px-6">
+        <div className="min-h-screen bg-muted/30 md:py-10 md:px-4">
             <div className="bg-white border border-gray-200 rounded-lg">
                 <div className="mx-auto max-w-5xl space-y-6">
                     <div className="bg-card">
@@ -89,7 +89,7 @@ export default function ManageChairmans() {
                 )}
 
                 {/* --- MOBILE VIEW: Cards (Hidden on Medium+ screens) --- */}
-                <div className="grid grid-cols-1 gap-4 md:hidden mt-4">
+                <div className="px-2 md:p-0 grid grid-cols-1 gap-4 md:hidden mt-4">
                     {loading ? (
                         <div>
                             <Loader loading={loading} />
@@ -106,17 +106,17 @@ export default function ManageChairmans() {
                                                 <User className="h-5 w-5" />
                                             </div>
                                             <div>
-                                                <h3 className="font-bold text-foreground">{chair.fullName}</h3>
-                                                <p className="text-xs text-muted-foreground">{chair.email}</p>
+                                                <h3 className="font-bold text-foreground">{chair?.fullName}</h3>
+                                                <p className="text-xs text-muted-foreground">{chair?.email}</p>
                                             </div>
                                         </div>
-                                        <span className={`px-2 py-1 text-[10px] rounded-md font-bold uppercase ${chair.facultyChairmans ? "bg-[#1D293D] text-white hover:bg-[#162131]" : "bg-gray-100 text-gray-500"}`}>
-                                            {chair.facultyChairmans ? "Active " : "InActive"}
+                                        <span className={`px-2 py-1 text-[10px] rounded-md font-bold uppercase ${user.faculty?.facultyName ? "bg-[#1D293D] text-white hover:bg-[#162131]" : "bg-gray-100 text-gray-500"}`}>
+                                            {user.faculty?.facultyName ? "Active " : "InActive"}
                                         </span>
                                     </div>
 
                                     <div className="flex justify-between items-center pt-2 border-t border-border/50">
-                                        <p className="text-sm font-medium"><span className="text-muted-foreground font-normal">Faculty:</span> {chair.facultyChairmans?.facultyName || "Not Assigned"}</p>
+                                        <p className="text-sm font-medium"><span className="text-muted-foreground font-normal">Faculty:</span> {user.faculty?.facultyName || "Not Assigned"}</p>
                                         <div className="flex gap-2">
                                             <button onClick={() => navigate(`/dashboard/chairman/edit-teacher/${chair._id}`)} className="p-2 bg-muted rounded-md"><Pencil className="h-4 w-4 text-primary" /></button>
                                             <button onClick={() => deleteHandler(chair._id)} className="p-2 bg-muted rounded-md"><Trash className="h-4 w-4 text-red-500" /></button>
@@ -162,7 +162,7 @@ export default function ManageChairmans() {
                                                     <td className="px-6 py-4 text-sm">{index + 1}</td>
                                                     <td className="px-6 py-4 flex items-center gap-2 font-medium text-foreground text-sm">
                                                         <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted-foreground/10 shrink-0"><User className="h-4 w-4" /></div>
-                                                        {chair.fullName}
+                                                        {chair?.fullName}
                                                     </td>
                                                     <td className="px-6 py-4 text-muted-foreground text-sm truncate max-w-[150px] lg:max-w-none">{chair.email}</td>
                                                     <td className="px-6 py-4 text-sm">{user.faculty?.facultyName || "Not Assigned"}</td>

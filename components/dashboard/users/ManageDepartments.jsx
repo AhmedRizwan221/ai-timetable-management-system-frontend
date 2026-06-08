@@ -48,7 +48,7 @@ export default function ManageDepartments() {
     }
 
     return (
-        <div className="min-h-screen bg-muted/30 py-10 px-4 sm:px-6">
+        <div className="min-h-screen bg-muted/30 md:py-10 md:px-4">
             <div className="bg-white border border-gray-200 rounded-lg">
                 <div className="bg-card">
                     <div className="block md:flex items-center container mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8 border-b">
@@ -79,7 +79,7 @@ export default function ManageDepartments() {
                 )}
 
                 {/* mobile screen */}
-                <div className="grid grid-cols-1 gap-4 md:hidden">
+                <div className="grid grid-cols-1 gap-4 md:hidden px-2 md:p-0">
                     {loading ? (
                         <div>
                             <Loader loading={loading} />
