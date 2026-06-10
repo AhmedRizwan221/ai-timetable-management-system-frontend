@@ -50,7 +50,10 @@ import ApproveTimeTable from "../pages/ApproveTimeTable.jsx";
 import ViewTimeTable from "../pages/ViewTimeTable.jsx";
 import ForgetPassword from "../pages/ForgetPassword.jsx";
 import ResetPassword from "../pages/ResetPassword.jsx";
-import TeacherSlots from "./shrared/TeacherSlots.jsx"
+import TeacherSlots from "./shrared/TeacherSlots.jsx";
+import ChangeAdminPassword from "../pages/ChangeAdminPassword.jsx";
+import ChangeDeanPassword from "../pages/ChangeDeanPassword.jsx";
+import ChangeChairmanPassword from "../pages/ChangeChairmanPassword.jsx"
 
 
 export {
@@ -106,5 +109,8 @@ export {
     ViewTimeTable,
     ForgetPassword,
     ResetPassword,
-    TeacherSlots
+    TeacherSlots,
+    ChangeAdminPassword,
+    ChangeDeanPassword,
+    ChangeChairmanPassword
 }

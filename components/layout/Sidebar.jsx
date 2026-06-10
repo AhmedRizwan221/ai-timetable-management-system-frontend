@@ -320,6 +320,7 @@ import {
   BookOpen,
   Calendar,
   CalendarDays,
+  Lock,
 } from "lucide-react";
 import { useSelector } from "react-redux";
 
@@ -360,7 +361,11 @@ export default function Sidebar() {
           { name: "Manage Faculties", path: "/dashboard/superadmin/manage-faculties" }
         ]
       },
-
+      {
+        name: "Change Password",
+        icon: <Lock size={20} />,
+        path: "/pages/ChangeAdminPassword"
+      }
 
     ],
     dean: [
@@ -369,13 +374,13 @@ export default function Sidebar() {
         name: "Chairmans",
         icon: <Users size={18} />,
         submenu: [
-          { name: "Create Chairman",  path: "/dashboard/dean/create-chairman" },
-           { name: "Manage Chairmans", path: "/dashboard/dean/manage-chairmans" }
+          { name: "Create Chairman", path: "/dashboard/dean/create-chairman" },
+          { name: "Manage Chairmans", path: "/dashboard/dean/manage-chairmans" }
         ]
       },
       {
         name: "Departments",
-        icon:  <Building2 size={24} />,
+        icon: <Building2 size={24} />,
         submenu: [
           { name: "Create Department", path: "/dashboard/dean/create-department" },
           { name: "Manage Department", path: "/dashboard/dean/manage-departments" },
@@ -386,6 +391,11 @@ export default function Sidebar() {
         name: "TimeTables",
         icon: <CalendarDays size={24} />,
         path: "/dashboard/dean/manage-timetables"
+      },
+      {
+        name: "Change Password",
+        icon: <Lock size={20} />,
+        path: "/pages/ChangeDeanPassword"
       }
     ],
     chairman: [
@@ -435,8 +445,13 @@ export default function Sidebar() {
       },
       {
         name: "View Teacher Slots",
-        icon: <BookOpen size={20}/>,
+        icon: <BookOpen size={20} />,
         path: "/dashboard/chairman/view-teacherSlots"
+      },
+      {
+        name: "Change Password",
+        icon: <Lock size={20} />,
+        path: "/pages/ChangeChairmanPassword"
       }
     ],
   };

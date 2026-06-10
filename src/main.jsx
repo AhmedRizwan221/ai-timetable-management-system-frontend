@@ -34,7 +34,10 @@ import {
   ViewTimeTable,
   ForgetPassword,
   ResetPassword,
-  TeacherSlots
+  TeacherSlots,
+  ChangeAdminPassword,
+  ChangeDeanPassword,
+  ChangeChairmanPassword
 } from '../components/index';
 import Department from "../pages/Department";
 import ManageApproveAndRejectTimeTable from '../components/dashboard/users/ManageApproveAndRejectTimeTable.jsx';
@@ -182,6 +185,16 @@ const router = createBrowserRouter([
           </AuthLayout>
         )
       },
+      {
+        path: "/pages/ChangeAdminPassword",
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <ChangeAdminPassword />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
 
       // dean routes here 
       {
@@ -280,6 +293,16 @@ const router = createBrowserRouter([
           <AuthLayout authentication={true}>
             <DashboardLayout>
               <ApproveTimeTable />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      },
+      {
+        path: "/pages/ChangeDeanPassword",
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <ChangeDeanPassword />
             </DashboardLayout>
           </AuthLayout>
         )
@@ -536,6 +559,16 @@ const router = createBrowserRouter([
           </AuthLayout>
         )
       },
+      {
+        path: "/pages/ChangeChairmanPassword",
+        element: (
+          <AuthLayout authentication={true}>
+            <DashboardLayout>
+              <ChangeChairmanPassword />
+            </DashboardLayout>
+          </AuthLayout>
+        )
+      }
     ]
   }
 ])

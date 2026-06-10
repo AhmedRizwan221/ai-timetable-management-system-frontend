@@ -216,6 +216,20 @@ export const allTeachersInDept = createAsyncThunk(
     }
 )
 
+// change user password
+export const changeUserPassword = createAsyncThunk(
+    "user/changerPassword",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await axios.patch(`${API_URL}/v1/users/change-password`, data, { withCredentials: true });
+
+            // console.log(response.data.data)
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
 const initialState = {
     deans: [],
     chairmans: [],
@@ -226,6 +240,7 @@ const initialState = {
     status: "idle",
     error: null,
     loading: false,
+    passwordChanged: false,
 
     // pagination data 
     totalPages: 0,
@@ -430,6 +445,20 @@ const userSlice = createSlice({
                     state.loading = false,
                     state.error = action.payload
             })
+            .addCase(changeUserPassword.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.passwordChanged = false;
+            })
+            .addCase(changeUserPassword.fulfilled, (state) => {
+                state.loading = false;
+                state.passwordChanged = true;
+            })
+            .addCase(changeUserPassword.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+                state.passwordChanged = false;
+            });
 
     }
 })
