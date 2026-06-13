@@ -57,7 +57,7 @@ export default function Login() {
             <div className={`m-auto w-full max-w-lg bg-white rounded-xl sm: py-10 md: p-10 border border-black/10`}>
                 <div className=" justify-center">
                     <h2 className="text-center text-xl lg:text-2xl leading-tight text-black font-bold">Sign in to your account</h2>
-                    <p className="mt-2 text-center text-base text-black/60">
+                    {/* <p className="mt-2 text-center text-base text-black/60">
                         Do not have account?&nbsp;
                         <Link
                             to="/signup"
@@ -65,7 +65,7 @@ export default function Login() {
                         >
                             SignUp
                         </Link>
-                    </p>
+                    </p> */}
                     <div className="container mx-auto max-w-4xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
                         {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
                         <form onSubmit={handleSubmit(handlelogin)}>

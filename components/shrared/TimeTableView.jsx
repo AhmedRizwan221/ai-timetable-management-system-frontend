@@ -172,7 +172,7 @@ function TimeTableView({
                 </div>)}
                 {!user && (<div className="min-w-0 flex flex-col">
                     <h1 className="text-lg sm:text-2xl font-bold text-gray-900 truncate">Time Table Management System</h1>
-                    <p className="hidden md:flex text-s font-medium pb-2 pl-2">Select your Department, Batch, Year, Semester and Department to continue</p>
+                    <p className="hidden md:flex text-s font-medium pb-2 pl-2">Select your Department, Batch, Year, Semester to continue</p>
                 </div>)}
                 <button
                     onClick={() => DownloadTimeTablePDF({
@@ -192,6 +192,15 @@ function TimeTableView({
             <main className="p-2 md:p-4">
                 {!isQueryMode && (
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                        <FilterSelect
+                            label="Department"
+                            value={selectedDepartment}
+                            onChange={(e) => setSelectedDepartment(e.target.value)}
+                            options={uniqueDepartment.map((dept) => ({
+                                val: dept?.deptName,
+                                lab: dept?.deptName
+                            }))}
+                        />
                         <FilterSelect
                             label="Batch"
                             value={selectedBatch}
@@ -215,15 +224,6 @@ function TimeTableView({
                             value={selectedSection}
                             onChange={(e) => setSelectedSection(e.target.value)}
                             options={['A', 'B'].map(s => ({ val: s, lab: `Section ${s}` }))}
-                        />
-                        <FilterSelect
-                            label="Department"
-                            value={selectedDepartment}
-                            onChange={(e) => setSelectedDepartment(e.target.value)}
-                            options={uniqueDepartment.map((dept) => ({
-                                val: dept?.deptName,
-                                lab: dept?.deptName
-                            }))}
                         />
                     </div>
                 )}
