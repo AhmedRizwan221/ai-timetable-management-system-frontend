@@ -121,7 +121,7 @@ export default function CreateCourse() {
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                                     {...register("teacherId", { required: true })}
                                 >
-                                    <option value="">Select Semester</option>
+                                    <option value="">Select Teacher</option>
                                     {teachers.map((tech) => (
                                         <option key={tech._id} value={tech._id}>
                                             {tech?.fullName} , {"Department" + tech.departmentTeacher?.deptName}

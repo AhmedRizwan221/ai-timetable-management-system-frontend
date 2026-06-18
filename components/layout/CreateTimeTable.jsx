@@ -111,7 +111,7 @@ export default function CreateTimeTable() {
 
     return (
         // time table card
-        <div className="min-h-screen bg-muted/30 py-10 px-4 sm:px-6">
+        <div className="min-h-screen bg-muted/30 md:py-10 md:px-4">
             <TimeTableForm
                 onSubmit={handleCreatTimeTable}
                 buttonText="Create"
@@ -132,7 +132,7 @@ export default function CreateTimeTable() {
                             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
                                 <CalendarDays className="h-5 w-5 text-primary-foreground" />
                             </div>
-                            <h1 className="text-2xl font-bold tracking-tight text-foreground">
+                            <h1 className="text-xl md:text-2xl font-bold tracking-tight text-foreground">
                                 Create Timetable Slot {user?.department?.deptName}
                             </h1>
                         </div>
@@ -159,6 +159,22 @@ export default function CreateTimeTable() {
                                     {timeTables.map((temp) => (
                                         <option key={temp._id} value={temp._id}>
                                             {temp?.batch?.batchName} , {"Sem No" + " " + temp?.semester?.semesterNumber + " " + "Year No" + temp.semester?.studyYear}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="space-y-2">
+                                <label className="flex items-center gap-1.5">
+                                    <BookOpen className="h-3.5 w-3.5 text-muted-foreground" /> Courses
+                                </label>
+                                <select
+                                    className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                    {...registerTimetableSlot("courseId", { required: true })}
+                                >
+                                    <option value="">Select Course</option>
+                                    {courses.map((cour) => (
+                                        <option key={cour._id} value={cour._id}>
+                                            {cour.courseName + " " + "|" + " " + cour?.teacher?.fullName}
                                         </option>
                                     ))}
                                 </select>
@@ -194,7 +210,7 @@ export default function CreateTimeTable() {
                                     </select>
                                 </div>
                             )}
-                                {/* if type is practical we show practical teacher */}
+                            {/* if type is practical we show practical teacher */}
                             {selectedType === 'practical' && (
                                 <div className="space-y-2">
                                     <label className="flex items-center gap-1.5">
@@ -253,22 +269,6 @@ export default function CreateTimeTable() {
                                     className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                                     {...registerTimetableSlot("endTime", { required: true })}
                                 />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="flex items-center gap-1.5">
-                                    <BookOpen className="h-3.5 w-3.5 text-muted-foreground" /> Courses
-                                </label>
-                                <select
-                                    className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                                    {...registerTimetableSlot("courseId", { required: true })}
-                                >
-                                    <option value="">Select Course</option>
-                                    {courses.map((cour) => (
-                                        <option key={cour._id} value={cour._id}>
-                                            {cour.courseName + " " + "|" + " " + cour?.teacher?.fullName } 
-                                        </option>
-                                    ))}
-                                </select>
                             </div>
                         </div>
                         <Button type="submit" className="w-full flex justify-center items-center sm:w-auto bg-[#1D293D] text-white hover:bg-[#162131]">

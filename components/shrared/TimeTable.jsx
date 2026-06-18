@@ -37,7 +37,7 @@ export default function TimeTableForm(
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
                             <CalendarDays className="h-8 w-8 text-primary-foreground" />
                         </div>
-                        <h1 className="text-2xl font-bold tracking-tight text-foreground">
+                        <h1 className="text-xl md:text-2xl font-bold tracking-tight text-foreground">
                             {buttonText} Timetable {user?.department?.deptName}
                         </h1>
                     </div>
@@ -107,7 +107,7 @@ export default function TimeTableForm(
                                 {...register("breakEndTime", { required: true })}
                             />
                         </div>
-                        <div className="space-y-2">
+                        <div className="hidden md:block space-y-2">
                             <label className="flex items-center gap-1.5">
                                 <BookOpen className="h-3.5 w-3.5 text-muted-foreground" /> Department
                             </label>
@@ -138,7 +138,7 @@ export default function TimeTableForm(
                                 ))}
                             </select>
                         </div>
-                        <div className="space-y-2">
+                        <div className="hidden md:block space-y-2">
                             <label className="flex items-center gap-1.5">
                                 <Building2 className="h-3.5 w-3.5 text-muted-foreground" /> Faculty
                             </label>

@@ -173,7 +173,7 @@ function ChairmanDashboard() {
                         <span className="hidden sm:inline font-medium">Download PDF</span>
                     </button>
                 </header>
-                <main className="md:p-4">
+                <main className="p-4">
                     {/* filter time tables  */}
                     <div className="block md:flex items-center justify-between gap-2">
                         <FilterSelect
@@ -227,7 +227,7 @@ function ChairmanDashboard() {
                     </div>
 
                     {/* main body of timetable */}
-                    <div className="w-full space-y-8 p-4 bg-white">
+                    <div className="w-full space-y-8 md:p-4 bg-white">
                         {/* Main Timetable */}
                         <div className="overflow-x-auto">
                             <table className="min-w-full border-collapse border border-black text-center text-sm">
