@@ -6,6 +6,7 @@ import { Users, Search, User, Pencil, Trash, ChevronRight, ChevronLeft } from "l
 import Input from "../../shrared/Input.jsx";
 import { getUser } from "../../../store/auth/authSlice.js";
 import Loader from "../../shrared/Loader.jsx";
+import SearchInput from "../../shrared/SearchInputToggle.jsx";
 
 export default function ManageTeachers() {
     const dispatch = useDispatch();
@@ -46,28 +47,14 @@ export default function ManageTeachers() {
         <div className="min-h-screen bg-muted/30 md:py-10 md:px-4">
             <div className="bg-white border border-gray-200 rounded-lg">
                 <div className="mx-auto max-w-5xl space-y-6">
-                    <div className="bg-card">
-                        <div className="block md:flex items-center container mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8 border-b">
-                            <div className="flex items-center gap-3">
-                                <div className="hidden md:flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
-                                    <Users className="h-10 w-10 text-primary-foreground" />
-                                </div>
-                                <h1 className="mb-2 md:m-0 text-xl md:text-2xl font-bold tracking-tight text-foreground">
-                                    Teachers Managment
-                                </h1>
-                            </div>
-                            <div className="relative w-full sm:w-72 md:ml-auto">
-                                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                                <Input
-                                    type="text"
-                                    className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm pl-10 focus:ring-2 focus:ring-ring"
-                                    placeholder="Search"
-                                    value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                />
-                            </div>
-                        </div>
-                    </div>
+                    <SearchInput
+                        heading={"Teachers Managment"}
+                        icon={<Search />}
+                        search={search}
+                        setSearch={setSearch}
+                        HeadingIcon={<Users className="h-10 w-10 text-primary-foreground" />}
+                        desktopIcon={<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />}
+                    />
                 </div>
 
                 {/* Error Message */}

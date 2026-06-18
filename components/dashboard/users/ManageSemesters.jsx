@@ -5,6 +5,7 @@ import { getSemesters, clearError, deleteSemester } from "../../../store/semeste
 import { useNavigate } from "react-router-dom";
 import Input from "../../shrared/Input";
 import Loader from "../../shrared/Loader";
+import SearchInput from "../../shrared/SearchInputToggle";
 
 
 export default function ManageSemesters() {
@@ -45,26 +46,14 @@ export default function ManageSemesters() {
         <div className="min-h-screen bg-muted/30 md:py-10 md:px-4">
             <div className="bg-white border border-gray-200 rounded-lg">
                 <div className="bg-card">
-                    <div className="block md:flex items-center container mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8 border-b">
-                        <div className="hidden md:flex items-center gap-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
-                                <GraduationCap className="h-10 w-10 text-primary-foreground" />
-                            </div>
-                            <h1 className="mb-2 md:m-0 text-xl md:text-2xl font-bold tracking-tight text-foreground">
-                                Semesters Managment
-                            </h1>
-                        </div>
-                        <div className="relative w-full sm:w-72 md:ml-auto">
-                            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                            <Input
-                                type="text"
-                                className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm pl-10 focus:ring-2 focus:ring-ring"
-                                placeholder="Search"
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                            />
-                        </div>
-                    </div>
+                    <SearchInput
+                        heading={"Semesters Managment"}
+                        icon={<Search />}
+                        search={search}
+                        setSearch={setSearch}
+                        HeadingIcon={<GraduationCap className="h-10 w-10 text-primary-foreground" />}
+                        desktopIcon={<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />}
+                    />
                 </div>
 
                 {error && (
