@@ -18,7 +18,7 @@ export default function EditUser({
     const navigate = useNavigate();
 
     return (
-        <div className="min-h-screen bg-muted/30 py-10 px-4 sm:px-6 ">
+        <div className="min-h-screen bg-muted/30 md:py-10 md:px-4">
             <div className="bg-white border border-gray-200 rounded-lg">
 
                 {/* Header */}
@@ -34,7 +34,7 @@ export default function EditUser({
                             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
                                 {Icon && <Icon className="h-8 w-8 text-muted-foreground" />}
                             </div>
-                            <h1 className="text-2xl font-bold">
+                            <h1 className="text-xl md:text-2xl font-bold">
                                 Edit {title} Details
                             </h1>
                         </div>

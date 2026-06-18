@@ -105,7 +105,7 @@ export default function ManageChairmans() {
                                     <div className="flex justify-between items-center pt-2 border-t border-border/50">
                                         <p className="text-sm font-medium"><span className="text-muted-foreground font-normal">Faculty:</span> {user.faculty?.facultyName || "Not Assigned"}</p>
                                         <div className="flex gap-2">
-                                            <button onClick={() => navigate(`/dashboard/chairman/edit-teacher/${chair._id}`)} className="p-2 bg-muted rounded-md"><Pencil className="h-4 w-4 text-primary" /></button>
+                                            <button onClick={() => navigate(`/dashboard/dean/edit-chairmans/${chair._id}`)} className="p-2 bg-muted rounded-md"><Pencil className="h-4 w-4 text-primary" /></button>
                                             <button onClick={() => deleteHandler(chair._id)} className="p-2 bg-muted rounded-md"><Trash className="h-4 w-4 text-red-500" /></button>
                                         </div>
                                     </div>
