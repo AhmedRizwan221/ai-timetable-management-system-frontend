@@ -409,6 +409,22 @@ export default function Sidebar() {
         ],
       },
       {
+        name: "Semester",
+        icon: <Calendar size={18} />,
+        submenu: [
+          { name: "Create Semester", path: "/dashboard/chairman/create-semester" },
+          { name: "Manage Semesters", path: "/dashboard/chairman/manage-semesters" },
+        ],
+      },
+      {
+        name: "Courses",
+        icon: <BookOpen size={18} />,
+        submenu: [
+          { name: "Create Course", path: "/dashboard/chairman/create-course" },
+          { name: "Manage Courses", path: "/dashboard/chairman/manage-courses" },
+        ],
+      },
+      {
         name: "Sections & Batches",
         icon: <LayoutGrid size={18} />,
         submenu: [
@@ -425,22 +441,6 @@ export default function Sidebar() {
           { name: "Create TimeTable", path: "/dashboard/chairman/create-timetable" },
           { name: "Manage TimeTable", path: "/dashboard/chairman/manage-timetables" },
           { name: "Manage TimeTable Slots", path: "/dashboard/chairman/manage-timetablesSlots" },
-        ],
-      },
-      {
-        name: "Semester",
-        icon: <Calendar size={18} />,
-        submenu: [
-          { name: "Create Semester", path: "/dashboard/chairman/create-semester" },
-          { name: "Manage Semesters", path: "/dashboard/chairman/manage-semesters" },
-        ],
-      },
-      {
-        name: "Courses",
-        icon: <BookOpen size={18} />,
-        submenu: [
-          { name: "Create Course", path: "/dashboard/chairman/create-course" },
-          { name: "Manage Courses", path: "/dashboard/chairman/manage-courses" },
         ],
       },
       {

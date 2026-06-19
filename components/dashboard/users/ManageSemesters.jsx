@@ -74,8 +74,6 @@ export default function ManageSemesters() {
                                 <div key={sem._id} className="bg-card p-4 rounded-xl border border-border shadow-sm space-y-3">
                                     <div className="flex justify-between items-start">
                                         <div className="flex items-center gap-3">
-                                            {/* <div className="h-10 w-10 flex items-center justify-center rounded-full bg-muted-foreground/10 text-muted-foreground">
-                                        </div> */}
                                             <p className="font-bold text-foreground">Semester {sem?.semesterNumber}</p>
                                             <div className="flex items-center gap-1">
                                                 <p className="font-bold text-foreground">Year {sem?.studyYear}</p>
