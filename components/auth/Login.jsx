@@ -20,12 +20,10 @@ export default function Login() {
     const handlelogin = async (data) => {
         setError("");
         try {
-            console.log("API_URL:", API_URL);
             await axios.post(`${API_URL}/v1/users/login`, data,
                 {
                     withCredentials: true
                 });
-            console.log("Final URL:", `${API_URL}v1/users/login`);
             const currentUser = await axios.get(
                 `${API_URL}/v1/users/current-user`,
                 { withCredentials: true }
@@ -53,8 +51,8 @@ export default function Login() {
     }
 
     return (
-        <div className="sm: px-4 flex justify-center items-center min-h-screen">
-            <div className={`m-auto w-full max-w-lg bg-white rounded-xl sm: py-10 md: p-10 border border-black/10`}>
+        <div className="sm:px-4 flex justify-center items-center min-h-screen">
+            <div className={`m-auto w-full max-w-lg bg-white rounded-xl sm:p-4 md:p-10 border border-black/10`}>
                 <div className=" justify-center">
                     <h2 className="text-center text-xl lg:text-2xl leading-tight text-black font-bold">Sign in to your account</h2>
                     {/* <p className="mt-2 text-center text-base text-black/60">
@@ -66,7 +64,7 @@ export default function Login() {
                             SignUp
                         </Link>
                     </p> */}
-                    <div className="container mx-auto max-w-4xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
+                    <div className="container mx-auto max-w-4xl space-y-8 md:px-4 py-8 sm:px-6 lg:px-8">
                         {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
                         <form onSubmit={handleSubmit(handlelogin)}>
                             <div className="grid gap-5 sm:grid-cols-1">
