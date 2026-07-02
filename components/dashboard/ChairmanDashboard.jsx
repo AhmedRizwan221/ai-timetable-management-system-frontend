@@ -256,50 +256,58 @@ function ChairmanDashboard() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {Days.map((day, dayIndex) => (
-                                        <tr key={day}>
-                                            <td className="border border-black px-4 py-3 font-bold text-left">
-                                                {day}
+                                    {uniqueTimeSlots.length === 0 ? (
+                                        <tr>
+                                            <td
+                                                colSpan={Days.length + 1}
+                                                className="text-center py-6 font-bold"
+                                            >
+                                                No timetables found
                                             </td>
+                                        </tr>
+                                    ) : (
+                                        Days.map((day, dayIndex) => (
+                                            <tr key={day}>
+                                                <td className="border border-black px-4 py-3 font-bold text-left">
+                                                    {day}
+                                                </td>
 
-                                            {uniqueTimeSlots.map((time, index) => {
-                                                // Render break only once (first row)
-                                                if (time.type === "break") {
-                                                    if (dayIndex === 0) {
-                                                        return (
-                                                            <td
-                                                                key={`${time.startTime}-${time.endTime}`}
-                                                                rowSpan={Days.length}
-                                                                className="border border-black px-2 py-3 font-bold text-center align-middle"
-                                                            >
-                                                                Break ☕
-                                                            </td>
-                                                        );
+                                                {uniqueTimeSlots.map((time) => {
+                                                    if (time.type === "break") {
+                                                        if (dayIndex === 0) {
+                                                            return (
+                                                                <td
+                                                                    key={`break-${time.startTime}-${time.endTime}`}
+                                                                    rowSpan={Days.length}
+                                                                    className="border border-black px-2 py-3 font-bold text-center align-middle"
+                                                                >
+                                                                    Break ☕
+                                                                </td>
+                                                            );
+                                                        }
+                                                        return null;
                                                     }
 
-                                                    // skip break cell for other rows
-                                                    return null;
-                                                }
+                                                    const slot = getSLot(day, time);
 
-                                                const slot = getSLot(day, time);
-
-                                                return (
-                                                    <td
-                                                        key={`${time.startTime}-${time.endTime}-${day}`}
-                                                        className="border border-black px-2 py-3 min-w-[120px]"
-                                                    >
-                                                        {slot ? (
-                                                            <div className="whitespace-pre-line font-bold">
-                                                                {slot.type === "theory"
-                                                                    ? slot.course?.courseName
-                                                                    : `${slot.course?.courseName} (Lab)`}
-                                                            </div>
-                                                        ) : null}
-                                                    </td>
-                                                );
-                                            })}
-                                        </tr>
-                                    ))}
+                                                    return (
+                                                        <td
+                                                            key={`${time.startTime}-${time.endTime}-${day}`}
+                                                            className="border border-black px-2 py-3 min-w-[120px]"
+                                                        >
+                                                            {slot ? (
+                                                                <div className="whitespace-pre-line font-bold">
+                                                                    {slot.type === "theory"
+                                                                        ? slot.course?.courseName
+                                                                        : `${slot.course?.courseName} (Lab)`}
+                                                                </div>
+                                                            ) : null}
+                                                        </td>
+                                                    );
+                                                })}
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
                             </table>
                         </div>
@@ -317,17 +325,29 @@ function ChairmanDashboard() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {mergedCourses.map((timetable, idx) => (
-                                        <tr key={idx}>
-                                            <td className="border border-black px-2 py-1 font-bold">{String(idx + 1).padStart(2, '0')}</td>
-                                            <td className="border border-black px-2 py-1 font-medium">{timetable?.courseName}</td>
-                                            <td className="border border-black px-2 py-1">
-                                                {(timetable?.creditHours?.theory ?? 0) + " + " + (timetable?.creditHours?.practical ?? 0)}
+                                    {mergedCourses.length === 0 ? (
+                                        <tr>
+                                            <td
+                                                colSpan={Days.length + 1}
+                                                className="text-center py-6 font-bold"
+                                            >
+                                                No Facilitators found
                                             </td>
-                                            <td className="border border-black px-2 py-1">{timetable?.courseFacilitator}</td>
-                                            <td className="border border-black px-2 py-1">{timetable?.practicalFacilitator || ""}</td>
                                         </tr>
-                                    ))}
+                                    ) : (
+                                        mergedCourses.map((timetable, idx) => (
+                                            <tr key={idx}>
+                                                <td className="border border-black px-2 py-1 font-bold">{String(idx + 1).padStart(2, '0')}</td>
+                                                <td className="border border-black px-2 py-1 font-medium">{timetable?.courseName}</td>
+                                                <td className="border border-black px-2 py-1">
+                                                    {(timetable?.creditHours?.theory ?? 0) + " + " + (timetable?.creditHours?.practical ?? 0)}
+                                                </td>
+                                                <td className="border border-black px-2 py-1">{timetable?.courseFacilitator}</td>
+                                                <td className="border border-black px-2 py-1">{timetable?.practicalFacilitator || ""}</td>
+                                            </tr>
+                                        ))
+                                    )}
+
                                 </tbody>
                             </table>
                         </div>

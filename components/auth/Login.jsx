@@ -51,8 +51,8 @@ export default function Login() {
     }
 
     return (
-        <div className="sm:px-4 flex justify-center items-center min-h-screen">
-            <div className={`m-auto w-full max-w-lg bg-white rounded-xl sm:p-4 md:p-10 border border-black/10`}>
+        <div className="sm: px-4 flex justify-center items-center min-h-screen">
+            <div className={`m-auto w-full max-w-lg bg-white rounded-xl sm: py-10 md: p-10 border border-black/10`}>
                 <div className=" justify-center">
                     <h2 className="text-center text-xl lg:text-2xl leading-tight text-black font-bold">Sign in to your account</h2>
                     {/* <p className="mt-2 text-center text-base text-black/60">
