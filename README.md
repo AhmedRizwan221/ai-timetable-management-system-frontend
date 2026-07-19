@@ -10,7 +10,7 @@ A modern, role-based React application for managing, generating, and visualizing
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.1-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](#license)
 
-[Live Demo](#) · [Report Bug](#) · [Request Feature](#)
+[🚀 Live Demo](https://timetable-ai-uni.vercel.app/) · [🐛 Report Bug](../../issues) · [✨ Request Feature](../../issues/new)
 
 </div>
 
